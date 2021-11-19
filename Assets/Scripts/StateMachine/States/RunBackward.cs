@@ -7,18 +7,15 @@ using UnityEngine;
 
 public class RunBackward : State
 {
-    private float speed;
     public RunBackward(Player player, StateMachine stateMachine, Animator animator, Rigidbody rigidbody, PlayerControls playerControls) : base(player, stateMachine, animator, rigidbody,  playerControls)
     {
     }
     public override void Enter()
     {
-        speed = 0;
     }
     public override void Exit()
     {
-        speed = 0;
-        Animator.SetFloat("Backward", speed);
+        Animator.SetFloat("Backward", Player.MovementSpeed);
     }
     public override void Update()
     {
@@ -33,24 +30,24 @@ public class RunBackward : State
     {
         if (!Input.GetKey(PlayerControls.MoveBackward))
         {
-            Rigidbody.velocity = new Vector3(0, Rigidbody.velocity.y, Rigidbody.velocity.z);
-            if (speed >= 0)
+            Rigidbody.velocity = new Vector3(Player.MovementSpeed, Rigidbody.velocity.y, Rigidbody.velocity.z);
+            if (Player.MovementSpeed >= 0)
             {
-                speed -= Time.deltaTime * 12;
+                Player.MovementSpeed -= Time.fixedDeltaTime * 12;
             }
-            if (speed <= 0)
+            if (Player.MovementSpeed <= 0)
             {
                 StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
             }
-            Animator.SetFloat("Backward", speed);
+            Animator.SetFloat("Backward", Player.MovementSpeed);
         }
         else
         {
-            if (speed <= Player.MaxMovementSpeed)
+            if (Player.MovementSpeed <= Player.MaxMovementSpeed)
             {
-                speed += Time.deltaTime * 12;
+                Player.MovementSpeed += Time.fixedDeltaTime * 12;
             }
-            Animator.SetFloat("Backward", speed);
+            Animator.SetFloat("Backward", Player.MovementSpeed);
             Rigidbody.velocity = new Vector3(-Player.MaxMovementSpeed * PlayerTransform.localScale.z, Rigidbody.velocity.y, Rigidbody.velocity.z);
         }
        

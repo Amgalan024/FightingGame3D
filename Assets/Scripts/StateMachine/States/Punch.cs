@@ -33,9 +33,13 @@ public class Punch : State
             {
                 StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
             }
-            else if (Player.MovementSpeed > 0.1)
+            else if (Animator.GetFloat("Forward")> 0.1)
             {
                 StateMachine.ChangeState(StateMachine.PlayerStates.RunForward);
+            }
+            else if (Animator.GetFloat("Backward") > 0.1)
+            {
+                StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
             }
         }
     }

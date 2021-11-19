@@ -33,7 +33,7 @@ public class RunFroward : State
             Rigidbody.velocity = new Vector3(Player.MovementSpeed, Rigidbody.velocity.y, Rigidbody.velocity.z);
             if (Player.MovementSpeed >= 0)
             {
-                Player.MovementSpeed -= Time.deltaTime * 12;
+                Player.MovementSpeed -= Time.fixedDeltaTime * 12;
             }
             if (Player.MovementSpeed <= 0)
             {
@@ -45,7 +45,7 @@ public class RunFroward : State
         {
             if (Player.MovementSpeed <= Player.MaxMovementSpeed)
             {
-                Player.MovementSpeed += Time.deltaTime * 12;
+                Player.MovementSpeed += Time.fixedDeltaTime * 12;
             }
             Animator.SetFloat("Forward", Player.MovementSpeed);
             Rigidbody.velocity = new Vector3(Player.MovementSpeed * PlayerTransform.localScale.z, Rigidbody.velocity.y, Rigidbody.velocity.z);
