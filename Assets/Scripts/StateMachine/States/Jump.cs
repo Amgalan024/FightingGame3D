@@ -14,7 +14,6 @@ public class Jump : State
     public override void Enter()
     {
         Rigidbody.velocity = new Vector3(Rigidbody.velocity.x, Player.JumpForce, Rigidbody.velocity.z);
-        //Rigidbody.AddForce(Vector3.up * Player.JumpForce, ForceMode.Impulse);
         JumpCount++;
     }
     public override void Exit()

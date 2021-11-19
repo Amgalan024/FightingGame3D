@@ -12,7 +12,6 @@ public class Punch : State
     }
     public override void Enter()
     {
-        //Animator.Play("Cross Punch");
         Animator.SetBool("IsPunching",true);
         Player.IsAttacking = true;
         Player.SetDamage(Player.PunchDamage);

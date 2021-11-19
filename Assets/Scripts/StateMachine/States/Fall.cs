@@ -25,11 +25,6 @@ public class Fall : State
     public override void FixedUpdate()
     {
         FallCheck();
-        //if (Player.IsGrounded)
-        //{
-        //    StateMachine.PlayerStates.Jump.JumpCount = 0;
-        //    StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
-        //}
     }
     private void FallCheck()
     {

@@ -12,7 +12,6 @@ public class Kick : State
     }
     public override void Enter()
     {
-        //Animator.Play("Roundhouse Kick");
         Animator.SetBool("IsKicking", true);
         Player.IsAttacking = true;
         Player.SetDamage(Player.KickDamage);
