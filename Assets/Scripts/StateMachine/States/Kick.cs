@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Kick : State
+public class Kick : AttackState
 {
     public Kick(Player player, StateMachine stateMachine, Animator animator, Rigidbody rigidbody, PlayerControls playerControls) : base(player, stateMachine, animator, rigidbody,  playerControls)
     {
@@ -26,27 +26,6 @@ public class Kick : State
     }
     public override void FixedUpdate()
     {
-        if (!Player.IsAttacking)
-        {
-            if (Animator.GetBool("IsCrouching"))
-            {
-                StateMachine.ChangeState(StateMachine.PlayerStates.Crouch);
-            }
-            else
-            {
-                if (Player.MovementSpeed < 0.1)
-                {
-                    StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
-                }
-                else if (Animator.GetFloat("Forward") > 0.1)
-                {
-                    StateMachine.ChangeState(StateMachine.PlayerStates.RunForward);
-                }
-                else if (Animator.GetFloat("Backward") > 0.1)
-                {
-                    StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
-                }
-            }
-        }
+        ExitAttackState();
     }
 }

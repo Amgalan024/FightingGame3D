@@ -5,26 +5,34 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class AttackState : State
+abstract public class AttackState : State
 {
-    public AttackState(Player player, StateMachine stateMachine, Animator animator, Rigidbody rigidbody, PlayerControls playerControls) : base(player, stateMachine, animator, rigidbody, playerControls)
+    protected AttackState(Player player, StateMachine stateMachine, Animator animator, Rigidbody rigidbody, PlayerControls playerControls) : base(player, stateMachine, animator, rigidbody, playerControls)
     {
     }
-
-    public override void Enter()
+    public void ExitAttackState()
     {
+        if (!Player.IsAttacking)
+        {
+            if (Animator.GetBool("IsCrouching"))
+            {
+                StateMachine.ChangeState(StateMachine.PlayerStates.Crouch);
+            }
+            else
+            {
+                if (Player.MovementSpeed < 0.1)
+                {
+                    StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+                }
+                else if (Animator.GetFloat("Forward") > 0.1)
+                {
+                    StateMachine.ChangeState(StateMachine.PlayerStates.RunForward);
+                }
+                else if (Animator.GetFloat("Backward") > 0.1)
+                {
+                    StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
+                }
+            }
+        }
     }
-
-    public override void Exit()
-    {
-    }
-
-    public override void FixedUpdate()
-    {
-    }
-
-    public override void Update()
-    {
-    }
-
 }
