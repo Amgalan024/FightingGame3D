@@ -13,8 +13,12 @@ public class Jump : State
     }
     public override void Enter()
     {
-        Rigidbody.velocity = new Vector3(Rigidbody.velocity.x, Player.JumpForce, Rigidbody.velocity.z);
-        JumpCount++;
+       // Debug.Log($"{StateMachine.PreviousState.GetType()} == {StateMachine.PlayerStates.Punch.GetType()} == {StateMachine.PreviousState.GetType().IsEquivalentTo(StateMachine.PlayerStates.Punch.GetType())}");
+        if (!PreviousStateEqualsAttackState())
+        {
+            Rigidbody.velocity = new Vector3(Rigidbody.velocity.x, Player.JumpForce, Rigidbody.velocity.z);
+            JumpCount++;
+        }
     }
     public override void Exit()
     {
@@ -27,7 +31,7 @@ public class Jump : State
     }
     public override void FixedUpdate()
     {
-        if (Rigidbody.velocity.y < 0)
+        if (Rigidbody.velocity.y <= 0)
         {
             StateMachine.ChangeState(StateMachine.PlayerStates.Fall);
         }
@@ -38,5 +42,17 @@ public class Jump : State
         {
             JumpInput();
         }
+    }
+    public bool PreviousStateEqualsAttackState()
+    {
+        if (StateMachine.PreviousState.GetType().IsEquivalentTo(StateMachine.PlayerStates.Punch.GetType()))
+        {
+            return true;
+        }
+        if (StateMachine.PreviousState.GetType().IsEquivalentTo(StateMachine.PlayerStates.Kick.GetType()))
+        {
+            return true;
+        }
+        return false;
     }
 }

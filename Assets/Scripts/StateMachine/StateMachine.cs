@@ -7,6 +7,7 @@ public class StateMachine
 {
     public PlayerStates PlayerStates { set; get; }
     public State CurrentState { set; get; }
+    public State PreviousState { set; get; }
     public void Initialize(State StartingState, PlayerStates PlayerStates)
     {
         this.CurrentState = StartingState;
@@ -15,6 +16,7 @@ public class StateMachine
     }
     public void ChangeState(State newState)
     {
+        PreviousState = CurrentState;
         CurrentState.Exit();
         CurrentState = newState;
         newState.Enter();

@@ -28,17 +28,30 @@ public class Punch : State
     {
         if (!Player.IsAttacking)
         {
-            if (Player.MovementSpeed < 0.1)
+            if (!Animator.GetBool("IsGrounded"))
             {
-                StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+                StateMachine.ChangeState(StateMachine.PlayerStates.Jump);
             }
-            else if (Animator.GetFloat("Forward")> 0.1)
+            else if (Animator.GetBool("IsCrouching"))
             {
-                StateMachine.ChangeState(StateMachine.PlayerStates.RunForward);
+                StateMachine.ChangeState(StateMachine.PlayerStates.Crouch);
             }
-            else if (Animator.GetFloat("Backward") > 0.1)
+            else
             {
-                StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
+                if (Player.MovementSpeed < 0.1)
+                {
+                    StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+                }
+                else if (Animator.GetFloat("Forward") > 0.1)
+                {
+                    Player.MovementSpeed = 0;
+                    StateMachine.ChangeState(StateMachine.PlayerStates.RunForward);
+                }
+                else if (Animator.GetFloat("Backward") > 0.1)
+                {
+                    Player.MovementSpeed = 0;
+                    StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
+                }
             }
         }
     }

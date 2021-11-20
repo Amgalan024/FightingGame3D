@@ -13,7 +13,6 @@ public class Fall : State
 
     public override void Enter()
     {
-        Debug.Log("Entered FALL");
     }
     public override void Exit()
     {
