@@ -29,19 +29,18 @@ public class Fall : MovementState
         if (Player.IsGrounded)
         {
             StateMachine.PlayerStates.Jump.JumpCount = 0;
-            StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
-            //if (Player.MovementSpeed < 0.1)
-            //{
-            //    StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
-            //}
-            //else if (Animator.GetFloat("Forward") > 0.1)
-            //{
-            //    StateMachine.ChangeState(StateMachine.PlayerStates.RunForward);
-            //}
-            //else if (Animator.GetFloat("Backward") > 0.1)
-            //{
-            //    StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
-            //}
+            if (Player.MovementSpeed < 0.1)
+            {
+                StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+            }
+            else if (Animator.GetFloat("Forward") > 0.1)
+            {
+                StateMachine.ChangeState(StateMachine.PlayerStates.RunForward);
+            }
+            else if (Animator.GetFloat("Backward") > 0.1)
+            {
+                StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
+            }
         }
     }
 }

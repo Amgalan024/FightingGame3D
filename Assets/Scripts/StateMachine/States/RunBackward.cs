@@ -25,7 +25,7 @@ public class RunBackward : MovementState
     public override void FixedUpdate()
     {
         MovementHandle();
-        StateMachine.PlayerStates.Idle.PlayersFaceToFace();
+        PlayersFaceToFace();
     }
     private void MovementHandle()
     {

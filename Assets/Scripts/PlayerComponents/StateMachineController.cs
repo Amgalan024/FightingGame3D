@@ -94,10 +94,11 @@ public class StateMachineController : MonoBehaviour, IPlayerComponent
     {
         playerStates.Idle.EnemyTransform = enemyTransform;
         playerStates.Crouch.EnemyTransform = enemyTransform;
-        playerStates.RunBackward.EnemyTransform = enemyTransform;
+        playerStates.RunForward.EnemyTransform = enemyTransform;
         playerStates.RunBackward.EnemyTransform = enemyTransform;
         playerStates.Jump.EnemyTransform = enemyTransform;
         playerStates.Fall.EnemyTransform = enemyTransform;
+        Debug.Log("Initialized EnemyTransform");
     }
 
 }
