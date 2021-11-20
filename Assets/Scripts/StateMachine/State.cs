@@ -13,7 +13,6 @@ public abstract class State
     public Player Player { private set; get; }
     public Rigidbody Rigidbody { private set; get; }
     public PlayerControls PlayerControls { private set; get; }
-    public Transform PlayerTransform { set; get; }
     protected State(Player player, StateMachine stateMachine, Animator animator, Rigidbody rigidbody, PlayerControls playerControls)
     {
         this.Player = player;

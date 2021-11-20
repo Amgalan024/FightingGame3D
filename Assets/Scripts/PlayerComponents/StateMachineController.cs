@@ -66,17 +66,14 @@ public class StateMachineController : MonoBehaviour, IPlayerComponent
         {
             playerControls = new PlayerControls(KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.Keypad6, KeyCode.Keypad4);
         }
-        playerStates.Idle = new Idle(player, movementSM, animator, playerRigidbody, playerControls);
-        playerStates.Crouch = new Crouch(player, movementSM, animator, playerRigidbody, playerControls);
-        playerStates.RunForward = new RunFroward(player, movementSM, animator, playerRigidbody, playerControls);
-        playerStates.RunBackward = new RunBackward(player, movementSM, animator, playerRigidbody, playerControls);
-        playerStates.Jump = new Jump(player, movementSM, animator, playerRigidbody, playerControls);
-        playerStates.Fall = new Fall(player, movementSM, animator, playerRigidbody, playerControls);
+        playerStates.Idle = new Idle(player, movementSM, animator, playerRigidbody, playerControls, transform);
+        playerStates.Crouch = new Crouch(player, movementSM, animator, playerRigidbody, playerControls, transform);
+        playerStates.RunForward = new RunForward(player, movementSM, animator, playerRigidbody, playerControls, transform);
+        playerStates.RunBackward = new RunBackward(player, movementSM, animator, playerRigidbody, playerControls, transform);
+        playerStates.Jump = new Jump(player, movementSM, animator, playerRigidbody, playerControls, transform);
+        playerStates.Fall = new Fall(player, movementSM, animator, playerRigidbody, playerControls, transform);
         playerStates.Punch = new Punch(player, movementSM, animator, playerRigidbody, playerControls);
         playerStates.Kick = new Kick(player, movementSM, animator, playerRigidbody, playerControls);
-        playerStates.RunForward.PlayerTransform = transform;
-        playerStates.RunBackward.PlayerTransform = transform;
-        playerStates.Idle.PlayerTransform = transform;
         movementSM.Initialize(playerStates.Idle, playerStates);
     }
     public Player GetPlayer()
@@ -93,9 +90,14 @@ public class StateMachineController : MonoBehaviour, IPlayerComponent
         animator.SetBool("IsGrounded", player.IsGrounded);
         animator.SetBool("IsCrouching", player.IsCrouching);
     }
-    public void SetEnemyForPlayer(Transform enemyTransform)
+    public void InitializeEnemyForPlayer(Transform enemyTransform)
     {
         playerStates.Idle.EnemyTransform = enemyTransform;
+        playerStates.Crouch.EnemyTransform = enemyTransform;
+        playerStates.RunBackward.EnemyTransform = enemyTransform;
+        playerStates.RunBackward.EnemyTransform = enemyTransform;
+        playerStates.Jump.EnemyTransform = enemyTransform;
+        playerStates.Fall.EnemyTransform = enemyTransform;
     }
 
 }

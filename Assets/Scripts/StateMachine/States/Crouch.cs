@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Crouch : State
+public class Crouch : MovementState
 {
-    public Crouch(Player player, StateMachine stateMachine, Animator animator, Rigidbody rigidbody, PlayerControls playerControls) : base(player, stateMachine, animator, rigidbody, playerControls)
+    public Crouch(Player player, StateMachine stateMachine, Animator animator, Rigidbody rigidbody, PlayerControls playerControls, Transform playerTransform) : base(player, stateMachine, animator, rigidbody, playerControls, playerTransform)
     {
     }
+
     public override void Enter()
     {
         Player.IsCrouching = true;
