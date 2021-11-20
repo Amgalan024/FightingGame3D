@@ -23,6 +23,16 @@ public class PlayerBuilder : MonoBehaviour
     {
         player = new Player(playerIcon, maxHealthPoints, maxEnergyPoints, healthPoints, energyPoints, movementSpeed, jumpForce, punchDamage, kickDamage);
         player.Number = playerNumber;
+        if (player.Number == Player.PLAYER1_NUMBER)
+        {
+            player.AtLeftSide = true;
+            player.AtRightSide = false;
+        }
+        if (player.Number == Player.PLAYER2_NUMBER)
+        {
+            player.AtLeftSide = false;
+            player.AtRightSide = true;
+        }
         foreach (var playerComponent in GetComponents<IPlayerComponent>())
         {
             playerComponent.InitializeComponent(player);
@@ -31,6 +41,10 @@ public class PlayerBuilder : MonoBehaviour
         {
             playerComponent.InitializeComponent(player);
         }
+    }
+    public void SetEnemyForPlayer(Transform enemyTransform)
+    {
+        GetComponent<StateMachineController>().SetEnemyForPlayer(enemyTransform);
     }
     public Player GetPlayer()
     {

@@ -2079,7 +2079,7 @@ MonoBehaviour:
   healthPoints: 100
   energyPoints: 0
   movementSpeed: 3
-  jumpForce: 10
+  jumpForce: 15
   punchDamage: 5
   kickDamage: 10
 --- !u!114 &7614905334654197298

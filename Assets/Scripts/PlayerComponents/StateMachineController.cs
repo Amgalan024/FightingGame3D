@@ -9,7 +9,6 @@ public class StateMachineController : MonoBehaviour, IPlayerComponent
 {
     public bool isGrounded;
     public bool isAttacking;
-
     private StateMachine movementSM;
     private Player player;
     private PlayerStates playerStates;
@@ -77,6 +76,7 @@ public class StateMachineController : MonoBehaviour, IPlayerComponent
         playerStates.Kick = new Kick(player, movementSM, animator, playerRigidbody, playerControls);
         playerStates.RunForward.PlayerTransform = transform;
         playerStates.RunBackward.PlayerTransform = transform;
+        playerStates.Idle.PlayerTransform = transform;
         movementSM.Initialize(playerStates.Idle, playerStates);
     }
     public Player GetPlayer()
@@ -92,6 +92,10 @@ public class StateMachineController : MonoBehaviour, IPlayerComponent
         animator.SetBool("IsAttacking", player.IsAttacking);
         animator.SetBool("IsGrounded", player.IsGrounded);
         animator.SetBool("IsCrouching", player.IsCrouching);
+    }
+    public void SetEnemyForPlayer(Transform enemyTransform)
+    {
+        playerStates.Idle.EnemyTransform = enemyTransform;
     }
 
 }

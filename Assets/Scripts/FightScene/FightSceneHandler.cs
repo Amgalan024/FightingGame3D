@@ -18,6 +18,8 @@ public class FightSceneHandler : MonoBehaviour
         player2.transform.localScale = new Vector3(player2.transform.localScale.x, player2.transform.localScale.y, -player2.transform.localScale.z);
         player1.BuildPlayer(Player.PLAYER1_NUMBER);
         player2.BuildPlayer(Player.PLAYER2_NUMBER);
+        player1.SetEnemyForPlayer(player2.transform);
+        player2.SetEnemyForPlayer(player1.transform);
         fightSceneStatsPanel.InitializeStatPanel(player1.GetPlayer(), player2.GetPlayer());
     }
 }

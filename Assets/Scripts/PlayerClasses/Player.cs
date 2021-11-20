@@ -26,6 +26,9 @@ public class Player
     public bool IsGrounded { set; get; }
     public bool IsAttacking { set; get; }
     public bool IsCrouching{ set; get; }
+    public bool AtLeftSide { set; get; }
+    public bool AtRightSide { set; get; }
+
     public Player(Sprite icon,int maxHealthPoints,int maxEnergyPoints,int healthPoints, int energyPoints, float movementSpeed, float jumpForce, int punchDamage, int kickDamage)
     {
         this.Icon = icon;

@@ -25,6 +25,7 @@ public class RunFroward : State
     public override void FixedUpdate()
     {
         MovementHandle();
+        StateMachine.PlayerStates.Idle.PlayersFaceToFace();
     }
     private void MovementHandle()
     {
