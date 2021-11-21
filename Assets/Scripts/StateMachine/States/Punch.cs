@@ -19,7 +19,6 @@ public class Punch : AttackState
     public override void Exit()
     {
         Animator.SetBool("IsPunching", false);
-        Player.MovementSpeed = 0;
     }
     public override void Update()
     {

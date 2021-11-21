@@ -15,4 +15,5 @@ public class PlayerStates
     public Crouch Crouch { set; get; }
     public Punch Punch { set; get; }
     public Kick Kick { set; get; }
+    public Combo Combo { set; get; }
 }

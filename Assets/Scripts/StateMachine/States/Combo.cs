@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class Combo : AttackState
 {
-    public string ComboName { set; get; }
-    public int ComboDamage { set; get; }
+    public string Name { set; get; }
+    public int Damage { set; get; }
 
     public Combo(Player player, StateMachine stateMachine, Animator animator, Rigidbody rigidbody, PlayerControls playerControls) : base(player, stateMachine, animator, rigidbody, playerControls)
     {
@@ -16,15 +16,17 @@ public class Combo : AttackState
 
     public override void Enter()
     {
-        Animator.Play(ComboName);
-        Animator.SetBool(ComboName,true);
+        Animator.Play(Name);
+        Animator.SetBool(Name,true);
         Player.IsAttacking = true;
-        Player.SetDamage(ComboDamage);
+        Player.SetDamage(Damage);
+        Player.IsDoingCombo = true;
     }
 
     public override void Exit()
     {
-        Animator.SetBool(ComboName, false);
+        Animator.SetBool(Name, false);
+        Player.IsDoingCombo = false;
     }
 
     public override void FixedUpdate()

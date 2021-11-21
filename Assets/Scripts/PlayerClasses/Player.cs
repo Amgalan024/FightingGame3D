@@ -9,6 +9,7 @@ public class Player
 {
     public const int PLAYER1_NUMBER = 1;
     public const int PLAYER2_NUMBER = 2;
+    public event Action OnPlayerTurned;
     public event Action<int> OnHPChanged;
     public event Action<int> OnDamageChanged;
     public int Number { set; get; }
@@ -25,9 +26,34 @@ public class Player
     public int KickDamage { private set; get; }
     public bool IsGrounded { set; get; }
     public bool IsAttacking { set; get; }
+    public bool IsDoingCombo { set; get; }
     public bool IsCrouching{ set; get; }
-    public bool AtLeftSide { set; get; }
-    public bool AtRightSide { set; get; }
+    private bool atLeftSide;
+    private bool atRightSide;
+    public bool AtLeftSide
+    {
+        set
+        {
+            OnPlayerTurned?.Invoke();
+            atLeftSide = value;
+        }
+        get
+        {
+            return atLeftSide;
+        }
+    }
+    public bool AtRightSide
+    {
+        set
+        {
+            OnPlayerTurned?.Invoke();
+            atRightSide = value;
+        }
+        get
+        {
+            return atRightSide;
+        }
+    }
 
     public Player(Sprite icon,int maxHealthPoints,int maxEnergyPoints,int healthPoints, int energyPoints, float movementSpeed, float jumpForce, int punchDamage, int kickDamage)
     {

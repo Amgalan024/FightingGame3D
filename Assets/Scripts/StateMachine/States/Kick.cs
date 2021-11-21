@@ -19,7 +19,6 @@ public class Kick : AttackState
     public override void Exit()
     {
         Animator.SetBool("IsKicking", false);
-        Player.MovementSpeed = 0;
     }
     public override void Update()
     {
