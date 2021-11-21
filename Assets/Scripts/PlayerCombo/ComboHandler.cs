@@ -11,8 +11,7 @@ public class ComboHandler : MonoBehaviour
     protected StateMachine stateMachine;
     protected Player player;
     public bool IsInitialized { set; get; }
-    protected KeyCode[][] ComboList { set; get; }
-    protected int[] ComboCount { set; get; }
+    protected ComboAttack[] ComboList { set; get; }
     protected float ComboTime { set; get; }
     public void InitializeCombo(Player player, PlayerControls playerControls, StateMachine stateMachine)
     {
@@ -25,42 +24,42 @@ public class ComboHandler : MonoBehaviour
     }
     private void OnPlayerTurned()
     {
-        ComboOnCharacterTurned();
+        InitializeComboList();
     }
     public virtual void ComboListInitialize()
     {
     }
-    public virtual void ComboOnCharacterTurned()
+    public virtual void InitializeComboList()
     {
     }
-    public void ComboCheck(KeyCode[] Combo, ref int ComboCount, string ComboName, int Damage)
+    public void ComboCheck(ComboAttack comboList)
     {
-        if (Input.GetKeyDown(Combo[ComboCount]))
+        if (Input.GetKeyDown(comboList.ControlsList[comboList.Count]))
         {
-            if (ComboCount == 0)
+            if (comboList.Count == 0)
             {
-                Debug.Log(Combo[ComboCount]);
+                Debug.Log(comboList.ControlsList[comboList.Count]);
                 ComboTime = 2f;
             }
             if (ComboTime > 0)
             {
-                Debug.Log(Combo[ComboCount]);
-                ComboCount++;
+                Debug.Log(comboList.ControlsList[comboList.Count]);
+                comboList.Count++;
             }
             else
             {
-                ResetComboCounts();
+                ResetComboCounts(ComboList);
             }
         }
-        else if (Input.anyKeyDown) // Изменить на проверку на нажатие клавиш входящих в управление персонажем
+        else if (Input.anyKeyDown) 
         {
-            ComboCount = 0;
+            comboList.Count = 0;
         }
-        if (ComboCount == Combo.Length)
+        if (comboList.Count == comboList.ControlsList.Length)
         {
-            ResetComboCounts();
-            stateMachine.PlayerStates.Combo.Name = ComboName;
-            stateMachine.PlayerStates.Combo.Damage = Damage;
+            ResetComboCounts(ComboList);
+            stateMachine.PlayerStates.Combo.Name = comboList.Name;
+            stateMachine.PlayerStates.Combo.Damage = comboList.Damage;
             stateMachine.ChangeState(stateMachine.PlayerStates.Combo);
         }
     }
@@ -71,11 +70,11 @@ public class ComboHandler : MonoBehaviour
             ComboTime -= Time.deltaTime;
         }
     }
-    public void ResetComboCounts()
+    public void ResetComboCounts(ComboAttack[] comboLists)
     {
-        for (int i = 0; i < this.ComboCount.Length; i++)
+        for (int i = 0; i < comboLists.Length; i++)
         {
-            this.ComboCount[i] = 0;
+            comboLists[i].Count = 0;
         }
     }
 }
