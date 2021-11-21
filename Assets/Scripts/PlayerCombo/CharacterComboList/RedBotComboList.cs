@@ -13,28 +13,28 @@ public class RedBotComboList : ComboHandler
         if (!player.IsDoingCombo)
         {
             //Сортировать по колву кнопок в комбе, от самых длинных комбинаций до самых коротких 
-            ComboCheck(ComboList[0]);
-            ComboCheck(ComboList[1]);
+            ComboCheck(ComboAttacksList[0]);
+            ComboCheck(ComboAttacksList[1]);
         }
     }
     public override void ComboListInitialize()
     {
-        ComboList = new ComboAttack[2];
-        for (int i = 0; i < ComboList.Length; i++)
+        ComboAttacksList = new ComboAttack[2];
+        for (int i = 0; i < ComboAttacksList.Length; i++)
         {
-            ComboList[i] = new ComboAttack();
-            ComboList[i].Count = 0;
+            ComboAttacksList[i] = new ComboAttack();
+            ComboAttacksList[i].Count = 0;
         }
         InitializeComboList();
     }
     public override void InitializeComboList()
     {
         base.InitializeComboList();
-        ComboList[0].Name = "Combo1";
-        ComboList[0].Damage = 15;
-        ComboList[0].ControlsList = new KeyCode[4] { playerControls.MoveBackward, playerControls.Crouch, playerControls.MoveForward, playerControls.Punch }; //Left Down Right P
-        ComboList[1].Name = "Combo2";
-        ComboList[1].Damage = 10;
-        ComboList[1].ControlsList = new KeyCode[3] { playerControls.Crouch, playerControls.MoveBackward, playerControls.Punch }; // Down Left P
+        ComboAttacksList[0].Name = "Combo1";
+        ComboAttacksList[0].Damage = 15;
+        ComboAttacksList[0].ControlsList = new KeyCode[4] { playerControls.MoveBackward, playerControls.Crouch, playerControls.MoveForward, playerControls.Punch }; //Left Down Right P
+        ComboAttacksList[1].Name = "Combo2";
+        ComboAttacksList[1].Damage = 10;
+        ComboAttacksList[1].ControlsList = new KeyCode[3] { playerControls.Crouch, playerControls.MoveBackward, playerControls.Punch }; // Down Left P
     }
 }
