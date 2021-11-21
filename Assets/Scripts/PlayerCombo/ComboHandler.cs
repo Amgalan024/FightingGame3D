@@ -12,6 +12,10 @@ public class ComboHandler : MonoBehaviour
     protected Player player;
     protected ComboAttack[] ComboAttacksList { set; get; }
     protected float ComboTimer { set; get; }
+    private void OnPlayerTurned()
+    {
+        InitializeComboList();
+    }
     public void InitializeCombo(Player player, PlayerControls playerControls, StateMachine stateMachine)
     {
         this.player = player;
@@ -19,10 +23,6 @@ public class ComboHandler : MonoBehaviour
         this.stateMachine = stateMachine;
         this.player.OnPlayerTurned += OnPlayerTurned;
         ComboListInitialize();
-    }
-    private void OnPlayerTurned()
-    {
-        InitializeComboList();
     }
     public virtual void ComboListInitialize()
     {
