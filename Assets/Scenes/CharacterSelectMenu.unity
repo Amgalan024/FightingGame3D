@@ -1395,7 +1395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f88c3152a41b7b4c8967f3c59297376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countDownTime: 1
+  countDownTime: 0.1
   countDownText: {fileID: 203148331}
   buttonsContainer: {fileID: 1048805539}
 --- !u!4 &1296671540
