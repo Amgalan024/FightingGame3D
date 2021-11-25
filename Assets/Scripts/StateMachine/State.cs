@@ -20,7 +20,13 @@ public abstract class State
         this.Animator = animator;
         this.Rigidbody = rigidbody;
         this.PlayerControls = playerControls;
+        this.Player.OnPlayerDied += Player_OnPlayerDied;
     }
+    private void Player_OnPlayerDied()
+    {
+        StateMachine.ChangeState(StateMachine.PlayerStates.Death);
+    }
+
     protected State(StateMachine stateMachine)
     {
         StateMachine = stateMachine;
@@ -29,6 +35,8 @@ public abstract class State
     public abstract void Update();
     public abstract void FixedUpdate();
     public abstract void Exit();
+    public abstract void OnTriggerEnter(Collider collider);
+    public abstract void OnTriggerExit(Collider collider);
     protected void AttackInput()
     {
         if (Input.GetKeyDown(PlayerControls.Punch))

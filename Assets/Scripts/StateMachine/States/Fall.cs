@@ -43,4 +43,14 @@ public class Fall : MovementState
             }
         }
     }
+
+    public override void OnTriggerEnter(Collider collider)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnTriggerExit(Collider collider)
+    {
+        throw new NotImplementedException();
+    }
 }

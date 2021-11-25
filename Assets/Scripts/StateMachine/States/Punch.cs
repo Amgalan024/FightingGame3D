@@ -22,7 +22,6 @@ public class Punch : AttackState
     }
     public override void Update()
     {
-        
     }
     public override void FixedUpdate()
     {

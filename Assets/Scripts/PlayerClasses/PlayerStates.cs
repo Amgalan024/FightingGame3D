@@ -16,4 +16,7 @@ public class PlayerStates
     public Punch Punch { set; get; }
     public Kick Kick { set; get; }
     public Combo Combo { set; get; }
+    public Death Death { set; get; }
+    public Block Block { set; get; }
+
 }

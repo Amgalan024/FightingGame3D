@@ -16,13 +16,7 @@ public class StateMachineController : MonoBehaviour, IPlayerComponent
     private Rigidbody playerRigidbody;
     private Animator animator;
     private PlayerControls playerControls;
-    private void OnPlayerDied(int obj)
-    {
-        if (obj <= 0)
-        {
-            Destroy(gameObject);
-        }
-    }
+
     private void Awake()
     {
         playerRigidbody = GetComponent<Rigidbody>();
@@ -41,6 +35,14 @@ public class StateMachineController : MonoBehaviour, IPlayerComponent
         MatchingAnimatorParameters();
         stateMachine.CurrentState.FixedUpdate();
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        stateMachine.CurrentState.OnTriggerEnter(other);
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        stateMachine.CurrentState.OnTriggerExit(other);
+    }
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.GetComponent<Platform>())
@@ -58,7 +60,6 @@ public class StateMachineController : MonoBehaviour, IPlayerComponent
     public void InitializeComponent(Player player)
     {
         this.player = player;
-        player.OnHPChanged += OnPlayerDied;
         stateMachine = new StateMachine();
         playerStates = new PlayerStates();
         if (player.Number == Player.PLAYER1_NUMBER)
@@ -78,6 +79,8 @@ public class StateMachineController : MonoBehaviour, IPlayerComponent
         playerStates.Punch = new Punch(player, stateMachine, animator, playerRigidbody, playerControls);
         playerStates.Kick = new Kick(player, stateMachine, animator, playerRigidbody, playerControls);
         playerStates.Combo = new Combo(player, stateMachine, animator, playerRigidbody, playerControls);
+        playerStates.Death = new Death(player, stateMachine, animator, playerRigidbody, playerControls);
+        playerStates.Block = new Block(player, stateMachine, animator, playerRigidbody, playerControls);
         stateMachine.Initialize(playerStates.Idle, playerStates);
         GetComponent<ComboHandler>().InitializeCombo(player, playerControls, stateMachine);
     }

@@ -2080,7 +2080,7 @@ MonoBehaviour:
   healthPoints: 100
   energyPoints: 0
   movementSpeed: 3
-  jumpForce: 15
+  jumpForce: 10
   punchDamage: 5
   kickDamage: 10
 --- !u!114 &7614905334654197298
@@ -2095,8 +2095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11ec6e57365009f43b34b367bbf2fb38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGrounded: 0
-  isAttacking: 0
+  stateText: {fileID: 0}
 --- !u!114 &6001045553561894549
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,9 +10,10 @@ public class Player
     public const int PLAYER1_NUMBER = 1;
     public const int PLAYER2_NUMBER = 2;
     public event Action OnPlayerTurned;
+    public event Action OnPlayerDied;
     public event Action<int> OnHPChanged;
     public event Action<int> OnDamageChanged;
-    public int Number { set; get; }
+    public int Number { private set; get; }
     public Sprite Icon { private set; get; }
     public int HealthPoints { private set; get; }
     public int MaxHealthPoints { private set; get; }
@@ -55,8 +56,9 @@ public class Player
         }
     }
 
-    public Player(Sprite icon,int maxHealthPoints,int maxEnergyPoints,int healthPoints, int energyPoints, float movementSpeed, float jumpForce, int punchDamage, int kickDamage)
+    public Player(int playerNumber,Sprite icon,int maxHealthPoints,int maxEnergyPoints,int healthPoints, int energyPoints, float movementSpeed, float jumpForce, int punchDamage, int kickDamage)
     {
+        this.Number = playerNumber;
         this.Icon = icon;
         this.MaxHealthPoints = maxHealthPoints;
         this.MaxEnergyPoints = maxEnergyPoints;
@@ -70,6 +72,10 @@ public class Player
     public void TakeDamage(int incomeDamage)
     {
         this.HealthPoints -= incomeDamage;
+        if (HealthPoints <= 0)
+        {
+            OnPlayerDied?.Invoke();
+        }
         OnHPChanged?.Invoke(this.HealthPoints);
     }
     public void SetDamage(int damage)

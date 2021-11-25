@@ -52,4 +52,14 @@ public class RunForward : MovementState
             Rigidbody.velocity = new Vector3(Player.MovementSpeed * PlayerTransform.localScale.z, Rigidbody.velocity.y, Rigidbody.velocity.z);
         }
     }
+
+    public override void OnTriggerEnter(Collider collider)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnTriggerExit(Collider collider)
+    {
+        throw new NotImplementedException();
+    }
 }

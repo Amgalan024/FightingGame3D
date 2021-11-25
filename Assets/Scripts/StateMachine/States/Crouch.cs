@@ -30,4 +30,14 @@ public class Crouch : MovementState
             StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
         }
     }
+
+    public override void OnTriggerEnter(Collider collider)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnTriggerExit(Collider collider)
+    {
+        throw new NotImplementedException();
+    }
 }
