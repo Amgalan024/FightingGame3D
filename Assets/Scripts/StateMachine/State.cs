@@ -35,8 +35,25 @@ public abstract class State
     public abstract void Update();
     public abstract void FixedUpdate();
     public abstract void Exit();
-    public abstract void OnTriggerEnter(Collider collider);
-    public abstract void OnTriggerExit(Collider collider);
+    public virtual void OnTriggerEnter(Collider collider)
+    {
+        if (collider.GetComponent<PlayerAttackHitBox>())
+        {
+            if (Player.IsBlocking)
+            {
+                StateMachine.ChangeState(StateMachine.PlayerStates.Block);
+            }
+            else
+            {
+                Player.TakeDamage(collider.GetComponent<PlayerAttackHitBox>().Damage);
+                Debug.Log($"Player Number {Player.Number} Took damage");
+            }
+        }
+    }
+    public virtual void OnTriggerExit(Collider collider)
+    {
+
+    }
     protected void AttackInput()
     {
         if (Input.GetKeyDown(PlayerControls.Punch))
@@ -71,6 +88,17 @@ public abstract class State
         if (Input.GetKey(PlayerControls.Crouch))
         {
             StateMachine.ChangeState(StateMachine.PlayerStates.Crouch);
+        }
+    }
+    protected void BlockInput()
+    {
+        if (Input.GetKey(PlayerControls.MoveBackward))
+        {
+            Player.IsBlocking = true;
+        }
+        else
+        {
+            Player.IsBlocking = false;
         }
     }
 }

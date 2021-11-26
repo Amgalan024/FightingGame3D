@@ -28,6 +28,7 @@ public class Player
     public bool IsGrounded { set; get; }
     public bool IsAttacking { set; get; }
     public bool IsDoingCombo { set; get; }
+    public bool IsBlocking { set; get; }
     public bool IsCrouching{ set; get; }
     private bool atLeftSide;
     private bool atRightSide;

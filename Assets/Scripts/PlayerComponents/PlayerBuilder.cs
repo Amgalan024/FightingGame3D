@@ -44,7 +44,7 @@ public class PlayerBuilder : MonoBehaviour
     }
     public void InitializeEnemyForPlayer(Transform enemyTransform)
     {
-        GetComponent<StateMachineController>().InitializeEnemyForPlayer(enemyTransform);
+        GetComponent<PlayerStateMachineController>().InitializeEnemyForPlayer(enemyTransform);
     }
     public Player GetPlayer()
     {

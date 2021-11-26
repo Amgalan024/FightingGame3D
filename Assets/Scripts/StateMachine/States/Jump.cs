@@ -28,6 +28,7 @@ public class Jump : MovementState
     {
         DoubleJump();
         AttackInput();
+        BlockInput();
     }
     public override void FixedUpdate()
     {
@@ -54,11 +55,10 @@ public class Jump : MovementState
 
     public override void OnTriggerEnter(Collider collider)
     {
-        throw new NotImplementedException();
+        base.OnTriggerEnter(collider);
     }
 
     public override void OnTriggerExit(Collider collider)
     {
-        throw new NotImplementedException();
     }
 }

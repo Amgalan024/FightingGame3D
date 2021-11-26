@@ -27,4 +27,13 @@ public class Punch : AttackState
     {
         ExitAttackState();
     }
+
+    public override void OnTriggerEnter(Collider collider)
+    {
+        base.OnTriggerEnter(collider);
+    }
+
+    public override void OnTriggerExit(Collider collider)
+    {
+    }
 }

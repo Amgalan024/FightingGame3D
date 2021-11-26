@@ -7,19 +7,18 @@ using UnityEngine;
 
 class PlayerAttackHitBox : MonoBehaviour, IPlayerComponent
 {
-    [SerializeField] private int damage;
+    public int Damage {private set; get; }
     private Player player;
     private void OnDamageChanged(int obj)
     {
-        damage = obj;
+        Damage = obj;
     }
     private void OnTriggerEnter(Collider collision)
     {
-        Debug.Log(collision.gameObject.name);
-        if (collision.gameObject.GetComponent<PlayerBuilder>())
-        {
-            collision.gameObject.GetComponent<PlayerBuilder>().GetPlayer().TakeDamage(damage);
-        }
+        //if (collision.gameObject.GetComponent<StateMachineController>())
+        //{
+        //    collision.gameObject.GetComponent<StateMachineController>().GetPlayer().TakeDamage(Damage);
+        //}
     }
     public Player GetPlayer()
     {

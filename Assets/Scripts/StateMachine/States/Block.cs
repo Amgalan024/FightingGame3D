@@ -13,10 +13,12 @@ public class Block : State
 
     public override void Enter()
     {
+        Debug.Log("Entered BlockState");
     }
 
     public override void Exit()
     {
+        Debug.Log("Exited BlockState");
     }
 
     public override void FixedUpdate()
@@ -25,12 +27,15 @@ public class Block : State
 
     public override void OnTriggerEnter(Collider collider)
     {
-        throw new NotImplementedException();
+        
     }
 
     public override void OnTriggerExit(Collider collider)
     {
-        throw new NotImplementedException();
+        if (collider.GetComponent<PlayerAttackHitBox>())
+        {
+            StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
+        }
     }
 
     public override void Update()

@@ -23,6 +23,7 @@ public class Fall : MovementState
     public override void FixedUpdate()
     {
         FallCheck();
+        BlockInput();
     }
     private void FallCheck()
     {
@@ -46,11 +47,10 @@ public class Fall : MovementState
 
     public override void OnTriggerEnter(Collider collider)
     {
-        throw new NotImplementedException();
+        base.OnTriggerEnter(collider);
     }
 
     public override void OnTriggerExit(Collider collider)
     {
-        throw new NotImplementedException();
     }
 }

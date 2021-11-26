@@ -30,11 +30,11 @@ public class StrongPunch : AttackState
 
     public override void OnTriggerEnter(Collider collider)
     {
-        throw new NotImplementedException();
+        base.OnTriggerEnter(collider);
+
     }
 
     public override void OnTriggerExit(Collider collider)
     {
-        throw new NotImplementedException();
     }
 }

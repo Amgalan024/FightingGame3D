@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class StateMachineController : MonoBehaviour, IPlayerComponent
+public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
 {
     [SerializeField] private Text stateText;
     private StateMachine stateMachine;
