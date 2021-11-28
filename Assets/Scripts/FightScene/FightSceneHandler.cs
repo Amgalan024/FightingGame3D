@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class FightSceneHandler : MonoBehaviour
 {
+    [SerializeField] private CameraMovement cameraMovement;
     [SerializeField] private FightSceneStatsPanel fightSceneStatsPanel;
     [SerializeField] private Transform player1SpawnPoint;
     [SerializeField] private Transform player2SpawnPoint;
@@ -22,5 +23,6 @@ public class FightSceneHandler : MonoBehaviour
         player1.InitializeEnemyForPlayer(player2.transform);
         player2.InitializeEnemyForPlayer(player1.transform);
         fightSceneStatsPanel.InitializeStatPanel(player1.GetPlayer(), player2.GetPlayer());
+        cameraMovement.InitializeCameraMovement(player1.gameObject, player2.gameObject);
     }
 }
