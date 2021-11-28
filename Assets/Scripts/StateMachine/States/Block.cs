@@ -13,11 +13,13 @@ public class Block : State
 
     public override void Enter()
     {
+        Animator.SetBool("IsBlocking", true);
         Debug.Log("Entered BlockState");
     }
 
     public override void Exit()
     {
+        Animator.SetBool("IsBlocking", false);
         Debug.Log("Exited BlockState");
     }
 
@@ -34,7 +36,27 @@ public class Block : State
     {
         if (collider.GetComponent<PlayerAttackHitBox>())
         {
-            StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
+            if (Animator.GetBool("IsCrouching"))
+            {
+                StateMachine.ChangeState(StateMachine.PlayerStates.Crouch);
+            }
+            else
+            {
+                if (Player.MovementSpeed < 0.1)
+                {
+                    StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+                }
+                else if (Animator.GetFloat("Forward") > 0.1)
+                {
+                    Player.MovementSpeed = 0;
+                    StateMachine.ChangeState(StateMachine.PlayerStates.RunForward);
+                }
+                else if (Animator.GetFloat("Backward") > 0.1)
+                {
+                    Player.MovementSpeed = 0;
+                    StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
+                }
+            }
         }
     }
 
