@@ -4,25 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-
-public class FightSceneHandler : MonoBehaviour
+public class FightSceneHandler 
 {
-    [SerializeField] private CameraMovement cameraMovement;
-    [SerializeField] private FightSceneStatsPanel fightSceneStatsPanel;
-    [SerializeField] private Transform player1SpawnPoint;
-    [SerializeField] private Transform player2SpawnPoint;
-    private PlayerBuilder player1;
-    private PlayerBuilder player2;
-    private void Awake()
+    private Player player1;
+    private Player player2;
+    public FightSceneHandler(Player player1, Player player2)
     {
-        player1 = Instantiate(CharacterSelectContainer.Player1Character, player1SpawnPoint.position, player1SpawnPoint.rotation);
-        player2 = Instantiate(CharacterSelectContainer.Player2Character, player2SpawnPoint.position, player2SpawnPoint.rotation);
-        player2.transform.localScale = new Vector3(player2.transform.localScale.x, player2.transform.localScale.y, -player2.transform.localScale.z);
-        player1.BuildPlayer(Player.PLAYER1_NUMBER);
-        player2.BuildPlayer(Player.PLAYER2_NUMBER);
-        player1.InitializeEnemyForPlayer(player2.transform);
-        player2.InitializeEnemyForPlayer(player1.transform);
-        fightSceneStatsPanel.InitializeStatPanel(player1.GetPlayer(), player2.GetPlayer());
-        cameraMovement.InitializeCameraMovement(player1.gameObject, player2.gameObject);
+        this.player1 = player1;
+        this.player2 = player2;
+        player1.OnPlayerDied += OnPlayer1Died;
+        player2.OnPlayerDied += OnPlayer2Died;
+    }
+    private void OnPlayer1Died()
+    {
+        player2.AddRoundScore();
+    }
+    private void OnPlayer2Died()
+    {
+        player1.AddRoundScore();
     }
 }
+

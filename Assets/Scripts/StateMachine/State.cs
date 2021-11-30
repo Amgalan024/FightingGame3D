@@ -20,13 +20,23 @@ public abstract class State
         this.Animator = animator;
         this.Rigidbody = rigidbody;
         this.PlayerControls = playerControls;
-        this.Player.OnPlayerDied += Player_OnPlayerDied;
+        this.Player.OnPlayerDied += OnPlayerDied;
+        this.Player.OnPlayerWonRound += OnPlayerWonRound;
+        this.Player.OnPlayerRefreshed += OnPlayerRefreshed;
     }
-    private void Player_OnPlayerDied()
+
+    private void OnPlayerRefreshed()
+    {
+        StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+    }
+    private void OnPlayerWonRound(int obj)
     {
         StateMachine.ChangeState(StateMachine.PlayerStates.Death);
     }
-
+    private void OnPlayerDied()
+    {
+        StateMachine.ChangeState(StateMachine.PlayerStates.Death);
+    }
     protected State(StateMachine stateMachine)
     {
         StateMachine = stateMachine;

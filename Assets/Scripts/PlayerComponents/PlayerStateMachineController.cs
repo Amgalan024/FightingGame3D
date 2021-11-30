@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
 {
     [SerializeField] private Text stateText;
-    private StateMachine stateMachine;
+    public StateMachine StateMachine { private set; get; }
     private Player player;
     private PlayerStates playerStates;
     private Rigidbody playerRigidbody;
@@ -26,22 +26,22 @@ public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
     {
         if (stateText)
         {
-            stateText.text = $"{stateMachine.CurrentState.GetType()}"; 
+            stateText.text = $"{StateMachine.CurrentState.GetType()}"; 
         }
-        stateMachine.CurrentState.Update();
+        StateMachine.CurrentState.Update();
     }
     private void FixedUpdate()
     {
         MatchingAnimatorParameters();
-        stateMachine.CurrentState.FixedUpdate();
+        StateMachine.CurrentState.FixedUpdate();
     }
     private void OnTriggerEnter(Collider other)
     {
-        stateMachine.CurrentState.OnTriggerEnter(other);
+        StateMachine.CurrentState.OnTriggerEnter(other);
     }
     private void OnTriggerExit(Collider other)
     {
-        stateMachine.CurrentState.OnTriggerExit(other);
+        StateMachine.CurrentState.OnTriggerExit(other);
     }
     private void OnCollisionExit(Collision collision)
     {
@@ -60,7 +60,7 @@ public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
     public void InitializeComponent(Player player)
     {
         this.player = player;
-        stateMachine = new StateMachine();
+        StateMachine = new StateMachine();
         playerStates = new PlayerStates();
         if (player.Number == Player.PLAYER1_NUMBER)
         {
@@ -70,19 +70,19 @@ public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
         {
             playerControls = new PlayerControls(KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.Keypad6, KeyCode.Keypad4);
         }
-        playerStates.Idle = new Idle(player, stateMachine, animator, playerRigidbody, playerControls, transform);
-        playerStates.Crouch = new Crouch(player, stateMachine, animator, playerRigidbody, playerControls, transform);
-        playerStates.RunForward = new RunForward(player, stateMachine, animator, playerRigidbody, playerControls, transform);
-        playerStates.RunBackward = new RunBackward(player, stateMachine, animator, playerRigidbody, playerControls, transform);
-        playerStates.Jump = new Jump(player, stateMachine, animator, playerRigidbody, playerControls, transform);
-        playerStates.Fall = new Fall(player, stateMachine, animator, playerRigidbody, playerControls, transform);
-        playerStates.Punch = new Punch(player, stateMachine, animator, playerRigidbody, playerControls);
-        playerStates.Kick = new Kick(player, stateMachine, animator, playerRigidbody, playerControls);
-        playerStates.Combo = new Combo(player, stateMachine, animator, playerRigidbody, playerControls);
-        playerStates.Death = new Death(player, stateMachine, animator, playerRigidbody, playerControls);
-        playerStates.Block = new Block(player, stateMachine, animator, playerRigidbody, playerControls);
-        stateMachine.Initialize(playerStates.Idle, playerStates);
-        GetComponent<ComboHandler>().InitializeCombo(player, playerControls, stateMachine);
+        playerStates.Idle = new Idle(player, StateMachine, animator, playerRigidbody, playerControls, transform);
+        playerStates.Crouch = new Crouch(player, StateMachine, animator, playerRigidbody, playerControls, transform);
+        playerStates.RunForward = new RunForward(player, StateMachine, animator, playerRigidbody, playerControls, transform);
+        playerStates.RunBackward = new RunBackward(player, StateMachine, animator, playerRigidbody, playerControls, transform);
+        playerStates.Jump = new Jump(player, StateMachine, animator, playerRigidbody, playerControls, transform);
+        playerStates.Fall = new Fall(player, StateMachine, animator, playerRigidbody, playerControls, transform);
+        playerStates.Punch = new Punch(player, StateMachine, animator, playerRigidbody, playerControls);
+        playerStates.Kick = new Kick(player, StateMachine, animator, playerRigidbody, playerControls);
+        playerStates.Combo = new Combo(player, StateMachine, animator, playerRigidbody, playerControls);
+        playerStates.Death = new Death(player, StateMachine, animator, playerRigidbody, playerControls);
+        playerStates.Block = new Block(player, StateMachine, animator, playerRigidbody, playerControls);
+        StateMachine.Initialize(playerStates.Idle, playerStates);
+        GetComponent<ComboHandler>().InitializeCombo(player, playerControls, StateMachine);
     }
     public Player GetPlayer()
     {

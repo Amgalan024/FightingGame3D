@@ -11,8 +11,13 @@ public class Player
     public const int PLAYER2_NUMBER = 2;
     public event Action OnPlayerTurned;
     public event Action OnPlayerDied;
+    public event Action OnPlayerRefreshed;
+
     public event Action<int> OnHPChanged;
     public event Action<int> OnDamageChanged;
+    public event Action<int> OnPlayerWonRound;
+
+    public int RoundScore { private set; get; }
     public int Number { private set; get; }
     public Sprite Icon { private set; get; }
     public int HealthPoints { private set; get; }
@@ -70,6 +75,13 @@ public class Player
         this.PunchDamage = punchDamage;
         this.KickDamage = kickDamage;
     }
+    public void RefreshPlayer()
+    {
+        this.HealthPoints = MaxHealthPoints;
+        this.MovementSpeed = 0;
+        OnHPChanged?.Invoke(this.HealthPoints);
+        OnPlayerRefreshed?.Invoke();
+    }
     public void TakeDamage(int incomeDamage)
     {
         this.HealthPoints -= incomeDamage;
@@ -83,5 +95,10 @@ public class Player
     {
         this.Damage = damage;
         OnDamageChanged?.Invoke(this.Damage);
+    }
+    public void  AddRoundScore()
+    {
+        this.RoundScore++;
+        OnPlayerWonRound?.Invoke(this.RoundScore);
     }
 }

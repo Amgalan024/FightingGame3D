@@ -22,7 +22,6 @@ public class PlayerBuilder : MonoBehaviour
     public void BuildPlayer(int playerNumber)
     {
         player = new Player(playerNumber, playerIcon, maxHealthPoints, maxEnergyPoints, healthPoints, energyPoints, movementSpeed, jumpForce, punchDamage, kickDamage);
-      //  player.Number = playerNumber;
         if (player.Number == Player.PLAYER1_NUMBER)
         {
             player.AtLeftSide = true;
