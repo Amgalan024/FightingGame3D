@@ -2167,6 +2167,8 @@ GameObject:
   - component: {fileID: 7614905334654197299}
   - component: {fileID: 7614905334654197298}
   - component: {fileID: 6001045553561894549}
+  - component: {fileID: 6521783543775393887}
+  - component: {fileID: 331919583319971425}
   m_Layer: 0
   m_Name: BlueBot
   m_TagString: Untagged
@@ -2286,6 +2288,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d67c3b821e4292241a5e147a7e0376f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6521783543775393887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308495431854941025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ca69411336a1cc42a450463b52d518a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &331919583319971425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308495431854941025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b617ae4c0a34d42b526b31d8dd1211, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7397325746335023162

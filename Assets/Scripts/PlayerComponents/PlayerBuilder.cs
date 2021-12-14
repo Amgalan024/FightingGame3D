@@ -18,36 +18,31 @@ public class PlayerBuilder : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private int punchDamage;
     [SerializeField] private int kickDamage;
-    private Player player;
+    public Player Player { private set; get; }
     public void BuildPlayer(int playerNumber)
     {
-        player = new Player(playerNumber, playerIcon, maxHealthPoints, maxEnergyPoints, healthPoints, energyPoints, movementSpeed, jumpForce, punchDamage, kickDamage);
-        if (player.Number == Player.PLAYER1_NUMBER)
+        Player = new Player(playerNumber, playerIcon, maxHealthPoints, maxEnergyPoints, healthPoints, energyPoints, movementSpeed, jumpForce, punchDamage, kickDamage);
+        if (Player.Number == Player.PLAYER1_NUMBER)
         {
-            player.AtLeftSide = true;
-            player.AtRightSide = false;
+            Player.AtLeftSide = true;
+            Player.AtRightSide = false;
         }
-        if (player.Number == Player.PLAYER2_NUMBER)
+        if (Player.Number == Player.PLAYER2_NUMBER)
         {
-            player.AtLeftSide = false;
-            player.AtRightSide = true;
+            Player.AtLeftSide = false;
+            Player.AtRightSide = true;
         }
         foreach (var playerComponent in GetComponents<IPlayerComponent>())
         {
-            playerComponent.InitializeComponent(player);
+            playerComponent.InitializeComponent(Player);
         }
         foreach (var playerComponent in GetComponentsInChildren<IPlayerComponent>())
         {
-            playerComponent.InitializeComponent(player);
+            playerComponent.InitializeComponent(Player);
         }
     }
     public void InitializeEnemyForPlayer(Transform enemyTransform)
     {
         GetComponent<PlayerStateMachineController>().InitializeEnemyForPlayer(enemyTransform);
     }
-    public Player GetPlayer()
-    {
-        return this.player;
-    }
-
 }

@@ -12,15 +12,15 @@ public class FightSceneInit : MonoBehaviour
     [SerializeField] private FightSceneStatsPanel fightSceneStatsPanel;
     [SerializeField] private Transform player1SpawnPoint;
     [SerializeField] private Transform player2SpawnPoint;
-    private PlayerBuilder player1;
-    private PlayerBuilder player2;
+    private PlayerBuilder player1Builder;
+    private PlayerBuilder player2Builder;
     private FightSceneHandler fightSceneHandler;
     private void Awake()
     {
         InitFightScene();
-        fightSceneHandler = new FightSceneHandler(player1.GetPlayer(), player2.GetPlayer());
-        player1.GetPlayer().OnPlayerDied += OnPlayer2WonRound;
-        player2.GetPlayer().OnPlayerDied += OnPlayer1WonRound;
+        fightSceneHandler = new FightSceneHandler(player1Builder.Player, player2Builder.Player);
+        player1Builder.Player.OnPlayerDied += OnPlayer2WonRound;
+        player2Builder.Player.OnPlayerDied += OnPlayer1WonRound;
     }
     private void OnPlayer1WonRound()
     {
@@ -32,22 +32,22 @@ public class FightSceneInit : MonoBehaviour
     }
     private void InitFightScene()
     {
-        player1 = Instantiate(CharacterSelectContainer.Player1Character, player1SpawnPoint.position, player1SpawnPoint.rotation);
-        player2 = Instantiate(CharacterSelectContainer.Player2Character, player2SpawnPoint.position, player2SpawnPoint.rotation);
-        player2.transform.localScale = new Vector3(player2.transform.localScale.x, player2.transform.localScale.y, -player2.transform.localScale.z);
-        player1.BuildPlayer(Player.PLAYER1_NUMBER);
-        player2.BuildPlayer(Player.PLAYER2_NUMBER);
-        player1.InitializeEnemyForPlayer(player2.transform);
-        player2.InitializeEnemyForPlayer(player1.transform);
-        fightSceneStatsPanel.InitializeStatPanel(player1.GetPlayer(), player2.GetPlayer());
-        cameraMovement.InitializeCameraMovement(player1.gameObject, player2.gameObject);
+        player1Builder = Instantiate(CharacterSelectContainer.Player1Character, player1SpawnPoint.position, player1SpawnPoint.rotation);
+        player2Builder = Instantiate(CharacterSelectContainer.Player2Character, player2SpawnPoint.position, player2SpawnPoint.rotation);
+        player2Builder.transform.localScale = new Vector3(player2Builder.transform.localScale.x, player2Builder.transform.localScale.y, -player2Builder.transform.localScale.z);
+        player1Builder.BuildPlayer(Player.PLAYER1_NUMBER);
+        player2Builder.BuildPlayer(Player.PLAYER2_NUMBER);
+        player1Builder.InitializeEnemyForPlayer(player2Builder.transform);
+        player2Builder.InitializeEnemyForPlayer(player1Builder.transform);
+        fightSceneStatsPanel.InitializeStatPanel(player1Builder.Player, player2Builder.Player);
+        cameraMovement.InitializeCameraMovement(player1Builder.gameObject, player2Builder.gameObject);
     }
     private IEnumerator StartNewRound()
     {
         yield return new WaitForSeconds(2f);
-        player1.transform.position = player1SpawnPoint.position;
-        player2.transform.position = player2SpawnPoint.position;
-        player1.GetPlayer().RefreshPlayer();
-        player2.GetPlayer().RefreshPlayer();
+        player1Builder.transform.position = player1SpawnPoint.position;
+        player2Builder.transform.position = player2SpawnPoint.position;
+        player1Builder.Player.RefreshPlayer();
+        player2Builder.Player.RefreshPlayer();
     }
 }

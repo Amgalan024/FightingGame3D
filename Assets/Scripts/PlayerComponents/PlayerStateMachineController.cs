@@ -11,7 +11,8 @@ public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
 {
     [SerializeField] private Text stateText;
     public StateMachine StateMachine { private set; get; }
-    private Player player;
+
+    public Player Player { set; get; }
     private PlayerStates playerStates;
     private Rigidbody playerRigidbody;
     private Animator animator;
@@ -32,7 +33,6 @@ public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
     }
     private void FixedUpdate()
     {
-        MatchingAnimatorParameters();
         StateMachine.CurrentState.FixedUpdate();
     }
     private void OnTriggerEnter(Collider other)
@@ -43,23 +43,9 @@ public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
     {
         StateMachine.CurrentState.OnTriggerExit(other);
     }
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.GetComponent<Platform>())
-        {
-            player.IsGrounded = false;
-        }
-    }
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.GetComponent<Platform>())
-        {
-            player.IsGrounded = true;
-        }
-    }
     public void InitializeComponent(Player player)
     {
-        this.player = player;
+        this.Player = player;
         StateMachine = new StateMachine();
         playerStates = new PlayerStates();
         if (player.Number == Player.PLAYER1_NUMBER)
@@ -84,20 +70,6 @@ public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
         StateMachine.Initialize(playerStates.Idle, playerStates);
         GetComponent<ComboHandler>().InitializeCombo(player, playerControls, StateMachine);
     }
-    public Player GetPlayer()
-    {
-        return this.player;
-    }
-    public void SetAttackFalse()
-    {
-        player.IsAttacking = false;
-    }
-    private void MatchingAnimatorParameters()
-    {
-        animator.SetBool("IsAttacking", player.IsAttacking);
-        animator.SetBool("IsGrounded", player.IsGrounded);
-        animator.SetBool("IsCrouching", player.IsCrouching);
-    }
     public void InitializeEnemyForPlayer(Transform enemyTransform)
     {
         playerStates.Idle.EnemyTransform = enemyTransform;
@@ -107,5 +79,4 @@ public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
         playerStates.Jump.EnemyTransform = enemyTransform;
         playerStates.Fall.EnemyTransform = enemyTransform;
     }
-
 }
