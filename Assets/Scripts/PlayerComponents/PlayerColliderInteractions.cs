@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class PlayerColliderInteractions : MonoBehaviour, IPlayerComponent
 {
-    public Player Player { set; get; }
+    public Player Player { private set; get; }
 
     private void OnCollisionExit(Collision collision)
     {

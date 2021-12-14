@@ -9,7 +9,7 @@ class PlayerAttackHitBox : MonoBehaviour, IPlayerComponent
 {
     public int Damage { private set; get; }
 
-    public Player Player { set; get; }
+    public Player Player { private set; get; }
     private void OnDamageChanged(int damage)
     {
         Damage = damage;

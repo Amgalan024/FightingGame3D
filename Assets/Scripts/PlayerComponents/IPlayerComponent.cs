@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 public interface IPlayerComponent
 {
-    Player Player { set; get; }
+    Player Player { get; }
     void InitializeComponent(Player player);
 }

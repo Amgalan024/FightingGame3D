@@ -34,7 +34,6 @@ public class FightSceneInit : MonoBehaviour
     {
         player1Builder = Instantiate(CharacterSelectContainer.Player1Character, player1SpawnPoint.position, player1SpawnPoint.rotation);
         player2Builder = Instantiate(CharacterSelectContainer.Player2Character, player2SpawnPoint.position, player2SpawnPoint.rotation);
-        player2Builder.transform.localScale = new Vector3(player2Builder.transform.localScale.x, player2Builder.transform.localScale.y, -player2Builder.transform.localScale.z);
         player1Builder.BuildPlayer(Player.PLAYER1_NUMBER);
         player2Builder.BuildPlayer(Player.PLAYER2_NUMBER);
         player1Builder.InitializeEnemyForPlayer(player2Builder.transform);

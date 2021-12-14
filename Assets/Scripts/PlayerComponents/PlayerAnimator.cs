@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour, IPlayerComponent
 {
-    public Player Player { set; get; }
+    public Player Player { private set; get; }
     private Animator animator;
     private void Awake()
     {

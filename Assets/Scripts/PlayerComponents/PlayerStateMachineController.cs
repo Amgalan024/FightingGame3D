@@ -11,8 +11,7 @@ public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
 {
     [SerializeField] private Text stateText;
     public StateMachine StateMachine { private set; get; }
-
-    public Player Player { set; get; }
+    public Player Player { private set; get; }
     private PlayerStates playerStates;
     private Rigidbody playerRigidbody;
     private Animator animator;
@@ -62,11 +61,11 @@ public class PlayerStateMachineController : MonoBehaviour, IPlayerComponent
         playerStates.RunBackward = new RunBackward(player, StateMachine, animator, playerRigidbody, playerControls, transform);
         playerStates.Jump = new Jump(player, StateMachine, animator, playerRigidbody, playerControls, transform);
         playerStates.Fall = new Fall(player, StateMachine, animator, playerRigidbody, playerControls, transform);
+        playerStates.Block = new Block(player, StateMachine, animator, playerRigidbody, playerControls);
         playerStates.Punch = new Punch(player, StateMachine, animator, playerRigidbody, playerControls);
         playerStates.Kick = new Kick(player, StateMachine, animator, playerRigidbody, playerControls);
         playerStates.Combo = new Combo(player, StateMachine, animator, playerRigidbody, playerControls);
         playerStates.Death = new Death(player, StateMachine, animator, playerRigidbody, playerControls);
-        playerStates.Block = new Block(player, StateMachine, animator, playerRigidbody, playerControls);
         StateMachine.Initialize(playerStates.Idle, playerStates);
         GetComponent<ComboHandler>().InitializeCombo(player, playerControls, StateMachine);
     }

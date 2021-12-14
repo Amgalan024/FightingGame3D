@@ -31,6 +31,7 @@ public class PlayerBuilder : MonoBehaviour
         {
             Player.AtLeftSide = false;
             Player.AtRightSide = true;
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, -transform.localScale.z);
         }
         foreach (var playerComponent in GetComponents<IPlayerComponent>())
         {

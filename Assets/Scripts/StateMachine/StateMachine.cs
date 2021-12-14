@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 public class StateMachine
 {
-    public PlayerStates PlayerStates { set; get; }
-    public State CurrentState { set; get; }
-    public State PreviousState { set; get; }
+    public PlayerStates PlayerStates { private set; get; }
+    public State CurrentState { private set; get; }
+    public State PreviousState { private set; get; }
     public void Initialize(State StartingState, PlayerStates PlayerStates)
     {
         this.CurrentState = StartingState;

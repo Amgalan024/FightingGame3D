@@ -25,7 +25,7 @@ public class CameraMovement : MonoBehaviour
         maxDistancedRangeDistanceBetweenPlayers = 10;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (player1 != null && player2 != null)
         {

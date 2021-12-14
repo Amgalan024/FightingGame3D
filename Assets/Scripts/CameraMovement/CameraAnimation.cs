@@ -30,11 +30,17 @@ public class CameraAnimation : MonoBehaviour
     }
     private void OnPlayersExitClosedRange()
     {
-        StartCoroutine(DistanceCamera());
+        if (!isAnimPlaying)
+        {
+            StartCoroutine(DistanceCamera());
+        }
     }
     private void OnPlayersEnteredClosedRange()
     {
-        StartCoroutine(CloseCamera());
+        if (!isAnimPlaying)
+        {
+            StartCoroutine(CloseCamera());
+        }
     }
     public void SideBordersUpdate()
     {
@@ -54,22 +60,28 @@ public class CameraAnimation : MonoBehaviour
     }
     private IEnumerator CloseCamera()
     {
+        isAnimPlaying = true;
         while (mainCinemachineCamera.m_Lens.FieldOfView >= 20)
         {
             mainCinemachineCamera.m_Lens.FieldOfView -= Time.deltaTime * animSpeed;
             yield return null;
         }
+        mainCinemachineCamera.m_Lens.FieldOfView = 20;
         isClosedSize = true;
         yield return null;
+        isAnimPlaying = false;
     }
     private IEnumerator DistanceCamera()
     {
+        isAnimPlaying = true;
         while (mainCinemachineCamera.m_Lens.FieldOfView <= 30)
         {
             mainCinemachineCamera.m_Lens.FieldOfView += Time.fixedDeltaTime * animSpeed; 
             yield return new WaitForFixedUpdate();
         }
         isClosedSize = false;
+        mainCinemachineCamera.m_Lens.FieldOfView = 30;
         yield return new WaitForFixedUpdate();
+        isAnimPlaying = false;
     }
 }
