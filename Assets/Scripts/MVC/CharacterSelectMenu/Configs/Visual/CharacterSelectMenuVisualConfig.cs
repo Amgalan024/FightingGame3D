@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace MVC.Configs
 {
+    [CreateAssetMenu(fileName = nameof(CharacterSelectMenuVisualConfig),
+        menuName = "Configs/CharacterSelectMenu/" + nameof(CharacterSelectMenuVisualConfig))]
     public class CharacterSelectMenuVisualConfig : ScriptableObject
     {
         [SerializeField] private CharacterSelectMenuView _menuView;
-        [SerializeField] private CharacterSelectButtonData[] _characterSelectButtonData;
-
+        [SerializeField] private CharacterSelectButtonView _buttonView;
+        public CharacterSelectButtonView ButtonView => _buttonView;
         public CharacterSelectMenuView MenuView => _menuView;
-        public CharacterSelectButtonData[] CharacterSelectButtonData => _characterSelectButtonData;
     }
 }

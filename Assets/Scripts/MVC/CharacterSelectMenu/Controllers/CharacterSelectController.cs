@@ -34,11 +34,13 @@ namespace MVC.Menu.Controllers
             _menuFactory.CreateMenuView();
             _menuFactory.CreateCharacterSelectButtons();
 
-            _playerButtonIndexes = new List<int>(2)
-            {
-                [0] = 0,
-                [1] = _menuStorage.MenuView.GridLayoutGroup.constraintCount - 1
-            };
+            _playerButtonIndexes = new List<int>(2);
+
+            _playerButtonIndexes.Add(0);
+            _playerButtonIndexes.Add(_menuStorage.MenuView.GridLayoutGroup.constraintCount - 1);
+            
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[0]].SelectButton(0);
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[1]].SelectButton(1);
         }
 
         public void Tick()
@@ -86,7 +88,7 @@ namespace MVC.Menu.Controllers
         {
             _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].UnselectButton(index);
 
-            _playerButtonIndexes[index] = value;
+            _playerButtonIndexes[index] += value;
 
             _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].SelectButton(index);
         }

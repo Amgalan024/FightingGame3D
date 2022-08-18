@@ -2,6 +2,8 @@
 
 namespace MVC.Configs
 {
+    [CreateAssetMenu(fileName = nameof(CharacterSelectMenuInputConfig),
+        menuName = "Configs/CharacterSelectMenu/" + nameof(CharacterSelectMenuInputConfig))]
     public class CharacterSelectMenuInputConfig : ScriptableObject
     {
         [SerializeField] private KeyCode _up;

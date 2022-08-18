@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace MVC.Configs
 {
+    [CreateAssetMenu(fileName = nameof(CharacterConfig),
+        menuName = "Configs/CharacterSelectMenu/" + nameof(CharacterConfig))]
     public class CharacterConfig : ScriptableObject
     {
         [SerializeField] private Sprite _icon;

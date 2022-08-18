@@ -5,14 +5,17 @@ namespace MVC.Menu.Services
 {
     public class CharacterSelectMenuFactory
     {
-        private readonly CharacterSelectMenuStorage _storage;
         private readonly CharacterSelectMenuVisualConfig _menuVisualConfig;
+        private readonly CharacterSelectMenuGameplayConfig _menuGameplayConfig;
+
+        private readonly CharacterSelectMenuStorage _storage;
 
         public CharacterSelectMenuFactory(CharacterSelectMenuStorage storage,
-            CharacterSelectMenuVisualConfig menuVisualConfig)
+            CharacterSelectMenuVisualConfig menuVisualConfig, CharacterSelectMenuGameplayConfig menuGameplayConfig)
         {
             _storage = storage;
             _menuVisualConfig = menuVisualConfig;
+            _menuGameplayConfig = menuGameplayConfig;
         }
 
         public void CreateMenuView()
@@ -22,11 +25,10 @@ namespace MVC.Menu.Services
 
         public void CreateCharacterSelectButtons()
         {
-            foreach (var data in _menuVisualConfig.CharacterSelectButtonData)
+            foreach (var characterConfig in _menuGameplayConfig.CharacterConfigs)
             {
-                var characterButton = Object.Instantiate(data.ButtonView, _storage.MenuView.ButtonsContainer);
-
-                var characterConfig = data.CharacterConfig;
+                var characterButton =
+                    Object.Instantiate(_menuVisualConfig.ButtonView, _storage.MenuView.ButtonsContainer);
 
                 _storage.CharacterButtonViews.Add(characterButton);
 

@@ -9,9 +9,9 @@ namespace MVC.Menu.Configs.SOData
     public class CharacterSelectButtonData
     {
         [SerializeField] private CharacterSelectButtonView _buttonView;
+        public CharacterSelectButtonView ButtonView => _buttonView;
         [SerializeField] private CharacterConfig _characterConfig;
 
-        public CharacterSelectButtonView ButtonView => _buttonView;
         public CharacterConfig CharacterConfig => _characterConfig;
     }
 }

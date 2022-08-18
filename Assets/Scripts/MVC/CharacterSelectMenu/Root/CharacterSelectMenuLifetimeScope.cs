@@ -10,7 +10,8 @@ namespace MVC.Root
 {
     public class CharacterSelectMenuLifetimeScope : LifetimeScope
     {
-        [SerializeField] private CharacterSelectMenuVisualConfig _characterSelectMenuVisualConfig;
+        [SerializeField] private CharacterSelectMenuGameplayConfig _menuGameplayConfig;
+        [SerializeField] private CharacterSelectMenuVisualConfig _menuVisualConfig;
 
         [SerializeField] private CharacterSelectMenuInputConfig[] _menuInputConfigs;
 
@@ -18,7 +19,8 @@ namespace MVC.Root
         {
             base.Configure(builder);
 
-            builder.RegisterInstance(_characterSelectMenuVisualConfig);
+            builder.RegisterInstance(_menuGameplayConfig);
+            builder.RegisterInstance(_menuVisualConfig);
             builder.RegisterInstance(_menuInputConfigs);
 
             builder.Register<SelectedCharactersContainer>(Lifetime.Singleton).AsSelf();

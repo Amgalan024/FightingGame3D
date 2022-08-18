@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace MVC.Configs
 {
+    [CreateAssetMenu(fileName = nameof(ComboConfig), menuName = "Configs/Gameplay/" + nameof(ComboConfig))]
     public class ComboConfig : ScriptableObject
     {
         [SerializeField] private ComboData[] _comboList;

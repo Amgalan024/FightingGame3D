@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace MVC.Configs
 {
+    [CreateAssetMenu(fileName = nameof(GameplayVisualConfig), menuName = "Configs/Gameplay/" + nameof(GameplayVisualConfig))]
     public class GameplayVisualConfig : ScriptableObject
     {
         [SerializeField] private FightLocationView _fightLocationView;
