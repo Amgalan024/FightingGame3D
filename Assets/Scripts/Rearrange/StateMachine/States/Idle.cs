@@ -2,8 +2,8 @@
 
 public class Idle : MovementState
 {
-    public Idle(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls, Transform playerTransform) : base(playerModel, stateMachine, animator, rigidbody,
+    public Idle(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls, Transform playerTransform) : base(playerModel, playerStateMachineOld, animator, rigidbody,
         playerControls, playerTransform)
     {
     }

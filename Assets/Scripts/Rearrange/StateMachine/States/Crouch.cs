@@ -2,15 +2,15 @@
 
 public class Crouch : MovementState
 {
-    public Crouch(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls, Transform playerTransform) : base(playerModel, stateMachine, animator, rigidbody,
+    public Crouch(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls, Transform playerTransform) : base(playerModel, playerStateMachineOld, animator, rigidbody,
         playerControls, playerTransform)
     {
     }
 
     public override void Enter()
     {
-        PlayerModel.IsCrouching = true;
+        PlayerModel.IsCrouching.Value = true;
     }
 
     public override void Exit()
@@ -27,8 +27,8 @@ public class Crouch : MovementState
     {
         if (!Input.GetKey(PlayerControls.Crouch))
         {
-            PlayerModel.IsCrouching = false;
-            StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+            PlayerModel.IsCrouching.Value = false;
+            PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Idle);
         }
     }
 

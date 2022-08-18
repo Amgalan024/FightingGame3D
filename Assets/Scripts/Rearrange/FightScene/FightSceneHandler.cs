@@ -14,17 +14,17 @@ public class FightSceneHandler
     {
         player1 = player1;
         player2 = player2;
-        player1.OnPlayerDied += OnPlayer1Died;
-        player2.OnPlayerDied += OnPlayer2Died;
+        player1.OnLose += OnPlayer1Died;
+        player2.OnLose += OnPlayer2Died;
     }
 
     private void OnPlayer1Died()
     {
-        player2.AddRoundScore();
+        player2.ScoreWin();
     }
 
     private void OnPlayer2Died()
     {
-        player1.AddRoundScore();
+        player1.ScoreWin();
     }
 }

@@ -2,16 +2,16 @@
 
 public class Punch : AttackState
 {
-    public Punch(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls) : base(playerModel, stateMachine, animator, rigidbody, playerControls)
+    public Punch(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls) : base(playerModel, playerStateMachineOld, animator, rigidbody, playerControls)
     {
     }
 
     public override void Enter()
     {
         Animator.SetBool("IsPunching", true);
-        PlayerModel.IsAttacking = true;
-        PlayerModel.SetDamage(PlayerModel.PunchDamage);
+        PlayerModel.IsAttacking.Value = true;
+        //PlayerModel.SetDamage(PlayerModel.PunchDamage);
     }
 
     public override void Exit()

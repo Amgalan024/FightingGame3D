@@ -5,8 +5,8 @@ public class Combo : AttackState
     public string Name { set; get; }
     public int Damage { set; get; }
 
-    public Combo(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls) : base(playerModel, stateMachine, animator, rigidbody, playerControls)
+    public Combo(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls) : base(playerModel, playerStateMachineOld, animator, rigidbody, playerControls)
     {
     }
 
@@ -14,15 +14,15 @@ public class Combo : AttackState
     {
         Animator.Play(Name);
         Animator.SetBool(Name, true);
-        PlayerModel.IsAttacking = true;
-        PlayerModel.SetDamage(Damage);
-        PlayerModel.IsDoingCombo = true;
+        PlayerModel.IsAttacking.Value = true;
+        //PlayerModel.SetDamage(Damage);
+        PlayerModel.IsDoingCombo.Value = true;
     }
 
     public override void Exit()
     {
         Animator.SetBool(Name, false);
-        PlayerModel.IsDoingCombo = false;
+        PlayerModel.IsDoingCombo.Value = false;
     }
 
     public override void FixedUpdate()

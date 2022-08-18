@@ -8,7 +8,7 @@ public class PlayerColliderInteractions : MonoBehaviour, IPlayerComponent
     {
         if (collision.gameObject.GetComponent<PlatformView>())
         {
-            PlayerModel.IsGrounded = false;
+            PlayerModel.IsGrounded.Value = false;
         }
     }
 
@@ -16,7 +16,7 @@ public class PlayerColliderInteractions : MonoBehaviour, IPlayerComponent
     {
         if (collision.gameObject.GetComponent<PlatformView>())
         {
-            PlayerModel.IsGrounded = true;
+            PlayerModel.IsGrounded.Value = true;
         }
     }
 

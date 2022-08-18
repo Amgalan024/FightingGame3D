@@ -2,8 +2,8 @@
 
 public class Block : State
 {
-    public Block(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls) : base(playerModel, stateMachine, animator, rigidbody, playerControls)
+    public Block(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls) : base(playerModel, playerStateMachineOld, animator, rigidbody, playerControls)
     {
     }
 
@@ -33,23 +33,23 @@ public class Block : State
         {
             if (Animator.GetBool("IsCrouching"))
             {
-                StateMachine.ChangeState(StateMachine.PlayerStates.Crouch);
+                PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Crouch);
             }
             else
             {
                 if (PlayerModel.MovementSpeed < 0.1)
                 {
-                    StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+                    PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Idle);
                 }
                 else if (Animator.GetFloat("Forward") > 0.1)
                 {
                     PlayerModel.MovementSpeed = 0;
-                    StateMachine.ChangeState(StateMachine.PlayerStates.RunForward);
+                    PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.RunForward);
                 }
                 else if (Animator.GetFloat("Backward") > 0.1)
                 {
                     PlayerModel.MovementSpeed = 0;
-                    StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
+                    PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.RunBackward);
                 }
             }
         }

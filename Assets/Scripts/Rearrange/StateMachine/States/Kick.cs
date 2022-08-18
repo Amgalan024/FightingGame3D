@@ -2,16 +2,16 @@
 
 public class Kick : AttackState
 {
-    public Kick(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls) : base(playerModel, stateMachine, animator, rigidbody, playerControls)
+    public Kick(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls) : base(playerModel, playerStateMachineOld, animator, rigidbody, playerControls)
     {
     }
 
     public override void Enter()
     {
         Animator.SetBool("IsKicking", true);
-        PlayerModel.IsAttacking = true;
-        PlayerModel.SetDamage(PlayerModel.KickDamage);
+        PlayerModel.IsAttacking.Value = true;
+        //PlayerModel.SetDamage(PlayerModel.KickDamage);
     }
 
     public override void Exit()

@@ -29,6 +29,6 @@ public class PlayerAnimator : MonoBehaviour, IPlayerComponent
 
     public void SetAttackFalse()
     {
-        PlayerModel.IsAttacking = false;
+        PlayerModel.IsAttacking.Value = false;
     }
 }

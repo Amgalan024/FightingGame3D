@@ -2,8 +2,8 @@
 
 public class RunBackward : MovementState
 {
-    public RunBackward(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls, Transform playerTransform) : base(playerModel, stateMachine, animator, rigidbody,
+    public RunBackward(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls, Transform playerTransform) : base(playerModel, playerStateMachineOld, animator, rigidbody,
         playerControls, playerTransform)
     {
     }
@@ -42,7 +42,7 @@ public class RunBackward : MovementState
 
             if (PlayerModel.MovementSpeed <= 0)
             {
-                StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+                PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Idle);
             }
 
             Animator.SetFloat("Backward", PlayerModel.MovementSpeed);

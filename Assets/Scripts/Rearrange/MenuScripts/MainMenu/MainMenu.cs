@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
             selectedButton = value;
             mainMenuButtonsArray[selectedButton].SelectButton();
         }
-        get { return selectedButton; }
+        get => selectedButton;
     }
 
     private MainMenuButton[] mainMenuButtonsArray;

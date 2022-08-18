@@ -4,15 +4,15 @@ public class Jump : MovementState
 {
     public int JumpCount { set; get; }
 
-    public Jump(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls, Transform playerTransform) : base(playerModel, stateMachine, animator, rigidbody,
+    public Jump(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls, Transform playerTransform) : base(playerModel, playerStateMachineOld, animator, rigidbody,
         playerControls, playerTransform)
     {
     }
 
     public override void Enter()
     {
-        Debug.Log($"{StateMachine.PlayerStates.Punch.GetType().BaseType}");
+        Debug.Log($"{PlayerStateMachineOld.PlayerStates.Punch.GetType().BaseType}");
         if (!PreviousStateEqualsAttackState())
         {
             Rigidbody.velocity = new Vector3(Rigidbody.velocity.x, PlayerModel.JumpForce, Rigidbody.velocity.z);
@@ -35,7 +35,7 @@ public class Jump : MovementState
     {
         if (Rigidbody.velocity.y <= 0)
         {
-            StateMachine.ChangeState(StateMachine.PlayerStates.Fall);
+            PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Fall);
         }
     }
 
@@ -49,8 +49,8 @@ public class Jump : MovementState
 
     public bool PreviousStateEqualsAttackState()
     {
-        if (StateMachine.PreviousState.GetType().BaseType
-            .IsEquivalentTo(StateMachine.PlayerStates.Punch.GetType().BaseType))
+        if (PlayerStateMachineOld.PreviousState.GetType().BaseType
+            .IsEquivalentTo(PlayerStateMachineOld.PlayerStates.Punch.GetType().BaseType))
         {
             return true;
         }

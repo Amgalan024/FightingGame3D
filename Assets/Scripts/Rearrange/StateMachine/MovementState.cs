@@ -5,8 +5,8 @@ abstract public class MovementState : State
     public Transform EnemyTransform;
     public Transform PlayerTransform;
 
-    protected MovementState(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls, Transform playerTransform) : base(playerModel, stateMachine, animator, rigidbody,
+    protected MovementState(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls, Transform playerTransform) : base(playerModel, playerStateMachineOld, animator, rigidbody,
         playerControls)
     {
         PlayerTransform = playerTransform;

@@ -15,8 +15,8 @@ public class FightSceneInit : MonoBehaviour
     {
         InitFightScene();
         fightSceneHandler = new FightSceneHandler(player1Builder.PlayerModel, player2Builder.PlayerModel);
-        player1Builder.PlayerModel.OnPlayerDied += OnPlayer2WonRound;
-        player2Builder.PlayerModel.OnPlayerDied += OnPlayer1WonRound;
+        player1Builder.PlayerModel.OnLose += OnPlayer2WonRound;
+        player2Builder.PlayerModel.OnLose += OnPlayer1WonRound;
     }
 
     private void OnPlayer1WonRound()

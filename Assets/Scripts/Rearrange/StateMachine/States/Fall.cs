@@ -2,8 +2,8 @@
 
 public class Fall : MovementState
 {
-    public Fall(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls, Transform playerTransform) : base(playerModel, stateMachine, animator, rigidbody,
+    public Fall(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls, Transform playerTransform) : base(playerModel, playerStateMachineOld, animator, rigidbody,
         playerControls, playerTransform)
     {
     }
@@ -30,18 +30,18 @@ public class Fall : MovementState
     {
         if (PlayerModel.IsGrounded)
         {
-            StateMachine.PlayerStates.Jump.JumpCount = 0;
+            PlayerStateMachineOld.PlayerStates.Jump.JumpCount = 0;
             if (PlayerModel.MovementSpeed < 0.1)
             {
-                StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+                PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Idle);
             }
             else if (Animator.GetFloat("Forward") > 0.1)
             {
-                StateMachine.ChangeState(StateMachine.PlayerStates.RunForward);
+                PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.RunForward);
             }
             else if (Animator.GetFloat("Backward") > 0.1)
             {
-                StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
+                PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.RunBackward);
             }
         }
     }

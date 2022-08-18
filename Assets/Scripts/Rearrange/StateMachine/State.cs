@@ -3,27 +3,27 @@
 public abstract class State
 {
     public Animator Animator { private set; get; }
-    public StateMachine StateMachine { private set; get; }
+    public PlayerStateMachineOld PlayerStateMachineOld { private set; get; }
     public PlayerModel PlayerModel { private set; get; }
-    public Rigidbody Rigidbody { private set; get; }
     public PlayerControls PlayerControls { private set; get; }
+    public Rigidbody Rigidbody { private set; get; }
 
-    protected State(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
+    protected State(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
         PlayerControls playerControls)
     {
         PlayerModel = playerModel;
-        StateMachine = stateMachine;
+        PlayerStateMachineOld = playerStateMachineOld;
         Animator = animator;
         Rigidbody = rigidbody;
         PlayerControls = playerControls;
-        PlayerModel.OnPlayerDied += OnPlayerDied;
-        PlayerModel.OnPlayerWonRound += OnPlayerWonRound;
+        PlayerModel.OnLose += OnLose;
+        //PlayerModel.OnWin += OnWin;
         PlayerModel.OnPlayerRefreshed += OnPlayerRefreshed;
     }
 
-    protected State(StateMachine stateMachine)
+    protected State(PlayerStateMachineOld playerStateMachineOld)
     {
-        StateMachine = stateMachine;
+        PlayerStateMachineOld = playerStateMachineOld;
     }
 
     public abstract void Enter();
@@ -37,7 +37,7 @@ public abstract class State
         {
             if (PlayerModel.IsBlocking)
             {
-                StateMachine.ChangeState(StateMachine.PlayerStates.Block);
+                PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Block);
             }
             else
             {
@@ -55,12 +55,12 @@ public abstract class State
     {
         if (Input.GetKeyDown(PlayerControls.Punch))
         {
-            StateMachine.ChangeState(StateMachine.PlayerStates.Punch);
+            PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Punch);
         }
 
         if (Input.GetKeyDown(PlayerControls.Kick))
         {
-            StateMachine.ChangeState(StateMachine.PlayerStates.Kick);
+            PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Kick);
         }
     }
 
@@ -68,7 +68,7 @@ public abstract class State
     {
         if (Input.GetKeyDown(PlayerControls.Jump))
         {
-            StateMachine.ChangeState(StateMachine.PlayerStates.Jump);
+            PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Jump);
         }
     }
 
@@ -76,12 +76,12 @@ public abstract class State
     {
         if (Input.GetKey(PlayerControls.MoveForward))
         {
-            StateMachine.ChangeState(StateMachine.PlayerStates.RunForward);
+            PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.RunForward);
         }
 
         if (Input.GetKey(PlayerControls.MoveBackward))
         {
-            StateMachine.ChangeState(StateMachine.PlayerStates.RunBackward);
+            PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.RunBackward);
         }
     }
 
@@ -89,7 +89,7 @@ public abstract class State
     {
         if (Input.GetKey(PlayerControls.Crouch))
         {
-            StateMachine.ChangeState(StateMachine.PlayerStates.Crouch);
+            PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Crouch);
         }
     }
 
@@ -97,26 +97,26 @@ public abstract class State
     {
         if (Input.GetKey(PlayerControls.MoveBackward))
         {
-            PlayerModel.IsBlocking = true;
+            PlayerModel.IsBlocking.Value = true;
         }
         else
         {
-            PlayerModel.IsBlocking = false;
+            PlayerModel.IsBlocking.Value = false;
         }
     }
 
     private void OnPlayerRefreshed()
     {
-        StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+        PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Idle);
     }
 
-    private void OnPlayerWonRound(int obj)
+    private void OnWin(int obj)
     {
-        StateMachine.ChangeState(StateMachine.PlayerStates.Death);
+        PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Death);
     }
 
-    private void OnPlayerDied()
+    private void OnLose()
     {
-        StateMachine.ChangeState(StateMachine.PlayerStates.Death);
+        PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Death);
     }
 }

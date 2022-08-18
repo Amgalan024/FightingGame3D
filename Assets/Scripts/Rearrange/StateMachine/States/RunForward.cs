@@ -2,8 +2,8 @@
 
 public class RunForward : MovementState
 {
-    public RunForward(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls, Transform playerTransform) : base(playerModel, stateMachine, animator, rigidbody,
+    public RunForward(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls, Transform playerTransform) : base(playerModel, playerStateMachineOld, animator, rigidbody,
         playerControls, playerTransform)
     {
     }
@@ -41,7 +41,7 @@ public class RunForward : MovementState
 
             if (PlayerModel.MovementSpeed <= 0)
             {
-                StateMachine.ChangeState(StateMachine.PlayerStates.Idle);
+                PlayerStateMachineOld.ChangeState(PlayerStateMachineOld.PlayerStates.Idle);
             }
 
             Animator.SetFloat("Forward", PlayerModel.MovementSpeed);

@@ -2,8 +2,8 @@
 
 public class Death : State
 {
-    public Death(PlayerModel playerModel, StateMachine stateMachine, Animator animator, Rigidbody rigidbody,
-        PlayerControls playerControls) : base(playerModel, stateMachine, animator, rigidbody, playerControls)
+    public Death(PlayerModel playerModel, PlayerStateMachineOld playerStateMachineOld, Animator animator, Rigidbody rigidbody,
+        PlayerControls playerControls) : base(playerModel, playerStateMachineOld, animator, rigidbody, playerControls)
     {
     }
 

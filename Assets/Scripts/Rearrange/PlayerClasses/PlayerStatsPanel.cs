@@ -19,7 +19,7 @@ public class PlayerStatsPanel
         SetStatBar(energyPointBar, playerModel.MaxEnergyPoints, playerModel.EnergyPoints);
         scoreText.text = playerModel.RoundScore.ToString();
         playerModel.OnHPChanged += OnHPChanged;
-        playerModel.OnPlayerWonRound += OnPlayerWonRound;
+        //playerModel.OnWin += OnWin;
     }
 
     private void OnHPChanged(int healthPoints)
@@ -27,7 +27,7 @@ public class PlayerStatsPanel
         _healthPointBar.value = healthPoints;
     }
 
-    private void OnPlayerWonRound(int roundScore)
+    private void OnWin(int roundScore)
     {
         _scoreText.text = roundScore.ToString();
     }
