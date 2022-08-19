@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: CharacterConfig 1
   m_EditorClassIdentifier: 
   _icon: {fileID: 0}
-  _maxHealthPoints: 0
-  _maxEnergyPoints: 0
-  _movementSpeed: 0
-  _jumpForce: 0
-  _punchDamage: 0
-  _kickDamage: 0
-  _prefab: {fileID: 0}
+  _maxHealthPoints: 100
+  _maxEnergyPoints: 100
+  _movementSpeed: 10
+  _jumpForce: 10
+  _punchDamage: 10
+  _kickDamage: 10
+  _prefab: {fileID: 465514404453568435, guid: e0782d1de0235e34e9f9ea99e2a44a24, type: 3}

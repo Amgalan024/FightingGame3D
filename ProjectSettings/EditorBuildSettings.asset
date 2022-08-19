@@ -6,12 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: 1ed7b7918ff64dd4cba0fb3306c1c5b0
+    path: Assets/MVC Pattern/Scenes/FightScene.unity
+    guid: 441214c40bad93d43bd90da89b9e99d3
   - enabled: 1
-    path: Assets/Scenes/CharacterSelectMenu.unity
-    guid: fc77114b44133f64b896c7b2dcb9c30f
-  - enabled: 1
-    path: Assets/Scenes/FightScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/MVC Pattern/Scenes/CharacterSelectScene.unity
+    guid: 5653835d05061664c83d8c1b7c13cc51
   m_configObjects: {}
