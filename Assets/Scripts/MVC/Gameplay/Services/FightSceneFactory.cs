@@ -2,6 +2,7 @@
 using MVC.Gameplay.Models.Player;
 using MVC.Menu.Models;
 using UnityEngine;
+using VContainer.Unity;
 
 namespace MVC.Gameplay.Services
 {
@@ -11,17 +12,20 @@ namespace MVC.Gameplay.Services
         private readonly FightSceneStorage _storage;
         private readonly SelectedCharactersContainer _charactersContainer;
 
+        private readonly Transform _parent;
+
         public FightSceneFactory(FightSceneStorage storage, GameplayVisualConfig visualConfig,
-            SelectedCharactersContainer charactersContainer)
+            SelectedCharactersContainer charactersContainer, LifetimeScope lifetimeScope)
         {
             _storage = storage;
             _visualConfig = visualConfig;
             _charactersContainer = charactersContainer;
+            _parent = lifetimeScope.transform;
         }
 
         public void CreateFightLocation()
         {
-            var fightLocation = Object.Instantiate(_visualConfig.FightLocationView);
+            var fightLocation = Object.Instantiate(_visualConfig.FightLocationView, _parent);
 
             _storage.FightLocationView = fightLocation;
         }

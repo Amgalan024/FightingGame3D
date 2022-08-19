@@ -1,5 +1,7 @@
 ﻿using MVC.Configs;
+using MVC.Gameplay;
 using MVC.Gameplay.Controllers;
+using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using UnityEngine;
 using VContainer;
@@ -17,8 +19,13 @@ namespace MVC.Root
 
             builder.RegisterInstance(_visualConfig);
 
-            builder.Register<FightSceneController>(Lifetime.Singleton);
-            builder.Register<PlayerLifetimeScopeFactory>(Lifetime.Scoped);
+            builder.Register<PlayerLifetimeScopeFactory>(Lifetime.Singleton);
+
+            builder.Register<FightSceneFactory>(Lifetime.Singleton);
+            builder.Register<FightSceneStorage>(Lifetime.Singleton);
+            builder.Register<FightSceneModel>(Lifetime.Singleton);
+
+            builder.RegisterEntryPoint<FightSceneController>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MVC.Configs;
+using MVC.Gameplay.Controllers;
 using MVC.Menu.Controllers;
 using MVC.Menu.Models;
 using MVC.Menu.Services;

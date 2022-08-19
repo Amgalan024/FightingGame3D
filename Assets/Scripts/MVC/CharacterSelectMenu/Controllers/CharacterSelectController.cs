@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using Cysharp.Threading.Tasks;
 using MVC.Configs;
 using MVC.Menu.Models;
 using MVC.Menu.Services;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using VContainer;
 using VContainer.Unity;
 
 namespace MVC.Menu.Controllers
@@ -15,7 +16,6 @@ namespace MVC.Menu.Controllers
         private readonly CharacterSelectMenuFactory _menuFactory;
         private readonly SelectedCharactersContainer _selectedCharactersContainer;
         private readonly CharacterSelectMenuInputConfig[] _inputConfigs;
-
         private List<int> _playerButtonIndexes;
 
         private float _countDownTime;
@@ -80,7 +80,7 @@ namespace MVC.Menu.Controllers
             {
                 var selectedButton = _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]];
                 _selectedCharactersContainer.PlayerConfigs.Add(_menuStorage.CharacterConfigsByButtons[selectedButton]);
-                StartFightScene();
+                StartFightSceneAsync().Forget();
             }
         }
 
@@ -93,11 +93,15 @@ namespace MVC.Menu.Controllers
             _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].SelectButton(index);
         }
 
-        private void StartFightScene()
+        private async UniTaskVoid StartFightSceneAsync()
         {
-            if (_selectedCharactersContainer.PlayerConfigs.All(characterConfig => characterConfig != null))
+            if (_selectedCharactersContainer.PlayerConfigs.Count >= 2)
             {
-                SceneManager.LoadScene(1);
+                using (LifetimeScope.Enqueue(builder => builder.RegisterInstance(_selectedCharactersContainer)))
+                {
+                    await SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+                    await SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+                }
             }
         }
     }

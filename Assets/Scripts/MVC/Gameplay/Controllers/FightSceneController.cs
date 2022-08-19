@@ -6,7 +6,7 @@ using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class FightSceneController : IInitializable, IFixedTickable, IDisposable
+    public class FightSceneController : IStartable, IFixedTickable, IDisposable
     {
         private readonly FightSceneFactory _factory;
         private readonly FightSceneStorage _storage;
@@ -23,7 +23,7 @@ namespace MVC.Gameplay.Controllers
             _fightSceneModel = fightSceneModel;
         }
 
-        void IInitializable.Initialize()
+        void IStartable.Start()
         {
             _factory.CreateFightLocation();
             _factory.CreatePlayers();

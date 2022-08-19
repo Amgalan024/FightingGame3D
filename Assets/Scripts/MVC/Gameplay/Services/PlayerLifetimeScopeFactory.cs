@@ -2,7 +2,6 @@
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
 using MVC.Models;
-using MVC.Root;
 using MVC.StateMachine;
 using MVC.StateMachine.States;
 using MVC.Views;
@@ -13,9 +12,9 @@ namespace MVC.Gameplay.Services
 {
     public class PlayerLifetimeScopeFactory
     {
-        private readonly GameplayLifeTimeScope _gameplayLifeTimeScope;
+        private readonly LifetimeScope _gameplayLifeTimeScope;
 
-        public PlayerLifetimeScopeFactory(GameplayLifeTimeScope gameplayLifeTimeScope)
+        public PlayerLifetimeScopeFactory(LifetimeScope gameplayLifeTimeScope)
         {
             _gameplayLifeTimeScope = gameplayLifeTimeScope;
         }
@@ -37,7 +36,8 @@ namespace MVC.Gameplay.Services
                 builder.Register<InputActionModelsContainer>(Lifetime.Scoped);
                 builder.Register<ComboModelsContainer>(Lifetime.Scoped);
 
-                builder.RegisterEntryPoint<PlayerStateMachine>(Lifetime.Scoped);
+                builder.Register<PlayerStateMachine>(Lifetime.Scoped).AsSelf().AsImplementedInterfaces();
+
                 builder.RegisterEntryPoint<PlayerStateController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<BaseInputController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<ComboInputController>(Lifetime.Scoped);

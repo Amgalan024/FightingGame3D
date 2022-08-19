@@ -1,5 +1,6 @@
 ﻿using MVC.Configs;
 using UnityEngine;
+using VContainer.Unity;
 
 namespace MVC.Menu.Services
 {
@@ -10,17 +11,20 @@ namespace MVC.Menu.Services
 
         private readonly CharacterSelectMenuStorage _storage;
 
-        public CharacterSelectMenuFactory(CharacterSelectMenuStorage storage,
+        private readonly Transform _parent;
+
+        public CharacterSelectMenuFactory(CharacterSelectMenuStorage storage, LifetimeScope lifetimeScope,
             CharacterSelectMenuVisualConfig menuVisualConfig, CharacterSelectMenuGameplayConfig menuGameplayConfig)
         {
             _storage = storage;
             _menuVisualConfig = menuVisualConfig;
             _menuGameplayConfig = menuGameplayConfig;
+            _parent = lifetimeScope.transform;
         }
 
         public void CreateMenuView()
         {
-            _storage.MenuView = Object.Instantiate(_menuVisualConfig.MenuView);
+            _storage.MenuView = Object.Instantiate(_menuVisualConfig.MenuView, _parent);
         }
 
         public void CreateCharacterSelectButtons()
