@@ -38,7 +38,7 @@ namespace MVC.Menu.Controllers
 
             _playerButtonIndexes.Add(0);
             _playerButtonIndexes.Add(_menuStorage.MenuView.GridLayoutGroup.constraintCount - 1);
-            
+
             _menuStorage.CharacterButtonViews[_playerButtonIndexes[0]].SelectButton(0);
             _menuStorage.CharacterButtonViews[_playerButtonIndexes[1]].SelectButton(1);
         }
@@ -97,12 +97,7 @@ namespace MVC.Menu.Controllers
         {
             if (_selectedCharactersContainer.PlayerConfigs.All(characterConfig => characterConfig != null))
             {
-                _countDownTime -= Time.deltaTime;
-
-                if (_countDownTime <= 0)
-                {
-                    SceneManager.LoadScene(2);
-                }
+                SceneManager.LoadScene(1);
             }
         }
     }
