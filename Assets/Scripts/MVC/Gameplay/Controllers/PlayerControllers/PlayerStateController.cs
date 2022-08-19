@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks.Linq;
 using MVC.Gameplay.Models;
 using MVC.Models;
 using MVC.StateMachine;
@@ -8,7 +10,7 @@ using VContainer.Unity;
 
 namespace MVC.Controllers
 {
-    public class PlayerStateController : IInitializable, IDisposable
+    public class PlayerStateController : IInitializable, IDisposable, IFixedTickable
     {
         private readonly PlayerStateMachine _stateMachine;
         private readonly StatesContainer _statesContainer;
@@ -18,6 +20,8 @@ namespace MVC.Controllers
 
         private readonly PlayerModel _playerModel;
         private readonly PlayerView _playerView;
+
+        private readonly List<IDisposable> _subscriptions = new List<IDisposable>(5);
 
         public PlayerStateController(PlayerStateMachine stateMachine,
             InputActionModelsContainer inputActionModelsContainer, StatesContainer statesContainer,
@@ -31,18 +35,23 @@ namespace MVC.Controllers
             _inputActionModelsContainer = inputActionModelsContainer;
         }
 
-        public void Initialize()
+        void IInitializable.Initialize()
         {
             _stateMachine.StartStateMachine(_statesContainer.IdleState);
 
             InitializeInput();
             InitializePlayer();
         }
+        
+        void IFixedTickable.FixedTick()
+        {
+            _stateMachineModel.CurrentState.OnFixedTick();
+        }
 
-
-        public void Dispose()
+        void IDisposable.Dispose()
         {
             DisposeInput();
+            DisposePlayer();
         }
 
         private void InitializeInput()
@@ -57,6 +66,18 @@ namespace MVC.Controllers
             _inputActionModelsContainer.BlockActionModel.OnInput += OnBlockInput;
         }
 
+        private void DisposeInput()
+        {
+            _inputActionModelsContainer.MoveForwardActionModel.OnInput -= OnMoveForwardInput;
+            _inputActionModelsContainer.MoveBackwardActionModel.OnInput -= OnMoveBackwardInput;
+            _inputActionModelsContainer.BlockStoppedActionModel.OnInput -= OnBlockStopped;
+            _inputActionModelsContainer.PunchActionModel.OnInput -= OnPunchInput;
+            _inputActionModelsContainer.KickActionModel.OnInput -= OnKickInput;
+            _inputActionModelsContainer.JumpActionModel.OnInput -= OnJumpInput;
+            _inputActionModelsContainer.CrouchActionModel.OnInput -= OnCrouchInput;
+            _inputActionModelsContainer.BlockActionModel.OnInput -= OnBlockInput;
+        }
+
         private void InitializePlayer()
         {
             _playerView.HitBoxView.OnColliderEnter += OnColliderEnter;
@@ -64,6 +85,29 @@ namespace MVC.Controllers
 
             _playerModel.OnWin += OnWin;
             _playerModel.OnLose += OnLose;
+
+            _subscriptions.Add(_playerModel.IsAttacking.Subscribe(isAttacking =>
+                _playerView.Animator.SetBool("IsAttacking", isAttacking)));
+
+            _subscriptions.Add(_playerModel.IsGrounded.Subscribe(isGrounded =>
+                _playerView.Animator.SetBool("IsGrounded", isGrounded)));
+
+            _subscriptions.Add(_playerModel.IsCrouching.Subscribe(isCrouching =>
+                _playerView.Animator.SetBool("IsCrouching", isCrouching)));
+        }
+
+        private void DisposePlayer()
+        {
+            _playerView.HitBoxView.OnColliderEnter -= OnColliderEnter;
+            _playerView.HitBoxView.OnColliderExit -= OnColliderExit;
+
+            _playerModel.OnWin -= OnWin;
+            _playerModel.OnLose -= OnLose;
+
+            foreach (var subscription in _subscriptions)
+            {
+                subscription.Dispose();
+            }
         }
 
         private void OnColliderEnter(Collider collider)
@@ -84,18 +128,6 @@ namespace MVC.Controllers
         private void OnLose()
         {
             _stateMachine.ChangeState(_statesContainer.LoseState);
-        }
-
-        private void DisposeInput()
-        {
-            _inputActionModelsContainer.MoveForwardActionModel.OnInput -= OnMoveForwardInput;
-            _inputActionModelsContainer.MoveBackwardActionModel.OnInput -= OnMoveBackwardInput;
-            _inputActionModelsContainer.BlockStoppedActionModel.OnInput -= OnBlockStopped;
-            _inputActionModelsContainer.PunchActionModel.OnInput -= OnPunchInput;
-            _inputActionModelsContainer.KickActionModel.OnInput -= OnKickInput;
-            _inputActionModelsContainer.JumpActionModel.OnInput -= OnJumpInput;
-            _inputActionModelsContainer.CrouchActionModel.OnInput -= OnCrouchInput;
-            _inputActionModelsContainer.BlockActionModel.OnInput -= OnBlockInput;
         }
 
         private void OnMoveForwardInput()
@@ -137,5 +169,7 @@ namespace MVC.Controllers
         {
             _stateMachine.ChangeState(_statesContainer.BlockState);
         }
+
+       
     }
 }

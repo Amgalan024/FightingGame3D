@@ -27,12 +27,12 @@ namespace MVC.Controllers
             _playerStateMachine = playerStateMachine;
         }
 
-        public void Initialize()
+        void IInitializable.Initialize()
         {
             throw new System.NotImplementedException();
         }
 
-        public void Tick()
+        void ITickable.Tick()
         {
             CountComboTimer();
 

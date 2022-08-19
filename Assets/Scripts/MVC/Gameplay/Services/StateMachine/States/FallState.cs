@@ -1,5 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks.Linq;
+using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
 using MVC.Views;
 
@@ -37,11 +38,11 @@ namespace MVC.StateMachine.States
                 {
                     StateMachineModel.ChangeState(StateModel.StatesContainer.IdleState);
                 }
-                else if (PlayerView.Animator.GetFloat("Forward") > 0.1)
+                else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Forward) > 0.1)
                 {
                     StateMachineModel.ChangeState(StateModel.StatesContainer.MoveForwardState);
                 }
-                else if (PlayerView.Animator.GetFloat("Backward") > 0.1)
+                else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Backward) > 0.1)
                 {
                     StateMachineModel.ChangeState(StateModel.StatesContainer.MoveBackwardState);
                 }

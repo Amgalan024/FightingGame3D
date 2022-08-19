@@ -24,6 +24,10 @@ namespace MVC.StateMachine.States
         {
         }
 
+        public virtual void OnFixedTick()
+        {
+        }
+
         public virtual void Exit()
         {
         }

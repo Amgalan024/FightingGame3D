@@ -30,7 +30,7 @@ namespace MVC.Gameplay.Services
                 builder.Register<StateModel>(Lifetime.Scoped);
                 builder.Register<StatesContainer>(Lifetime.Scoped);
                 builder.Register<StateMachineModel>(Lifetime.Scoped);
-                
+
                 builder.Register<PlayerAttackModel>(Lifetime.Scoped);
 
                 builder.Register<ControlModelsContainer>(Lifetime.Scoped);

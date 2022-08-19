@@ -15,11 +15,6 @@ namespace MVC.StateMachine.States
         public override void Enter()
         {
             StateModel.InputActionModelsContainer.SetAllInputActionModels(true);
-            SetFaceToFace();
-        }
-
-        private void SetFaceToFace()
-        {
         }
     }
 }

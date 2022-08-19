@@ -13,6 +13,7 @@ namespace MVC.StateMachine.States
         public PlayerView PlayerView { get; }
 
         abstract void Enter();
+        abstract void OnFixedTick();
         abstract void Exit();
         abstract void OnTriggerEnter(Collider collider);
         abstract void OnTriggerExit(Collider collider);

@@ -46,45 +46,5 @@
             BlockActionModel.Filter = value;
             BlockStoppedActionModel.Filter = value;
         }
-
-        public void InvokeMoveForward()
-        {
-            MoveForwardActionModel.InvokeInput();
-        }
-
-        public void InvokeMoveBackward()
-        {
-            MoveBackwardActionModel.InvokeInput();
-        }
-
-        public void InvokeJump()
-        {
-            JumpActionModel.InvokeInput();
-        }
-
-        public void InvokeCrouch()
-        {
-            CrouchActionModel.InvokeInput();
-        }
-
-        public void InvokePunch()
-        {
-            PunchActionModel.InvokeInput();
-        }
-
-        public void InvokeKick()
-        {
-            KickActionModel.InvokeInput();
-        }
-
-        public void InvokeBlocking()
-        {
-            BlockActionModel.InvokeInput();
-        }
-
-        public void InvokeBlockStop()
-        {
-            BlockStoppedActionModel.InvokeInput();
-        }
     }
 }

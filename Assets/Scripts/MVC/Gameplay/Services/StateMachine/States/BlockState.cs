@@ -1,5 +1,5 @@
-﻿using MVC.Gameplay.Models;
-using MVC.Models;
+﻿using MVC.Gameplay.Constants;
+using MVC.Gameplay.Models;
 using MVC.Views;
 using UnityEngine;
 
@@ -7,12 +7,6 @@ namespace MVC.StateMachine.States
 {
     public class BlockState : State
     {
-        private static readonly int IsBlocking = Animator.StringToHash("IsBlocking");
-        private static readonly int IsCrouching = Animator.StringToHash("IsCrouching");
-        private static readonly int Forward = Animator.StringToHash("Forward");
-        private static readonly int Backward = Animator.StringToHash("Backward");
-
-
         public BlockState(StateModel stateModel, StateMachineModel stateMachineModel, PlayerView playerView) : base(
             stateModel, stateMachineModel, playerView)
         {
@@ -20,12 +14,12 @@ namespace MVC.StateMachine.States
 
         public override void Enter()
         {
-            PlayerView.Animator.SetBool(IsBlocking, true);
+            PlayerView.Animator.SetBool(PlayerAnimatorData.IsBlocking, true);
         }
 
         public override void Exit()
         {
-            PlayerView.Animator.SetBool(IsBlocking, false);
+            PlayerView.Animator.SetBool(PlayerAnimatorData.IsBlocking, false);
         }
 
         public override void OnTriggerExit(Collider collider)
@@ -34,7 +28,7 @@ namespace MVC.StateMachine.States
 
             if (collider.GetComponent<PlayerAttackHitBoxView>())
             {
-                if (PlayerView.Animator.GetBool(IsCrouching))
+                if (PlayerView.Animator.GetBool(PlayerAnimatorData.IsCrouching))
                 {
                     StateMachineModel.ChangeState(StateModel.StatesContainer.CrouchState);
                 }
@@ -44,12 +38,12 @@ namespace MVC.StateMachine.States
                     {
                         StateMachineModel.ChangeState(StateModel.StatesContainer.IdleState);
                     }
-                    else if (PlayerView.Animator.GetFloat(Forward) > 0.1)
+                    else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Forward) > 0.1)
                     {
                         StateModel.PlayerModel.MovementSpeed = 0;
                         StateMachineModel.ChangeState(StateModel.StatesContainer.MoveForwardState);
                     }
-                    else if (PlayerView.Animator.GetFloat(Backward) > 0.1)
+                    else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Backward) > 0.1)
                     {
                         StateModel.PlayerModel.MovementSpeed = 0;
                         StateMachineModel.ChangeState(StateModel.StatesContainer.MoveBackwardState);

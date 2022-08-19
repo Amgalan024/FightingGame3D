@@ -42,7 +42,5 @@ namespace MVC.StateMachine.States
                 StateMachineModel.ChangeState(StateModel.StatesContainer.IdleState);
             }
         }
-
-    
     }
 }

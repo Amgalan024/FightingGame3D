@@ -11,7 +11,6 @@ public class PlayerModel
     public event Action OnPlayerTurned;
     public event Action OnLose;
     public event Action OnPlayerRefreshed;
-
     public event Action<int> OnHPChanged;
     public event Action<int> OnDamageChanged;
     public event Action OnWin;
@@ -34,28 +33,9 @@ public class PlayerModel
     public AsyncReactiveProperty<bool> IsBlocking { set; get; }
     public AsyncReactiveProperty<bool> IsCrouching { set; get; }
 
-    private bool _isAtLeftSide;
-    private bool _isAtRightSide;
+    public bool AtLeftSide { set; get; }
 
-    public bool AtLeftSide
-    {
-        set
-        {
-            OnPlayerTurned?.Invoke();
-            _isAtLeftSide = value;
-        }
-        get => _isAtLeftSide;
-    }
-
-    public bool AtRightSide
-    {
-        set
-        {
-            OnPlayerTurned?.Invoke();
-            _isAtRightSide = value;
-        }
-        get => _isAtRightSide;
-    }
+    public bool AtRightSide { set; get; }
 
     public PlayerModel(int playerNumber, Sprite icon, int maxHealthPoints, int maxEnergyPoints, int healthPoints,
         int energyPoints, float movementSpeed, float jumpForce, int punchDamage, int kickDamage)
@@ -109,5 +89,10 @@ public class PlayerModel
     {
         RoundScore++;
         OnWin?.Invoke();
+    }
+
+    public void TurnPlayer()
+    {
+        OnPlayerTurned?.Invoke();
     }
 }
