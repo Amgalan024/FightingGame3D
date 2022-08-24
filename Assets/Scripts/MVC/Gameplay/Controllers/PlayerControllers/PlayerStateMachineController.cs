@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks.Linq;
+using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Models;
-using MVC.StateMachine;
+using MVC.StateMachine.States;
 using MVC.Views;
 using UnityEngine;
 using VContainer.Unity;
 
 namespace MVC.Controllers
 {
-    public class PlayerStateController : IInitializable, IDisposable, IFixedTickable
+    public class PlayerStateMachineController : IInitializable, IDisposable, IFixedTickable
     {
-        private readonly PlayerStateMachine _stateMachine;
+        private readonly StateMachine.StateMachine _stateMachine;
         private readonly StatesContainer _statesContainer;
         private readonly StateMachineModel _stateMachineModel;
-
+        private readonly StateMachineProxy _stateMachineProxy;
         private readonly InputActionModelsContainer _inputActionModelsContainer;
 
         private readonly PlayerModel _playerModel;
@@ -23,26 +25,30 @@ namespace MVC.Controllers
 
         private readonly List<IDisposable> _subscriptions = new List<IDisposable>(5);
 
-        public PlayerStateController(PlayerStateMachine stateMachine,
+        public PlayerStateMachineController(StateMachine.StateMachine stateMachine,
             InputActionModelsContainer inputActionModelsContainer, StatesContainer statesContainer,
-            PlayerModel playerModel, PlayerView playerView, StateMachineModel stateMachineModel)
+            PlayerModel playerModel, PlayerView playerView, StateMachineModel stateMachineModel,
+            StateMachineProxy stateMachineProxy)
         {
             _stateMachine = stateMachine;
             _statesContainer = statesContainer;
             _playerModel = playerModel;
             _playerView = playerView;
             _stateMachineModel = stateMachineModel;
+            _stateMachineProxy = stateMachineProxy;
             _inputActionModelsContainer = inputActionModelsContainer;
         }
 
         void IInitializable.Initialize()
         {
-            _stateMachine.StartStateMachine(_statesContainer.IdleState);
+            _stateMachine.StartStateMachine(_statesContainer.GetStateByType(typeof(IdleState)));
+
+            _stateMachineProxy.OnStateChanged += OnStateChanged;
 
             InitializeInput();
             InitializePlayer();
         }
-        
+
         void IFixedTickable.FixedTick()
         {
             _stateMachineModel.CurrentState.OnFixedTick();
@@ -50,8 +56,15 @@ namespace MVC.Controllers
 
         void IDisposable.Dispose()
         {
+            _stateMachineProxy.OnStateChanged -= OnStateChanged;
+
             DisposeInput();
             DisposePlayer();
+        }
+
+        private void OnStateChanged(Type stateType)
+        {
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(stateType));
         }
 
         private void InitializeInput()
@@ -87,13 +100,13 @@ namespace MVC.Controllers
             _playerModel.OnLose += OnLose;
 
             _subscriptions.Add(_playerModel.IsAttacking.Subscribe(isAttacking =>
-                _playerView.Animator.SetBool("IsAttacking", isAttacking)));
+                _playerView.Animator.SetBool(PlayerAnimatorData.IsAttacking, isAttacking)));
 
             _subscriptions.Add(_playerModel.IsGrounded.Subscribe(isGrounded =>
-                _playerView.Animator.SetBool("IsGrounded", isGrounded)));
+                _playerView.Animator.SetBool(PlayerAnimatorData.IsGrounded, isGrounded)));
 
             _subscriptions.Add(_playerModel.IsCrouching.Subscribe(isCrouching =>
-                _playerView.Animator.SetBool("IsCrouching", isCrouching)));
+                _playerView.Animator.SetBool(PlayerAnimatorData.IsCrouching, isCrouching)));
         }
 
         private void DisposePlayer()
@@ -122,54 +135,52 @@ namespace MVC.Controllers
 
         private void OnWin()
         {
-            _stateMachine.ChangeState(_statesContainer.WinState);
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(WinState)));
         }
 
         private void OnLose()
         {
-            _stateMachine.ChangeState(_statesContainer.LoseState);
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(LoseState)));
         }
 
         private void OnMoveForwardInput()
         {
-            _stateMachine.ChangeState(_statesContainer.MoveForwardState);
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(RunForwardState)));
         }
 
         private void OnMoveBackwardInput()
         {
-            _stateMachine.ChangeState(_statesContainer.MoveBackwardState);
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(RunBackwardState)));
         }
 
         private void OnBlockStopped()
         {
-            _stateMachine.ChangeState(_statesContainer.PunchState);
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(IdleState)));
         }
 
         private void OnPunchInput()
         {
-            _stateMachine.ChangeState(_statesContainer.PunchState);
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(PunchState)));
         }
 
         private void OnKickInput()
         {
-            _stateMachine.ChangeState(_statesContainer.KickState);
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(KickState)));
         }
 
         private void OnJumpInput()
         {
-            _stateMachine.ChangeState(_statesContainer.JumpState);
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(JumpState)));
         }
 
         private void OnCrouchInput()
         {
-            _stateMachine.ChangeState(_statesContainer.CrouchState);
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(CrouchState)));
         }
 
         private void OnBlockInput()
         {
-            _stateMachine.ChangeState(_statesContainer.BlockState);
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(BlockState)));
         }
-
-       
     }
 }

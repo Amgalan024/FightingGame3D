@@ -9,20 +9,20 @@ namespace MVC.Controllers
     {
         private readonly PlayerModel _playerModel;
 
-        private readonly ControlModelsContainer _controlModelsContainer;
+        private readonly InputModelsContainer _inputModelsContainer;
         private readonly InputActionModelsContainer _inputActionModelsContainer;
 
         public BaseInputController(InputActionModelsContainer inputActionModelsContainer,
-            ControlModelsContainer controlModelsContainer, PlayerModel playerModel)
+            InputModelsContainer inputModelsContainer, PlayerModel playerModel)
         {
             _inputActionModelsContainer = inputActionModelsContainer;
-            _controlModelsContainer = controlModelsContainer;
+            _inputModelsContainer = inputModelsContainer;
             _playerModel = playerModel;
         }
 
         void IInitializable.Initialize()
         {
-            _playerModel.OnPlayerTurned += _controlModelsContainer.SwitchMovementControllers;
+            _playerModel.OnPlayerTurned += _inputModelsContainer.SwitchMovementControllers;
         }
 
         void ITickable.Tick()
@@ -35,17 +35,17 @@ namespace MVC.Controllers
 
         void IDisposable.Dispose()
         {
-            _playerModel.OnPlayerTurned -= _controlModelsContainer.SwitchMovementControllers;
+            _playerModel.OnPlayerTurned -= _inputModelsContainer.SwitchMovementControllers;
         }
 
         private void HandleAttackInput()
         {
-            if (Input.GetKeyDown(_controlModelsContainer.Punch.Key))
+            if (Input.GetKeyDown(_inputModelsContainer.Punch.Key))
             {
                 _inputActionModelsContainer.PunchActionModel.InvokeInput();
             }
 
-            if (Input.GetKeyDown(_controlModelsContainer.Kick.Key))
+            if (Input.GetKeyDown(_inputModelsContainer.Kick.Key))
             {
                 _inputActionModelsContainer.KickActionModel.InvokeInput();
             }
@@ -53,7 +53,7 @@ namespace MVC.Controllers
 
         private void HandleJumpInput()
         {
-            if (Input.GetKeyDown(_controlModelsContainer.Jump.Key))
+            if (Input.GetKeyDown(_inputModelsContainer.Jump.Key))
             {
                 _inputActionModelsContainer.JumpActionModel.InvokeInput();
             }
@@ -61,17 +61,17 @@ namespace MVC.Controllers
 
         private void HandleMovementInput()
         {
-            if (Input.GetKey(_controlModelsContainer.MoveForward.Key))
+            if (Input.GetKey(_inputModelsContainer.MoveForward.Key))
             {
                 _inputActionModelsContainer.MoveForwardActionModel.InvokeInput();
             }
 
-            if (Input.GetKey(_controlModelsContainer.MoveBackward.Key))
+            if (Input.GetKey(_inputModelsContainer.MoveBackward.Key))
             {
                 _inputActionModelsContainer.MoveBackwardActionModel.InvokeInput();
             }
 
-            if (Input.GetKey(_controlModelsContainer.Crouch.Key))
+            if (Input.GetKey(_inputModelsContainer.Crouch.Key))
             {
                 _inputActionModelsContainer.CrouchActionModel.InvokeInput();
             }
@@ -79,7 +79,7 @@ namespace MVC.Controllers
 
         private void HandleBlockInput()
         {
-            if (Input.GetKey(_controlModelsContainer.MoveBackward.Key))
+            if (Input.GetKey(_inputModelsContainer.MoveBackward.Key))
             {
                 _inputActionModelsContainer.BlockActionModel.InvokeInput();
             }

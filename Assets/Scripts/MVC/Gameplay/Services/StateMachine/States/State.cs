@@ -1,4 +1,5 @@
 ﻿using MVC.Gameplay.Models;
+using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Gameplay.Services;
 using MVC.Views;
 using UnityEngine;
@@ -9,15 +10,14 @@ namespace MVC.StateMachine.States
     {
         public bool IsActive { get; set; }
         public StateModel StateModel { get; }
-        public StateMachineModel StateMachineModel { get; }
         public PlayerView PlayerView { get; }
         public FightSceneStorage Storage { get; }
 
-        public State(StateModel stateModel, StateMachineModel stateMachineModel, PlayerView playerView)
+        public State(StateModel stateModel, PlayerView playerView, FightSceneStorage storage)
         {
             StateModel = stateModel;
-            StateMachineModel = stateMachineModel;
             PlayerView = playerView;
+            Storage = storage;
         }
 
         public virtual void Enter()
@@ -38,7 +38,7 @@ namespace MVC.StateMachine.States
             {
                 if (StateModel.PlayerModel.IsBlocking)
                 {
-                    StateMachineModel.ChangeState(StateModel.StatesContainer.BlockState);
+                    StateModel.StateMachineProxy.ChangeState(typeof(BlockState));
                 }
                 else
                 {

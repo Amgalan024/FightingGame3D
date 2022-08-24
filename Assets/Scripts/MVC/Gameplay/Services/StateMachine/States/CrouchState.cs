@@ -1,4 +1,5 @@
 ﻿using MVC.Gameplay.Models;
+using MVC.Gameplay.Services;
 using MVC.Models;
 using MVC.Views;
 using UnityEngine;
@@ -8,16 +9,17 @@ namespace MVC.StateMachine.States
 {
     public class CrouchState : State, ITickable
     {
-        private readonly ControlModelsContainer _controls;
+        private readonly InputModelsContainer _inputs;
 
-        public CrouchState(StateModel stateModel, StateMachineModel stateMachineModel, PlayerView playerView, ControlModelsContainer controls) : base(stateModel, stateMachineModel, playerView)
+        public CrouchState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage,
+            InputModelsContainer inputs) : base(stateModel, playerView, storage)
         {
-            _controls = controls;
+            _inputs = inputs;
         }
 
         public override void Enter()
         {
-            StateModel.PlayerModel.IsCrouching.Value  = true;
+            StateModel.PlayerModel.IsCrouching.Value = true;
 
             StateModel.InputActionModelsContainer.SetAllInputActionModels(false);
 
@@ -32,14 +34,14 @@ namespace MVC.StateMachine.States
 
         public override void Exit()
         {
-            StateModel.PlayerModel.IsCrouching.Value  = false;
+            StateModel.PlayerModel.IsCrouching.Value = false;
         }
 
         private void StopCrouch()
         {
-            if (!Input.GetKey(_controls.Crouch.Key))
+            if (!Input.GetKey(_inputs.Crouch.Key))
             {
-                StateMachineModel.ChangeState(StateModel.StatesContainer.IdleState);
+                StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
             }
         }
     }

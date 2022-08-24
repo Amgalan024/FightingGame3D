@@ -1,5 +1,6 @@
 ﻿using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Services;
 using MVC.Views;
 using UnityEngine;
 
@@ -7,8 +8,8 @@ namespace MVC.StateMachine.States
 {
     public class BlockState : State
     {
-        public BlockState(StateModel stateModel, StateMachineModel stateMachineModel, PlayerView playerView) : base(
-            stateModel, stateMachineModel, playerView)
+        public BlockState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
+            playerView, storage)
         {
         }
 
@@ -30,23 +31,23 @@ namespace MVC.StateMachine.States
             {
                 if (PlayerView.Animator.GetBool(PlayerAnimatorData.IsCrouching))
                 {
-                    StateMachineModel.ChangeState(StateModel.StatesContainer.CrouchState);
+                    StateModel.StateMachineProxy.ChangeState(typeof(CrouchState));
                 }
                 else
                 {
                     if (StateModel.PlayerModel.MovementSpeed < 0.1)
                     {
-                        StateMachineModel.ChangeState(StateModel.StatesContainer.IdleState);
+                        StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
                     }
                     else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Forward) > 0.1)
                     {
                         StateModel.PlayerModel.MovementSpeed = 0;
-                        StateMachineModel.ChangeState(StateModel.StatesContainer.MoveForwardState);
+                        StateModel.StateMachineProxy.ChangeState(typeof(RunForwardState));
                     }
                     else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Backward) > 0.1)
                     {
                         StateModel.PlayerModel.MovementSpeed = 0;
-                        StateMachineModel.ChangeState(StateModel.StatesContainer.MoveBackwardState);
+                        StateModel.StateMachineProxy.ChangeState(typeof(RunBackwardState));
                     }
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using MVC.Configs;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using UnityEngine;
@@ -13,14 +14,17 @@ namespace MVC.Gameplay.Controllers
         private readonly PlayerLifetimeScopeFactory _playerLifetimeScopeFactory;
 
         private readonly FightSceneModel _fightSceneModel;
+        private readonly PlayerInputConfig[] _inputConfigs;
 
         public FightSceneController(FightSceneFactory factory, FightSceneStorage storage,
-            PlayerLifetimeScopeFactory playerLifetimeScopeFactory, FightSceneModel fightSceneModel)
+            PlayerLifetimeScopeFactory playerLifetimeScopeFactory, FightSceneModel fightSceneModel,
+            PlayerInputConfig[] inputConfigs)
         {
             _factory = factory;
             _storage = storage;
             _playerLifetimeScopeFactory = playerLifetimeScopeFactory;
             _fightSceneModel = fightSceneModel;
+            _inputConfigs = inputConfigs;
         }
 
         void IStartable.Start()
@@ -28,12 +32,18 @@ namespace MVC.Gameplay.Controllers
             _factory.CreateFightLocation();
             _factory.CreatePlayers();
 
+            int playerIndex = 0;
+
             foreach (var modelView in _storage.PlayerModelsByView)
             {
+                var comboConfig = _storage.ComboConfigsByModel[modelView.Value];
+
                 var playerLifetimeScope =
-                    _playerLifetimeScopeFactory.CreatePlayerLifetimeScope(modelView.Value, modelView.Key);
+                    _playerLifetimeScopeFactory.CreatePlayerLifetimeScope(modelView.Value, modelView.Key,
+                        _inputConfigs[playerIndex], comboConfig);
 
                 _fightSceneModel.PlayerLifetimeScopes.Add(playerLifetimeScope);
+                playerIndex++;
             }
 
             _storage.PlayerModels[0].OnLose += _storage.PlayerModels[1].ScoreWin;

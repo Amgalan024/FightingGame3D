@@ -7,7 +7,7 @@ namespace MVC.Models
     {
         public ComboModel[] ComboModels { get; }
 
-        public ComboModelsContainer(ComboConfig comboConfig, ControlModelsContainer controlModelsContainer)
+        public ComboModelsContainer(ComboConfig comboConfig, InputModelsContainer inputModelsContainer)
         {
             ComboModels = new ComboModel[comboConfig.ComboList.Length];
 
@@ -16,7 +16,7 @@ namespace MVC.Models
             for (int i = 0; i < ComboModels.Length; i++)
             {
                 ComboModels[i] = new ComboModel(sortedComboList[i].Name, sortedComboList[i].Damage,
-                    controlModelsContainer, sortedComboList[i]);
+                    inputModelsContainer, sortedComboList[i]);
             }
         }
     }

@@ -1,8 +1,9 @@
-﻿using MVC.Controllers;
+﻿using MVC.Configs;
+using MVC.Controllers;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
+using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Models;
-using MVC.StateMachine;
 using MVC.StateMachine.States;
 using MVC.Views;
 using VContainer;
@@ -19,12 +20,15 @@ namespace MVC.Gameplay.Services
             _gameplayLifeTimeScope = gameplayLifeTimeScope;
         }
 
-        public LifetimeScope CreatePlayerLifetimeScope(PlayerModel playerModel, PlayerView playerView)
+        public LifetimeScope CreatePlayerLifetimeScope(PlayerModel playerModel, PlayerView playerView,
+            PlayerInputConfig playerInputConfig, ComboConfig comboConfig)
         {
             var scope = _gameplayLifeTimeScope.CreateChild(builder =>
             {
                 builder.RegisterInstance(playerModel);
                 builder.RegisterInstance(playerView);
+                builder.RegisterInstance(playerInputConfig.InputModels);
+                builder.RegisterInstance(comboConfig);
 
                 builder.Register<StateModel>(Lifetime.Scoped);
                 builder.Register<StatesContainer>(Lifetime.Scoped);
@@ -32,13 +36,14 @@ namespace MVC.Gameplay.Services
 
                 builder.Register<PlayerAttackModel>(Lifetime.Scoped);
 
-                builder.Register<ControlModelsContainer>(Lifetime.Scoped);
+                builder.Register<InputModelsContainer>(Lifetime.Scoped);
                 builder.Register<InputActionModelsContainer>(Lifetime.Scoped);
                 builder.Register<ComboModelsContainer>(Lifetime.Scoped);
 
-                builder.Register<PlayerStateMachine>(Lifetime.Scoped).AsSelf().AsImplementedInterfaces();
+                builder.Register<StateMachineProxy>(Lifetime.Scoped);
+                builder.Register<StateMachine.StateMachine>(Lifetime.Scoped).AsSelf().AsImplementedInterfaces();
 
-                builder.RegisterEntryPoint<PlayerStateController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<MVC.Controllers.PlayerStateMachineController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<BaseInputController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<ComboInputController>(Lifetime.Scoped);
 

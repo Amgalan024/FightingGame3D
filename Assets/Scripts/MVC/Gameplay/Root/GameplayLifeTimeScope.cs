@@ -1,4 +1,5 @@
-﻿using MVC.Configs;
+﻿using JetBrains.Annotations;
+using MVC.Configs;
 using MVC.Gameplay;
 using MVC.Gameplay.Controllers;
 using MVC.Gameplay.Models;
@@ -12,12 +13,14 @@ namespace MVC.Root
     public class GameplayLifeTimeScope : LifetimeScope
     {
         [SerializeField] private GameplayVisualConfig _visualConfig;
+        [SerializeField] private PlayerInputConfig[] _playerInputConfigs;
 
         protected override void Configure(IContainerBuilder builder)
         {
             base.Configure(builder);
 
             builder.RegisterInstance(_visualConfig);
+            builder.RegisterInstance(_playerInputConfigs);
 
             builder.Register<PlayerLifetimeScopeFactory>(Lifetime.Singleton);
 

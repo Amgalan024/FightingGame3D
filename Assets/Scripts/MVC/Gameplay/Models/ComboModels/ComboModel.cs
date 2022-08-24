@@ -5,21 +5,21 @@ namespace MVC.Models
 {
     public class ComboModel
     {
-        public ControlModel[] PlayerControlModels { get;}
+        public InputModel[] InputModels { get; }
         public string Name { get; }
         public int Damage { get; }
         public int ComboCount { get; set; }
 
-        public ComboModel(string name, int damage, ControlModelsContainer controlModelsContainer, ComboData comboData)
+        public ComboModel(string name, int damage, InputModelsContainer inputModelsContainer, ComboData comboData)
         {
             Name = name;
             Damage = damage;
 
-            PlayerControlModels = new ControlModel[comboData.ControlNames.Length];
+            InputModels = new InputModel[comboData.ControlNames.Length];
 
-            for (int i = 0; i < PlayerControlModels.Length; i++)
+            for (int i = 0; i < InputModels.Length; i++)
             {
-                PlayerControlModels[i] = controlModelsContainer.ControlModels
+                InputModels[i] = inputModelsContainer.InputModels
                     .First(x => x.Name == comboData.ControlNames[i]);
             }
         }

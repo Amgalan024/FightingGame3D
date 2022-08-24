@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MVC.Configs;
 using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Views;
 using MVC.Views;
@@ -12,6 +13,9 @@ namespace MVC.Gameplay.Services
         public List<PlayerView> PlayerViews { get; } = new List<PlayerView>(5);
 
         public List<PlayerModel> PlayerModels { get; } = new List<PlayerModel>(5);
+
+        public Dictionary<PlayerModel, ComboConfig> ComboConfigsByModel { get; } =
+            new Dictionary<PlayerModel, ComboConfig>(5);
 
         public Dictionary<PlayerModel, PlayerView> PlayerViewsByModel { get; } =
             new Dictionary<PlayerModel, PlayerView>(5);

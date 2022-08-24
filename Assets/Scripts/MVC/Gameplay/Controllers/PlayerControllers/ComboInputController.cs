@@ -1,16 +1,16 @@
-﻿using MVC.Configs;
+﻿using System;
 using MVC.Models;
-using MVC.StateMachine;
+using MVC.StateMachine.States;
 using UnityEngine;
 using VContainer.Unity;
 
 namespace MVC.Controllers
 {
-    public class ComboInputController : IInitializable, ITickable
+    public class ComboInputController : ITickable
     {
-        private readonly PlayerStateMachine _playerStateMachine;
+        private readonly StateMachine.StateMachine _stateMachine;
 
-        private readonly StatesContainer _statesContainer;
+        private readonly ComboState _comboState;
 
         private readonly PlayerModel _playerModel;
 
@@ -18,18 +18,13 @@ namespace MVC.Controllers
 
         private float _comboTimer;
 
-        public ComboInputController(PlayerModel playerModel, PlayerStateMachine playerStateMachine,
-            StatesContainer statesContainer, ComboModelsContainer comboModelsContainer)
+        public ComboInputController(PlayerModel playerModel, StateMachine.StateMachine stateMachine,
+            ComboModelsContainer comboModelsContainer, ComboState comboState)
         {
-            _statesContainer = statesContainer;
             _comboModelsContainer = comboModelsContainer;
+            _comboState = comboState;
             _playerModel = playerModel;
-            _playerStateMachine = playerStateMachine;
-        }
-
-        void IInitializable.Initialize()
-        {
-            throw new System.NotImplementedException();
+            _stateMachine = stateMachine;
         }
 
         void ITickable.Tick()
@@ -47,7 +42,7 @@ namespace MVC.Controllers
 
         private void ComboCheck(ComboModel comboModel)
         {
-            if (Input.GetKeyDown(comboModel.PlayerControlModels[comboModel.ComboCount].Key))
+            if (Input.GetKeyDown(comboModel.InputModels[comboModel.ComboCount].Key))
             {
                 if (comboModel.ComboCount == 0)
                 {
@@ -68,14 +63,14 @@ namespace MVC.Controllers
                 comboModel.ComboCount = 0;
             }
 
-            if (comboModel.ComboCount == comboModel.PlayerControlModels.Length)
+            if (comboModel.ComboCount == comboModel.InputModels.Length)
             {
                 ResetComboCounts();
 
-                _statesContainer.ComboState.Name = comboModel.Name;
-                _statesContainer.ComboState.Damage = comboModel.Damage;
+                _comboState.Name = comboModel.Name;
+                _comboState.Damage = comboModel.Damage;
 
-                _playerStateMachine.ChangeState(_statesContainer.ComboState);
+                _stateMachine.ChangeState(_comboState);
             }
         }
 

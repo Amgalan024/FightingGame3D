@@ -37,12 +37,14 @@ namespace MVC.Gameplay.Services
                 var playerModel = new PlayerModel(i, _charactersContainer.PlayerConfigs[i]);
                 var playerView = Object.Instantiate(_charactersContainer.PlayerConfigs[i].Prefab,
                     _storage.FightLocationView.PlayerSpawnPoints[i]);
+                var comboConfig = _charactersContainer.PlayerConfigs[i].ComboConfig;
 
                 _storage.PlayerModels.Add(playerModel);
                 _storage.PlayerViews.Add(playerView);
 
                 _storage.PlayerModelsByView.Add(playerView, playerModel);
                 _storage.PlayerViewsByModel.Add(playerModel, playerView);
+                _storage.ComboConfigsByModel.Add(playerModel, comboConfig);
 
                 var playerAttackModel = new PlayerAttackModel();
 

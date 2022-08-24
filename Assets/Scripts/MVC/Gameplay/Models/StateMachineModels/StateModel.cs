@@ -1,4 +1,5 @@
 ﻿using MVC.Gameplay.Models.Player;
+using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Models;
 using UnityEngine;
 
@@ -8,18 +9,21 @@ namespace MVC.Gameplay.Models
     {
         public PlayerModel PlayerModel { get; }
         public PlayerAttackModel PlayerAttackModel { get; }
-        public StatesContainer StatesContainer { get; }
-        public ControlModelsContainer ControlModelsContainer { get; }
+        public InputModelsContainer InputModelsContainer { get; }
         public InputActionModelsContainer InputActionModelsContainer { get; }
+        public StateMachineModel StateMachineModel { get; }
+        public StateMachineProxy StateMachineProxy { get; }
 
-        public StateModel(StatesContainer statesContainer, PlayerModel playerModel,
-            InputActionModelsContainer inputActionModelsContainer, PlayerAttackModel playerAttackModel, ControlModelsContainer controlModelsContainer)
+        public StateModel(PlayerModel playerModel, InputActionModelsContainer inputActionModelsContainer,
+            PlayerAttackModel playerAttackModel, InputModelsContainer inputModelsContainer,
+            StateMachineProxy stateMachineProxy, StateMachineModel stateMachineModel)
         {
-            StatesContainer = statesContainer;
             PlayerModel = playerModel;
             InputActionModelsContainer = inputActionModelsContainer;
             PlayerAttackModel = playerAttackModel;
-            ControlModelsContainer = controlModelsContainer;
+            InputModelsContainer = inputModelsContainer;
+            StateMachineProxy = stateMachineProxy;
+            StateMachineModel = stateMachineModel;
         }
     }
 }

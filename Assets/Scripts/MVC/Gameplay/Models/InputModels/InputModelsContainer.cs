@@ -1,21 +1,22 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using MVC.Configs.Enums;
 
 namespace MVC.Models
 {
-    public class ControlModelsContainer
+    public class InputModelsContainer
     {
-        public ControlModel[] ControlModels { get; }
-        public ControlModel MoveForward { get; }
-        public ControlModel MoveBackward { get; }
-        public ControlModel Jump { get; }
-        public ControlModel Crouch { get; }
-        public ControlModel Punch { get; }
-        public ControlModel Kick { get; }
+        public List<InputModel> InputModels { get; }
+        public InputModel MoveForward { get; }
+        public InputModel MoveBackward { get; }
+        public InputModel Jump { get; }
+        public InputModel Crouch { get; }
+        public InputModel Punch { get; }
+        public InputModel Kick { get; }
 
-        public ControlModelsContainer(ControlModel[] controlModels)
+        public InputModelsContainer(List<InputModel> inputModels)
         {
-            ControlModels = controlModels;
+            InputModels = inputModels;
 
             MoveForward = GetControlModelByControlName(ControlNames.MoveForward);
             MoveBackward = GetControlModelByControlName(ControlNames.MoveBackward);
@@ -34,9 +35,9 @@ namespace MVC.Models
             MoveBackward.Key = forwardKey;
         }
 
-        private ControlModel GetControlModelByControlName(ControlNames controlName)
+        private InputModel GetControlModelByControlName(ControlNames controlName)
         {
-            return ControlModels.First(x => x.Name == controlName);
+            return InputModels.First(x => x.Name == controlName);
         }
     }
 }

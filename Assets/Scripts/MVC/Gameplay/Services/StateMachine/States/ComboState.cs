@@ -1,8 +1,6 @@
 ﻿using MVC.Gameplay.Models;
-using MVC.Models;
+using MVC.Gameplay.Services;
 using MVC.Views;
-using UnityEngine;
-using VContainer.Unity;
 
 namespace MVC.StateMachine.States
 {
@@ -11,8 +9,8 @@ namespace MVC.StateMachine.States
         public string Name { set; get; }
         public int Damage { set; get; }
 
-        public ComboState(StateModel stateModel, StateMachineModel stateMachineModel, PlayerView playerView) : base(
-            stateModel, stateMachineModel, playerView)
+        public ComboState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
+            playerView, storage)
         {
         }
 

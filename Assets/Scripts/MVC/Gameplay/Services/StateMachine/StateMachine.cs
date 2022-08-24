@@ -1,14 +1,13 @@
-﻿using System;
-using MVC.Gameplay.Models;
+﻿using MVC.Gameplay.Models;
 using MVC.StateMachine.States;
 
 namespace MVC.StateMachine
 {
-    public class PlayerStateMachine : IDisposable
+    public class StateMachine
     {
         private readonly StateMachineModel _stateMachineModel;
 
-        public PlayerStateMachine(StateMachineModel stateMachineModel)
+        public StateMachine(StateMachineModel stateMachineModel)
         {
             _stateMachineModel = stateMachineModel;
         }
@@ -17,7 +16,6 @@ namespace MVC.StateMachine
         {
             _stateMachineModel.CurrentState = startingState;
             startingState.Enter();
-            _stateMachineModel.OnStateChanged += ChangeState;
         }
 
         public void ChangeState(IState newState)
@@ -31,11 +29,6 @@ namespace MVC.StateMachine
 
             newState.IsActive = true;
             newState.Enter();
-        }
-
-        public void Dispose()
-        {
-            _stateMachineModel.OnStateChanged -= ChangeState;
         }
     }
 }

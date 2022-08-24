@@ -1,18 +1,17 @@
 ﻿using System.Threading;
 using Cysharp.Threading.Tasks;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Services;
 using MVC.Views;
 
 namespace MVC.StateMachine.States
 {
     public class JumpState : State
     {
-        public int JumpCount { set; get; }
-
         private CancellationTokenSource _fallCts;
 
-        public JumpState(StateModel stateModel, StateMachineModel stateMachineModel, PlayerView playerView) : base(
-            stateModel, stateMachineModel, playerView)
+        public JumpState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
+            playerView, storage)
         {
         }
 
@@ -31,10 +30,10 @@ namespace MVC.StateMachine.States
 
                 PlayerView.Rigidbody.velocity = velocity;
 
-                JumpCount++;
+                StateModel.PlayerModel.CurrentJumpCount++;
             }
 
-            if (JumpCount < 2)
+            if (StateModel.PlayerModel.CurrentJumpCount < 2)
             {
                 StateModel.InputActionModelsContainer.SetJumpInputActionsFilter(true);
             }
@@ -53,15 +52,14 @@ namespace MVC.StateMachine.States
         private async UniTask AwaitFall(CancellationToken token)
         {
             await UniTask.WaitUntil(() => PlayerView.Rigidbody.velocity.y <= 0, cancellationToken: token);
-            StateMachineModel.ChangeState(StateModel.StatesContainer.FallState);
+            StateModel.StateMachineProxy.ChangeState(typeof(FallState));
         }
 
         private bool CheckPreviousStateIsAttackState()
         {
-            var memberInfo = StateMachineModel.PreviousState.GetType().BaseType;
+            var memberInfo = StateModel.StateMachineModel.PreviousState.GetType().BaseType;
 
-            if (memberInfo != null &&
-                memberInfo.IsEquivalentTo(StateModel.StatesContainer.PunchState.GetType().BaseType))
+            if (memberInfo != null && memberInfo.IsEquivalentTo(typeof(AttackState)))
             {
                 return true;
             }

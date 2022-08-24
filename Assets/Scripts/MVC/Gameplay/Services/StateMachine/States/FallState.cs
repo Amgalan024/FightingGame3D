@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks.Linq;
 using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Services;
 using MVC.Views;
 
 namespace MVC.StateMachine.States
@@ -10,8 +11,8 @@ namespace MVC.StateMachine.States
     {
         private IDisposable _fallSubscription;
 
-        public FallState(StateModel stateModel, StateMachineModel stateMachineModel, PlayerView playerView) : base(
-            stateModel, stateMachineModel, playerView)
+        public FallState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
+            playerView, storage)
         {
         }
 
@@ -33,18 +34,19 @@ namespace MVC.StateMachine.States
         {
             if (isGrounded)
             {
-                StateModel.StatesContainer.JumpState.JumpCount = 0;
+                StateModel.PlayerModel.CurrentJumpCount = 0;
+
                 if (StateModel.PlayerModel.MovementSpeed < 0.1)
                 {
-                    StateMachineModel.ChangeState(StateModel.StatesContainer.IdleState);
+                    StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
                 }
                 else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Forward) > 0.1)
                 {
-                    StateMachineModel.ChangeState(StateModel.StatesContainer.MoveForwardState);
+                    StateModel.StateMachineProxy.ChangeState(typeof(RunForwardState));
                 }
                 else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Backward) > 0.1)
                 {
-                    StateMachineModel.ChangeState(StateModel.StatesContainer.MoveBackwardState);
+                    StateModel.StateMachineProxy.ChangeState(typeof(RunBackwardState));
                 }
             }
         }

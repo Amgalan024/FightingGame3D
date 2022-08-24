@@ -1,5 +1,6 @@
 ﻿using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Services;
 using MVC.Views;
 using UnityEngine;
 
@@ -7,8 +8,8 @@ namespace MVC.StateMachine.States
 {
     public class KickState : CommonStates.AttackState
     {
-        public KickState(StateModel stateModel, StateMachineModel stateMachineModel, PlayerView playerView) : base(
-            stateModel, stateMachineModel, playerView)
+        public KickState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
+            playerView, storage)
         {
         }
 

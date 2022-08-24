@@ -20,3 +20,4 @@ MonoBehaviour:
   _punchDamage: 10
   _kickDamage: 10
   _prefab: {fileID: 465514404453568435, guid: e0782d1de0235e34e9f9ea99e2a44a24, type: 3}
+  _comboConfig: {fileID: 11400000, guid: ecfbb378e4f292045a0a27b63cb11858, type: 2}

@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/MVC Pattern/Scenes/FightScene.unity
-    guid: 441214c40bad93d43bd90da89b9e99d3
-  - enabled: 1
     path: Assets/MVC Pattern/Scenes/CharacterSelectScene.unity
     guid: 5653835d05061664c83d8c1b7c13cc51
+  - enabled: 1
+    path: Assets/MVC Pattern/Scenes/FightScene.unity
+    guid: 441214c40bad93d43bd90da89b9e99d3
   m_configObjects: {}

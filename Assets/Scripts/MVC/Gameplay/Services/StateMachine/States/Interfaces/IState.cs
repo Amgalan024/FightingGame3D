@@ -9,7 +9,6 @@ namespace MVC.StateMachine.States
     {
         public bool IsActive { get; set; }
         public StateModel StateModel { get; }
-        public StateMachineModel StateMachineModel { get; }
         public PlayerView PlayerView { get; }
 
         abstract void Enter();

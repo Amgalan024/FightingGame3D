@@ -1,11 +1,13 @@
 ﻿using MVC.Gameplay.Models;
+using MVC.Gameplay.Services;
 using MVC.Views;
 
 namespace MVC.StateMachine.States
 {
     public class WinState : State
     {
-        public WinState(StateModel stateModel, StateMachineModel stateMachineModel, PlayerView playerView) : base(stateModel, stateMachineModel, playerView)
+        public WinState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
+            playerView, storage)
         {
         }
 
@@ -13,6 +15,5 @@ namespace MVC.StateMachine.States
         {
             base.Enter();
         }
-        
     }
 }

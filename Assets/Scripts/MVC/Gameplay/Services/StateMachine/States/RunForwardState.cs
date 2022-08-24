@@ -1,5 +1,6 @@
 ﻿using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Services;
 using MVC.Views;
 using UnityEngine;
 
@@ -7,8 +8,8 @@ namespace MVC.StateMachine.States
 {
     public class RunForwardState : State
     {
-        public RunForwardState(StateModel stateModel, StateMachineModel stateMachineModel, PlayerView playerView) :
-            base(stateModel, stateMachineModel, playerView)
+        public RunForwardState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(
+            stateModel, playerView, storage)
         {
         }
 
@@ -22,7 +23,7 @@ namespace MVC.StateMachine.States
 
         public override void OnFixedTick()
         {
-            if (!Input.GetKey(StateModel.ControlModelsContainer.MoveBackward.Key))
+            if (!Input.GetKey(StateModel.InputModelsContainer.MoveBackward.Key))
             {
                 var velocity = PlayerView.Rigidbody.velocity;
 
@@ -37,7 +38,7 @@ namespace MVC.StateMachine.States
 
                 if (StateModel.PlayerModel.MovementSpeed <= 0)
                 {
-                    StateMachineModel.ChangeState(StateModel.StatesContainer.IdleState);
+                    StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
                 }
 
                 PlayerView.Animator.SetFloat(PlayerAnimatorData.Forward, StateModel.PlayerModel.MovementSpeed);
