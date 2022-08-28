@@ -1,12 +1,13 @@
 ﻿using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Gameplay.Services;
+using MVC.Utils.Disposable;
 using MVC.Views;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public abstract class State : IState
+    public abstract class State : DisposableWithCts, IState
     {
         public bool IsActive { get; set; }
         public StateModel StateModel { get; }
@@ -19,7 +20,7 @@ namespace MVC.StateMachine.States
             PlayerView = playerView;
             Storage = storage;
         }
-        
+
         public virtual void Enter()
         {
         }

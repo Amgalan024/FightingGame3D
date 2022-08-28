@@ -1,4 +1,5 @@
-﻿using MVC.Gameplay.Constants;
+﻿using Cysharp.Threading.Tasks;
+using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using MVC.Views;
@@ -20,42 +21,23 @@ namespace MVC.StateMachine.States
             StateModel.InputActionModelsContainer.SetBlockInputActionsFilter(true);
             StateModel.InputActionModelsContainer.SetAttackInputActionsFilter(true);
             StateModel.InputActionModelsContainer.SetJumpInputActionsFilter(true);
+
+            PlayerView.IdleToMoveAnimationAsync(PlayerAnimatorData.Backward, Token).Forget();
         }
 
         public override void OnFixedTick()
         {
             if (!Input.GetKey(StateModel.InputModelsContainer.MoveBackward.Key))
             {
-                var velocity = PlayerView.Rigidbody.velocity;
+                PlayerView.Rigidbody.velocity = Vector3.zero;
 
-                velocity.x = StateModel.PlayerModel.MovementSpeed;
-
-                PlayerView.Rigidbody.velocity = velocity;
-
-                if (StateModel.PlayerModel.MovementSpeed >= 0)
-                {
-                    StateModel.PlayerModel.MovementSpeed -= Time.fixedDeltaTime * 12;
-                }
-
-                if (StateModel.PlayerModel.MovementSpeed <= 0)
-                {
-                    StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
-                }
-
-                PlayerView.Animator.SetFloat(PlayerAnimatorData.Backward, StateModel.PlayerModel.MovementSpeed);
+                StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
             }
             else
             {
-                if (StateModel.PlayerModel.MovementSpeed <= StateModel.PlayerModel.MaxMovementSpeed)
-                {
-                    StateModel.PlayerModel.MovementSpeed += Time.fixedDeltaTime * 12;
-                }
-
-                PlayerView.Animator.SetFloat(PlayerAnimatorData.Backward, StateModel.PlayerModel.MovementSpeed);
-
                 var velocity = PlayerView.Rigidbody.velocity;
 
-                velocity.x = -StateModel.PlayerModel.MovementSpeed * PlayerView.transform.localScale.z;
+                velocity.x = -StateModel.PlayerModel.MaxMovementSpeed * PlayerView.transform.localScale.z;
 
                 PlayerView.Rigidbody.velocity = velocity;
             }
@@ -63,7 +45,7 @@ namespace MVC.StateMachine.States
 
         public override void Exit()
         {
-            PlayerView.Animator.SetFloat(PlayerAnimatorData.Backward, StateModel.PlayerModel.MovementSpeed);
+            PlayerView.MoveToIdleAnimationAsync(PlayerAnimatorData.Backward, Token).Forget();
         }
     }
 }

@@ -66,6 +66,7 @@ namespace MVC.Gameplay.Services
             builder.Register<PunchState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<RunBackwardState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<RunForwardState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<DashForwardState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
         }
     }
 }

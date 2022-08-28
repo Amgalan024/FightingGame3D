@@ -1298,6 +1298,8 @@ MonoBehaviour:
   _animator: {fileID: 4191922155322776068}
   _rigidbody: {fileID: 4191922155322776186}
   _stateText: {fileID: 7953535129565339264}
+  _toMoveFloat: 3
+  _toMoveDuration: 0.1
 --- !u!114 &4061195048306864458
 MonoBehaviour:
   m_ObjectHideFlags: 0

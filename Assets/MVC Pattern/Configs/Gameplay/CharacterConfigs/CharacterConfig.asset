@@ -15,7 +15,7 @@ MonoBehaviour:
   _icon: {fileID: 0}
   _maxHealthPoints: 100
   _maxEnergyPoints: 100
-  _movementSpeed: 10
+  _movementSpeed: 3
   _jumpForce: 10
   _punchDamage: 10
   _kickDamage: 10
