@@ -23,7 +23,7 @@ namespace MVC.StateMachine.States.CommonStates
 
         public override void Exit()
         {
-            _exitStateSubscription.Dispose();
+            _exitStateSubscription?.Dispose();
         }
 
         private void ExitAttackState(bool isAttacking)

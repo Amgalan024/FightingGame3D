@@ -8,8 +8,9 @@
         public readonly InputActionModel CrouchActionModel = new InputActionModel();
         public readonly InputActionModel PunchActionModel = new InputActionModel();
         public readonly InputActionModel KickActionModel = new InputActionModel();
-        public readonly InputActionModel BlockActionModel = new InputActionModel();
-        public readonly InputActionModel BlockStoppedActionModel = new InputActionModel();
+        
+        public readonly InputActionModel StartBlockActionModel = new InputActionModel();
+        public readonly InputActionModel StopBlockActionModel = new InputActionModel();
 
         public void SetAllInputActionModels(bool value)
         {
@@ -19,8 +20,7 @@
             CrouchActionModel.Filter = value;
             PunchActionModel.Filter = value;
             KickActionModel.Filter = value;
-            BlockActionModel.Filter = value;
-            BlockStoppedActionModel.Filter = value;
+            StartBlockActionModel.Filter = value;
         }
 
         public void SetAttackInputActionsFilter(bool value)
@@ -43,8 +43,8 @@
 
         public void SetBlockInputActionsFilter(bool value)
         {
-            BlockActionModel.Filter = value;
-            BlockStoppedActionModel.Filter = value;
+            StartBlockActionModel.Filter = value;
+            StopBlockActionModel.Filter = value;
         }
     }
 }

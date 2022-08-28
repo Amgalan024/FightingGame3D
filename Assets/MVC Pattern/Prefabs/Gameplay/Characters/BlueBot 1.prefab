@@ -2181,7 +2181,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7308495431854941025}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -8.28, y: 0, z: -9.75}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7644234996818296885}
@@ -2257,6 +2257,7 @@ MonoBehaviour:
   _attackHitBoxViewView: {fileID: 7954529395445606583}
   _animator: {fileID: 7614905334654197302}
   _rigidbody: {fileID: 7614905334654197300}
+  _stateText: {fileID: 8068283412780647301}
 --- !u!114 &5998205462613095502
 MonoBehaviour:
   m_ObjectHideFlags: 0

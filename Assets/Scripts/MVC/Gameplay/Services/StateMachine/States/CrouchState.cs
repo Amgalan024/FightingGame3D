@@ -3,11 +3,10 @@ using MVC.Gameplay.Services;
 using MVC.Models;
 using MVC.Views;
 using UnityEngine;
-using VContainer.Unity;
 
 namespace MVC.StateMachine.States
 {
-    public class CrouchState : State, ITickable
+    public class CrouchState : State
     {
         private readonly InputModelsContainer _inputs;
 
@@ -27,7 +26,7 @@ namespace MVC.StateMachine.States
             StateModel.InputActionModelsContainer.SetBlockInputActionsFilter(true);
         }
 
-        public void Tick()
+        public override void OnFixedTick()
         {
             StopCrouch();
         }

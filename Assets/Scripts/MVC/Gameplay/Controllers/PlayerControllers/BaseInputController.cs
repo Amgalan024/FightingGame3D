@@ -81,11 +81,11 @@ namespace MVC.Controllers
         {
             if (Input.GetKey(_inputModelsContainer.MoveBackward.Key))
             {
-                _inputActionModelsContainer.BlockActionModel.InvokeInput();
+                _inputActionModelsContainer.StartBlockActionModel.InvokeInput();
             }
             else
             {
-                _inputActionModelsContainer.BlockStoppedActionModel.InvokeInput();
+                _inputActionModelsContainer.StopBlockActionModel.InvokeInput();
             }
         }
     }

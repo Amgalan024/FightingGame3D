@@ -19,7 +19,7 @@ namespace MVC.StateMachine.States
             PlayerView = playerView;
             Storage = storage;
         }
-
+        
         public virtual void Enter()
         {
         }

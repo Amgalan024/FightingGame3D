@@ -27,7 +27,7 @@ namespace MVC.StateMachine.States
 
         public override void Exit()
         {
-            _fallSubscription.Dispose();
+            _fallSubscription?.Dispose();
         }
 
         private void OnFall(bool isGrounded)

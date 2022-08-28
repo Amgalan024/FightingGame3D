@@ -71,24 +71,24 @@ namespace MVC.Controllers
         {
             _inputActionModelsContainer.MoveForwardActionModel.OnInput += OnMoveForwardInput;
             _inputActionModelsContainer.MoveBackwardActionModel.OnInput += OnMoveBackwardInput;
-            _inputActionModelsContainer.BlockStoppedActionModel.OnInput += OnBlockStopped;
             _inputActionModelsContainer.PunchActionModel.OnInput += OnPunchInput;
             _inputActionModelsContainer.KickActionModel.OnInput += OnKickInput;
             _inputActionModelsContainer.JumpActionModel.OnInput += OnJumpInput;
             _inputActionModelsContainer.CrouchActionModel.OnInput += OnCrouchInput;
-            _inputActionModelsContainer.BlockActionModel.OnInput += OnBlockInput;
+            _inputActionModelsContainer.StartBlockActionModel.OnInput += OnStartBlockInput;
+            _inputActionModelsContainer.StopBlockActionModel.OnInput += OnStopBlock;
         }
 
         private void DisposeInput()
         {
             _inputActionModelsContainer.MoveForwardActionModel.OnInput -= OnMoveForwardInput;
             _inputActionModelsContainer.MoveBackwardActionModel.OnInput -= OnMoveBackwardInput;
-            _inputActionModelsContainer.BlockStoppedActionModel.OnInput -= OnBlockStopped;
             _inputActionModelsContainer.PunchActionModel.OnInput -= OnPunchInput;
             _inputActionModelsContainer.KickActionModel.OnInput -= OnKickInput;
             _inputActionModelsContainer.JumpActionModel.OnInput -= OnJumpInput;
             _inputActionModelsContainer.CrouchActionModel.OnInput -= OnCrouchInput;
-            _inputActionModelsContainer.BlockActionModel.OnInput -= OnBlockInput;
+            _inputActionModelsContainer.StartBlockActionModel.OnInput -= OnStartBlockInput;
+            _inputActionModelsContainer.StopBlockActionModel.OnInput -= OnStopBlock;
         }
 
         private void InitializePlayer()
@@ -114,6 +114,9 @@ namespace MVC.Controllers
             _playerView.HitBoxView.OnColliderEnter -= OnColliderEnter;
             _playerView.HitBoxView.OnColliderExit -= OnColliderExit;
 
+            _playerView.HitBoxView.OnCollisionExited += OnCollisionExit;
+            _playerView.HitBoxView.OnCollisionStaying += OnCollisionStay;
+
             _playerModel.OnWin -= OnWin;
             _playerModel.OnLose -= OnLose;
 
@@ -131,6 +134,22 @@ namespace MVC.Controllers
         private void OnColliderExit(Collider collider)
         {
             _stateMachineModel.CurrentState.OnTriggerExit(collider);
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            if (collision.gameObject.GetComponent<PlatformView>())
+            {
+                _playerModel.IsGrounded.Value = false;
+            }
+        }
+
+        private void OnCollisionStay(Collision collision)
+        {
+            if (collision.gameObject.GetComponent<PlatformView>())
+            {
+                _playerModel.IsGrounded.Value = true;
+            }
         }
 
         private void OnWin()
@@ -153,10 +172,6 @@ namespace MVC.Controllers
             _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(RunBackwardState)));
         }
 
-        private void OnBlockStopped()
-        {
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(IdleState)));
-        }
 
         private void OnPunchInput()
         {
@@ -178,9 +193,14 @@ namespace MVC.Controllers
             _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(CrouchState)));
         }
 
-        private void OnBlockInput()
+        private void OnStartBlockInput()
         {
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(BlockState)));
+            _playerModel.IsBlocking.Value = true;
+        }
+
+        private void OnStopBlock()
+        {
+            _playerModel.IsBlocking.Value = false;
         }
     }
 }

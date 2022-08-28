@@ -14,7 +14,7 @@ public class PlayerModel
     public event Action<int> OnDamageChanged;
     public event Action OnWin;
 
-    public AsyncReactiveProperty<bool> IsGrounded { get; } = new AsyncReactiveProperty<bool>(false);
+    public AsyncReactiveProperty<bool> IsGrounded { get; } = new AsyncReactiveProperty<bool>(true);
     public AsyncReactiveProperty<bool> IsAttacking { get; } = new AsyncReactiveProperty<bool>(false);
     public AsyncReactiveProperty<bool> IsDoingCombo { get; } = new AsyncReactiveProperty<bool>(false);
     public AsyncReactiveProperty<bool> IsBlocking { get; } = new AsyncReactiveProperty<bool>(false);
@@ -24,11 +24,11 @@ public class PlayerModel
     public int MaxHealthPoints { get; }
     public int MaxEnergyPoints { get; }
     public float MaxMovementSpeed { get; }
+    public float JumpForce {  get; }
     public float MovementSpeed { set; get; }
     public int HealthPoints { private set; get; }
     public int EnergyPoints { private set; get; }
     public int RoundScore { private set; get; }
-    public float JumpForce { private set; get; }
     public int PunchDamage { private set; get; }
     public int KickDamage { private set; get; }
 

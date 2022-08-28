@@ -23,7 +23,7 @@ namespace MVC.StateMachine.States
 
         public override void OnFixedTick()
         {
-            if (!Input.GetKey(StateModel.InputModelsContainer.MoveBackward.Key))
+            if (!Input.GetKey(StateModel.InputModelsContainer.MoveForward.Key))
             {
                 var velocity = PlayerView.Rigidbody.velocity;
 
@@ -54,7 +54,7 @@ namespace MVC.StateMachine.States
 
                 var velocity = PlayerView.Rigidbody.velocity;
 
-                velocity.x = StateModel.PlayerModel.MaxMovementSpeed * PlayerView.transform.localPosition.x;
+                velocity.x = StateModel.PlayerModel.MovementSpeed * PlayerView.transform.localScale.z;
 
                 PlayerView.Rigidbody.velocity = velocity;
             }
