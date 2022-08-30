@@ -21,15 +21,16 @@ namespace MVC.StateMachine
 
         public void ChangeState(IState newState)
         {
-            Debug.Log($"Exited {_stateMachineModel.CurrentState.GetType()} Entered {newState.GetType()}");
             _stateMachineModel.PreviousState = _stateMachineModel.CurrentState;
 
             _stateMachineModel.CurrentState.IsActive = false;
             _stateMachineModel.CurrentState.Exit();
+            Debug.Log($"Exited {_stateMachineModel.CurrentState.GetType()}");
             _stateMachineModel.CurrentState = newState;
 
             newState.IsActive = true;
             newState.Enter();
+            Debug.Log($"Entered {newState.GetType()}");
         }
     }
 }

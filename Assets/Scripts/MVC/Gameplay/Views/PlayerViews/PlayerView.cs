@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MVC.Gameplay.Constants;
@@ -9,6 +10,8 @@ namespace MVC.Views
 {
     public class PlayerView : MonoBehaviour
     {
+        public event Action OnAttackAnimationEnded = delegate { };
+
         [SerializeField] private PlayerHitBoxView _hitBoxView;
         [SerializeField] private PlayerAttackHitBoxView _attackHitBoxViewView;
         [SerializeField] private Animator _animator;
@@ -23,33 +26,32 @@ namespace MVC.Views
         public Rigidbody Rigidbody => _rigidbody;
         public Text StateText => _stateText;
 
-        private Tween _moveAnimatorTween;
+        private Tween _idleToMoveTween;
+
+        private Tween _moveToIdleTween;
+
+        public void InvokeAttackAnimationEnd()
+        {
+            OnAttackAnimationEnded.Invoke();
+        }
 
         public async UniTask IdleToMoveAnimationAsync(int moveHash, CancellationToken token)
         {
-            if (_moveAnimatorTween.IsActive())
-            {
-                _moveAnimatorTween.Kill();
-            }
+            await UniTask.WaitUntil(() => !_moveToIdleTween.IsActive(), cancellationToken: token);
 
-            _moveAnimatorTween = DOTween.To(() => _animator.GetFloat(moveHash),
+            _idleToMoveTween = DOTween.To(() => _animator.GetFloat(moveHash),
                 newFloat => _animator.SetFloat(moveHash, newFloat), _toMoveFloat,
                 _toMoveDuration);
 
-            await _moveAnimatorTween.AwaitForComplete(cancellationToken: token);
+            await _idleToMoveTween.AwaitForComplete(cancellationToken: token);
         }
 
         public async UniTask MoveToIdleAnimationAsync(int moveHash, CancellationToken token)
         {
-            if (_moveAnimatorTween.IsActive())
-            {
-                _moveAnimatorTween.Kill();
-            }
-
-            _moveAnimatorTween = DOTween.To(() => _animator.GetFloat(moveHash),
+            _moveToIdleTween = DOTween.To(() => _animator.GetFloat(moveHash),
                 newFloat => _animator.SetFloat(moveHash, newFloat), 0, _toMoveDuration);
 
-            await _moveAnimatorTween.AwaitForComplete(cancellationToken: token);
+            await _moveToIdleTween.AwaitForComplete(cancellationToken: token);
         }
     }
 }

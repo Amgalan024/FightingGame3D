@@ -20,7 +20,6 @@ namespace MVC.StateMachine.States
 
             PlayerView.Animator.Play(Name);
             PlayerView.Animator.SetBool(Name, true);
-            StateModel.PlayerModel.IsAttacking.Value = true;
             StateModel.PlayerAttackModel.Damage = Damage;
             StateModel.PlayerModel.IsDoingCombo.Value = true;
         }

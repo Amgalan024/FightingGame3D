@@ -93,6 +93,8 @@ namespace MVC.Controllers
 
         private void InitializePlayer()
         {
+            _playerView.OnAttackAnimationEnded += OnAttackAnimationEnded;
+
             _playerView.HitBoxView.OnColliderEnter += OnColliderEnter;
             _playerView.HitBoxView.OnColliderExit += OnColliderExit;
 
@@ -109,8 +111,11 @@ namespace MVC.Controllers
                 _playerView.Animator.SetBool(PlayerAnimatorData.IsCrouching, isCrouching)));
         }
 
+
         private void DisposePlayer()
         {
+            _playerView.OnAttackAnimationEnded -= OnAttackAnimationEnded;
+
             _playerView.HitBoxView.OnColliderEnter -= OnColliderEnter;
             _playerView.HitBoxView.OnColliderExit -= OnColliderExit;
 
@@ -124,6 +129,11 @@ namespace MVC.Controllers
             {
                 subscription.Dispose();
             }
+        }
+
+        private void OnAttackAnimationEnded()
+        {
+            _playerModel.IsAttacking.Value = false;
         }
 
         private void OnColliderEnter(Collider collider)

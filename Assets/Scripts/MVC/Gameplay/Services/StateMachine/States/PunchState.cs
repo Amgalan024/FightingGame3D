@@ -17,7 +17,7 @@ namespace MVC.StateMachine.States
             base.Enter();
 
             PlayerView.Animator.SetBool(PlayerAnimatorData.IsPunching, true);
-            StateModel.PlayerModel.IsAttacking.Value = true;
+
             StateModel.PlayerAttackModel.Damage = StateModel.PlayerModel.PunchDamage;
         }
 

@@ -19,8 +19,6 @@ namespace MVC.StateMachine.States
 
             PlayerView.Animator.SetBool(PlayerAnimatorData.IsKicking, true);
 
-            StateModel.PlayerModel.IsAttacking.Value = true;
-
             StateModel.PlayerAttackModel.Damage = StateModel.PlayerModel.KickDamage;
         }
 

@@ -18,6 +18,7 @@ namespace MVC.StateMachine.States.CommonStates
 
         public override void Enter()
         {
+            StateModel.PlayerModel.IsAttacking.Value = true;
             _exitStateSubscription = StateModel.PlayerModel.IsAttacking.Subscribe(ExitAttackState);
         }
 
@@ -28,7 +29,7 @@ namespace MVC.StateMachine.States.CommonStates
 
         private void ExitAttackState(bool isAttacking)
         {
-            if (isAttacking)
+            if (!isAttacking)
             {
                 if (PlayerView.Animator.GetBool(PlayerAnimatorData.IsCrouching))
                 {
