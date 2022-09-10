@@ -20,6 +20,8 @@ namespace MVC.StateMachine.States
 
         public override void Enter()
         {
+            base.Enter();
+
             _dashCts?.Dispose();
             _dashCts = new CancellationTokenSource();
 
@@ -53,6 +55,8 @@ namespace MVC.StateMachine.States
 
         public override void Exit()
         {
+            base.Exit();
+
             PlayerView.MoveToIdleAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
         }
 

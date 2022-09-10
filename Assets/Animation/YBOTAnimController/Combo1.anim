@@ -16921,7 +16921,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 1.8666667
-    functionName: SetAttackFalse
+    functionName: InvokeAttackAnimationEnd
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

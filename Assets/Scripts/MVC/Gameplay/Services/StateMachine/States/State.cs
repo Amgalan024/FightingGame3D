@@ -1,4 +1,5 @@
-﻿using MVC.Gameplay.Models;
+﻿using System;
+using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Gameplay.Services;
 using MVC.Utils.Disposable;
@@ -9,6 +10,8 @@ namespace MVC.StateMachine.States
 {
     public abstract class State : DisposableWithCts, IState
     {
+        public event Action OnStateEntered;
+        public event Action OnStateExited;
         public bool IsActive { get; set; }
         public StateModel StateModel { get; }
         public PlayerView PlayerView { get; }
@@ -23,6 +26,7 @@ namespace MVC.StateMachine.States
 
         public virtual void Enter()
         {
+            OnStateEntered?.Invoke();
         }
 
         public virtual void OnFixedTick()
@@ -31,6 +35,7 @@ namespace MVC.StateMachine.States
 
         public virtual void Exit()
         {
+            OnStateExited?.Invoke();
         }
 
         public virtual void OnTriggerEnter(Collider collider)
@@ -43,9 +48,7 @@ namespace MVC.StateMachine.States
                 }
                 else
                 {
-                    var attackModel = Storage.PlayerAttackModelsByView[attackHitBox];
-
-                    StateModel.PlayerModel.TakeDamage(attackModel.Damage);
+                    StateModel.PlayerModel.InvokePlayerAttacked(attackHitBox);
                 }
             }
         }

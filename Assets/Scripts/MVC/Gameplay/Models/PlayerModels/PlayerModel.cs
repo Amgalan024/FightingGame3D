@@ -1,12 +1,14 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 using MVC.Configs;
+using MVC.Views;
 using UnityEngine;
 
 public class PlayerModel
 {
     public const int PLAYER1_NUMBER = 1;
     public const int PLAYER2_NUMBER = 2;
+    public event Action<PlayerModel, PlayerAttackHitBoxView> OnPlayerAttacked;
     public event Action OnPlayerTurned;
     public event Action OnLose;
     public event Action OnPlayerRefreshed;
@@ -34,9 +36,9 @@ public class PlayerModel
 
     public int CurrentJumpCount { set; get; }
 
-    public bool AtLeftSide { set; get; }
+    public bool AtLeftSide { set; get; } = true;
 
-    public bool AtRightSide { set; get; }
+    public bool AtRightSide { set; get; } = false;
 
     public PlayerModel(int playerNumber, Sprite icon, int maxHealthPoints, int maxEnergyPoints, int healthPoints,
         int energyPoints, float movementSpeed, float jumpForce, int punchDamage, int kickDamage)
@@ -95,5 +97,10 @@ public class PlayerModel
     public void TurnPlayer()
     {
         OnPlayerTurned?.Invoke();
+    }
+
+    public void InvokePlayerAttacked(PlayerAttackHitBoxView playerAttackHitBoxView)
+    {
+        OnPlayerAttacked?.Invoke(this, playerAttackHitBoxView);
     }
 }

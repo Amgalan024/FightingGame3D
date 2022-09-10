@@ -18,12 +18,16 @@ namespace MVC.StateMachine.States.CommonStates
 
         public override void Enter()
         {
+            base.Enter();
+
             StateModel.PlayerModel.IsAttacking.Value = true;
             _exitStateSubscription = StateModel.PlayerModel.IsAttacking.Subscribe(ExitAttackState);
         }
 
         public override void Exit()
         {
+            base.Exit();
+
             _exitStateSubscription?.Dispose();
         }
 

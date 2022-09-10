@@ -1202,10 +1202,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4442250729321458999}
   - component: {fileID: 4191922155322776186}
-  - component: {fileID: 4191922155322776187}
   - component: {fileID: 4191922155322776068}
   - component: {fileID: 6257393798585599290}
   - component: {fileID: 4061195048306864458}
+  - component: {fileID: 5210590288645476508}
   m_Layer: 0
   m_Name: RedBot 1
   m_TagString: Untagged
@@ -1248,20 +1248,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!136 &4191922155322776187
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3958060629802923917}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1.8174579
-  m_Direction: 1
-  m_Center: {x: -0, y: 0.8630539, z: 0}
 --- !u!95 &4191922155322776068
 Animator:
   serializedVersion: 3
@@ -1297,6 +1283,9 @@ MonoBehaviour:
   _attackHitBoxViewView: {fileID: 8828816986446273722}
   _animator: {fileID: 4191922155322776068}
   _rigidbody: {fileID: 4191922155322776186}
+  _standingJumpTweenData: {fileID: 0}
+  _movingJumpTweenData: {fileID: 0}
+  _fallTweenData: {fileID: 0}
   _stateText: {fileID: 7953535129565339264}
   _toMoveFloat: 3
   _toMoveDuration: 0.1
@@ -1312,6 +1301,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5945a64a94445bf9b2f753072afee73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &5210590288645476508
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958060629802923917}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.1, y: 1.8, z: 0.57}
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!1 &4049739396382509210
 GameObject:
   m_ObjectHideFlags: 0

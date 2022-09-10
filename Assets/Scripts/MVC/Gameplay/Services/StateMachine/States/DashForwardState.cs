@@ -16,6 +16,8 @@ namespace MVC.StateMachine.States
 
         public override void Enter()
         {
+            base.Enter();
+
             StateModel.InputActionModelsContainer.SetAllInputActionModels(false);
 
             StateModel.InputActionModelsContainer.SetAttackInputActionsFilter(true);
@@ -44,6 +46,8 @@ namespace MVC.StateMachine.States
 
         public override void Exit()
         {
+            base.Enter();
+
             PlayerView.MoveToIdleAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
         }
     }

@@ -19,7 +19,7 @@ namespace MVC.Controllers
         private readonly StateMachineModel _stateMachineModel;
         private readonly StateMachineProxy _stateMachineProxy;
         private readonly InputActionModelsContainer _inputActionModelsContainer;
-
+        private readonly FightSceneModel _fightSceneModel;
         private readonly PlayerModel _playerModel;
         private readonly PlayerView _playerView;
 
@@ -28,7 +28,7 @@ namespace MVC.Controllers
         public PlayerStateMachineController(StateMachine.StateMachine stateMachine,
             InputActionModelsContainer inputActionModelsContainer, StatesContainer statesContainer,
             PlayerModel playerModel, PlayerView playerView, StateMachineModel stateMachineModel,
-            StateMachineProxy stateMachineProxy)
+            StateMachineProxy stateMachineProxy, FightSceneModel fightSceneModel)
         {
             _stateMachine = stateMachine;
             _statesContainer = statesContainer;
@@ -36,6 +36,7 @@ namespace MVC.Controllers
             _playerView = playerView;
             _stateMachineModel = stateMachineModel;
             _stateMachineProxy = stateMachineProxy;
+            _fightSceneModel = fightSceneModel;
             _inputActionModelsContainer = inputActionModelsContainer;
         }
 
@@ -44,6 +45,9 @@ namespace MVC.Controllers
             _stateMachine.StartStateMachine(_statesContainer.GetStateByType(typeof(IdleState)));
 
             _stateMachineProxy.OnStateChanged += OnStateChanged;
+
+            _statesContainer.GetStateByType(typeof(IdleState)).OnStateEntered +=
+                () => _fightSceneModel.InvokePlayerSideCheck(_playerModel);
 
             InitializeInput();
             InitializePlayer();
@@ -98,6 +102,9 @@ namespace MVC.Controllers
             _playerView.HitBoxView.OnColliderEnter += OnColliderEnter;
             _playerView.HitBoxView.OnColliderExit += OnColliderExit;
 
+            _playerView.HitBoxView.OnCollisionEntered += OnCollisionEntered;
+            _playerView.HitBoxView.OnCollisionExited += OnCollisionExit;
+
             _playerModel.OnWin += OnWin;
             _playerModel.OnLose += OnLose;
 
@@ -119,8 +126,8 @@ namespace MVC.Controllers
             _playerView.HitBoxView.OnColliderEnter -= OnColliderEnter;
             _playerView.HitBoxView.OnColliderExit -= OnColliderExit;
 
-            _playerView.HitBoxView.OnCollisionExited += OnCollisionExit;
-            _playerView.HitBoxView.OnCollisionStaying += OnCollisionStay;
+            _playerView.HitBoxView.OnCollisionEntered -= OnCollisionEntered;
+            _playerView.HitBoxView.OnCollisionExited -= OnCollisionExit;
 
             _playerModel.OnWin -= OnWin;
             _playerModel.OnLose -= OnLose;
@@ -154,7 +161,7 @@ namespace MVC.Controllers
             }
         }
 
-        private void OnCollisionStay(Collision collision)
+        private void OnCollisionEntered(Collision collision)
         {
             if (collision.gameObject.GetComponent<PlatformView>())
             {

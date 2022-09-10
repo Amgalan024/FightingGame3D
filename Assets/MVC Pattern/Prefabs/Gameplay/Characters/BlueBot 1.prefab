@@ -2162,10 +2162,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7937362840492915163}
   - component: {fileID: 7614905334654197300}
-  - component: {fileID: 7614905334654197301}
   - component: {fileID: 7614905334654197302}
   - component: {fileID: 465514404453568435}
   - component: {fileID: 5998205462613095502}
+  - component: {fileID: 7749300232393603906}
   m_Layer: 0
   m_Name: BlueBot 1
   m_TagString: Untagged
@@ -2208,20 +2208,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!136 &7614905334654197301
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7308495431854941025}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1.8174579
-  m_Direction: 1
-  m_Center: {x: -0, y: 0.8630539, z: 0}
 --- !u!95 &7614905334654197302
 Animator:
   serializedVersion: 3
@@ -2257,6 +2243,9 @@ MonoBehaviour:
   _attackHitBoxViewView: {fileID: 7954529395445606583}
   _animator: {fileID: 7614905334654197302}
   _rigidbody: {fileID: 7614905334654197300}
+  _standingJumpTweenData: {fileID: 0}
+  _movingJumpTweenData: {fileID: 0}
+  _fallTweenData: {fileID: 0}
   _stateText: {fileID: 8068283412780647301}
   _toMoveFloat: 3
   _toMoveDuration: 0.1
@@ -2272,6 +2261,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5945a64a94445bf9b2f753072afee73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &7749300232393603906
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308495431854941025}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.1, y: 1.8, z: 0.57}
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!1 &7397325746335023162
 GameObject:
   m_ObjectHideFlags: 0

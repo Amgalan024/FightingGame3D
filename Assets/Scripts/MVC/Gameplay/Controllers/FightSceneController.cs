@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Linq;
 using MVC.Configs;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
+using MVC.Views;
 using UnityEngine;
 using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class FightSceneController : IStartable, IFixedTickable, IDisposable
+    public class FightSceneController : IStartable, IDisposable
     {
         private readonly FightSceneFactory _factory;
         private readonly FightSceneStorage _storage;
@@ -32,6 +34,7 @@ namespace MVC.Gameplay.Controllers
             _factory.CreateFightLocation();
             _factory.CreatePlayers();
 
+
             int playerIndex = 0;
 
             foreach (var modelView in _storage.PlayerModelsByView)
@@ -46,28 +49,42 @@ namespace MVC.Gameplay.Controllers
                 playerIndex++;
             }
 
+            _storage.PlayerModels.ForEach(SetPlayersFaceToFace);
+
+            _fightSceneModel.OnPlayerSideCheck += SetPlayersFaceToFace;
+
+            _storage.PlayerModels[0].OnPlayerAttacked += OnPlayerAttacked;
+            _storage.PlayerModels[1].OnPlayerAttacked += OnPlayerAttacked;
+
             _storage.PlayerModels[0].OnLose += _storage.PlayerModels[1].ScoreWin;
             _storage.PlayerModels[1].OnLose += _storage.PlayerModels[0].ScoreWin;
         }
 
-        void IFixedTickable.FixedTick()
-        {
-            var player1Transform = _storage.PlayerViewsByModel[_storage.PlayerModels[0]].transform;
-            var player2Transform = _storage.PlayerViewsByModel[_storage.PlayerModels[1]].transform;
-
-            SetPlayerFaceOpponent(_storage.PlayerModels[0], player1Transform, player2Transform);
-            SetPlayerFaceOpponent(_storage.PlayerModels[1], player2Transform, player1Transform);
-        }
-
         void IDisposable.Dispose()
         {
+            _fightSceneModel.OnPlayerSideCheck -= SetPlayersFaceToFace;
+
+            _storage.PlayerModels[0].OnPlayerAttacked -= OnPlayerAttacked;
+            _storage.PlayerModels[1].OnPlayerAttacked -= OnPlayerAttacked;
+
             _storage.PlayerModels[0].OnLose -= _storage.PlayerModels[1].ScoreWin;
             _storage.PlayerModels[1].OnLose -= _storage.PlayerModels[0].ScoreWin;
         }
 
-        private void SetPlayerFaceOpponent(PlayerModel playerModel, Transform playerTransform, Transform enemyTransform)
+        private void SetPlayersFaceToFace(PlayerModel playerModel)
         {
-            if (playerModel.AtLeftSide && playerTransform.position.x > enemyTransform.position.x)
+            var playerTransform = _storage.PlayerViewsByModel[playerModel].transform;
+
+            var opponentModel = _storage.PlayerModels.First(p => !p.Equals(playerModel));
+
+            var opponentTransform = _storage.PlayerViewsByModel[opponentModel].transform;
+
+            SetPlayerFaceOpponent(_storage.PlayerModels[0], playerTransform, opponentTransform);
+        }
+
+        private void SetPlayerFaceOpponent(PlayerModel playerModel, Transform playerTransform, Transform opponentTransform)
+        {
+            if (playerModel.AtLeftSide && playerTransform.position.x > opponentTransform.position.x)
             {
                 playerModel.TurnPlayer();
                 playerModel.AtRightSide = true;
@@ -78,7 +95,7 @@ namespace MVC.Gameplay.Controllers
                 playerTransform.localScale = localScale;
             }
 
-            if (playerModel.AtRightSide && playerTransform.position.x < enemyTransform.position.x)
+            if (playerModel.AtRightSide && playerTransform.position.x < opponentTransform.position.x)
             {
                 playerModel.TurnPlayer();
                 playerModel.AtLeftSide = true;
@@ -88,6 +105,11 @@ namespace MVC.Gameplay.Controllers
                 localScale.z = 1;
                 playerTransform.localScale = localScale;
             }
+        }
+
+        private void OnPlayerAttacked(PlayerModel playerModel, PlayerAttackHitBoxView attackHitBoxView)
+        {
+            playerModel.TakeDamage(_storage.PlayerAttackModelsByView[attackHitBoxView].Damage);
         }
     }
 }

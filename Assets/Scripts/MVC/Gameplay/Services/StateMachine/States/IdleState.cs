@@ -1,8 +1,6 @@
 ﻿using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
-using MVC.Models;
 using MVC.Views;
-using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
@@ -15,6 +13,8 @@ namespace MVC.StateMachine.States
 
         public override void Enter()
         {
+            base.Enter();
+
             StateModel.InputActionModelsContainer.SetAllInputActionModels(true);
         }
     }

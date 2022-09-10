@@ -8,8 +8,10 @@ namespace MVC.Views
         public event Action<Collider> OnColliderEnter;
         public event Action<Collider> OnColliderExit;
 
-        public event Action<Collision> OnCollisionExited;
+        public event Action<Collision> OnCollisionEntered;
         public event Action<Collision> OnCollisionStaying;
+        public event Action<Collision> OnCollisionExited;
+
 
         public void OnTriggerEnter(Collider other)
         {
@@ -21,14 +23,19 @@ namespace MVC.Views
             OnColliderExit?.Invoke(other);
         }
 
-        private void OnCollisionExit(Collision collision)
+        private void OnCollisionEnter(Collision collision)
         {
-            OnCollisionExited?.Invoke(collision);
+            OnCollisionEntered?.Invoke(collision);
         }
 
         private void OnCollisionStay(Collision collision)
         {
             OnCollisionStaying?.Invoke(collision);
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            OnCollisionExited?.Invoke(collision);
         }
     }
 }

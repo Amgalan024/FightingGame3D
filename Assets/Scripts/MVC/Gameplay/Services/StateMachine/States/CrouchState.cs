@@ -18,6 +18,8 @@ namespace MVC.StateMachine.States
 
         public override void Enter()
         {
+            base.Enter();
+
             StateModel.PlayerModel.IsCrouching.Value = true;
 
             StateModel.InputActionModelsContainer.SetAllInputActionModels(false);
@@ -33,6 +35,8 @@ namespace MVC.StateMachine.States
 
         public override void Exit()
         {
+            base.Exit();
+
             StateModel.PlayerModel.IsCrouching.Value = false;
         }
 

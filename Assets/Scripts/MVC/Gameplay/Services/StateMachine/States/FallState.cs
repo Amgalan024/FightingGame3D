@@ -18,6 +18,8 @@ namespace MVC.StateMachine.States
 
         public override void Enter()
         {
+            base.Enter();
+
             _fallSubscription = StateModel.PlayerModel.IsGrounded.Subscribe(OnFall);
 
             StateModel.InputActionModelsContainer.SetAllInputActionModels(false);
@@ -27,6 +29,8 @@ namespace MVC.StateMachine.States
 
         public override void Exit()
         {
+            base.Exit();
+
             _fallSubscription?.Dispose();
         }
 
@@ -39,14 +43,6 @@ namespace MVC.StateMachine.States
                 if (StateModel.PlayerModel.MovementSpeed < 0.1)
                 {
                     StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
-                }
-                else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Forward) > 0.1)
-                {
-                    StateModel.StateMachineProxy.ChangeState(typeof(RunForwardState));
-                }
-                else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Backward) > 0.1)
-                {
-                    StateModel.StateMachineProxy.ChangeState(typeof(RunBackwardState));
                 }
             }
         }

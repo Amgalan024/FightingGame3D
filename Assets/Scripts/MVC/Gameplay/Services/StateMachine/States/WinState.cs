@@ -10,10 +10,6 @@ namespace MVC.StateMachine.States
             playerView, storage)
         {
         }
-
-        public override void Enter()
-        {
-            base.Enter();
-        }
+       
     }
 }
