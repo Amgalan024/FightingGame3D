@@ -1283,8 +1283,8 @@ MonoBehaviour:
   _attackHitBoxViewView: {fileID: 8828816986446273722}
   _animator: {fileID: 4191922155322776068}
   _rigidbody: {fileID: 4191922155322776186}
-  _standingJumpTweenData: {fileID: 0}
-  _movingJumpTweenData: {fileID: 0}
+  _standingJumpTweenData: {fileID: 11400000, guid: e73c6b50732edd0468c87b48337f2d08, type: 2}
+  _movingJumpTweenData: {fileID: 11400000, guid: 79302b7d3cdae8040bc5f915fa3022b2, type: 2}
   _fallTweenData: {fileID: 0}
   _stateText: {fileID: 7953535129565339264}
   _toMoveFloat: 3
