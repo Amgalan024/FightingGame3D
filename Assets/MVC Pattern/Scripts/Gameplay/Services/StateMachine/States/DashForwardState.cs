@@ -38,7 +38,7 @@ namespace MVC.StateMachine.States
             {
                 var velocity = PlayerView.Rigidbody.velocity;
 
-                velocity.x = StateModel.PlayerModel.MaxMovementSpeed * 2 * PlayerView.transform.localScale.z;
+                velocity.x = StateModel.PlayerModel.MaxMovementSpeed * 2 * PlayerView.GetPlayerDirection();
 
                 PlayerView.Rigidbody.velocity = velocity;
             }

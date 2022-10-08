@@ -34,9 +34,11 @@ namespace MVC.StateMachine.States
 
             var animationData = StateModel.CharacterConfig.PlayerAnimationData;
 
+            _jumpStateModel.Direction = PlayerView.GetPlayerDirection();
             _jumpStateModel.JumpTweenVectorData =
                 animationData.GetTweenDataByDirection(animationData.JumpTweenData, _runStateModel.DirectionType);
 
+            _fallStateModel.Direction = PlayerView.GetPlayerDirection();
             _fallStateModel.FallTweenVectorData =
                 animationData.GetTweenDataByDirection(animationData.FallTweenData, _runStateModel.DirectionType);
 
@@ -67,7 +69,7 @@ namespace MVC.StateMachine.States
                 var velocity = PlayerView.Rigidbody.velocity;
 
                 velocity.x = (int) _runStateModel.DirectionType * StateModel.PlayerModel.MaxMovementSpeed *
-                             PlayerView.transform.localScale.z;
+                             PlayerView.GetPlayerDirection();
 
                 PlayerView.Rigidbody.velocity = velocity;
             }

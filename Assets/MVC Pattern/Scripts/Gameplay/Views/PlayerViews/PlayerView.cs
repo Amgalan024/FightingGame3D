@@ -36,18 +36,6 @@ namespace MVC.Views
         public Sequence JumpSequence { get; private set; }
         public Sequence FallSequence { get; private set; }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                var playerTransformRotation = transform.localScale;
-
-                playerTransformRotation = new Vector3(1, 1, -playerTransformRotation.z);
-
-                transform.localScale = playerTransformRotation;
-            }
-        }
-
         public void InvokeAttackAnimationEnd()
         {
             OnAttackAnimationEnded.Invoke();
@@ -64,6 +52,11 @@ namespace MVC.Views
 
         public async UniTask DashBackward()
         {
+        }
+
+        public int GetPlayerDirection()
+        {
+            return (int) transform.localScale.z;
         }
 
         public async UniTask IdleToMoveAnimationAsync(int moveHash, CancellationToken token)
@@ -85,7 +78,8 @@ namespace MVC.Views
             await MoveToIdleTween.AwaitForComplete(cancellationToken: token);
         }
 
-        public async UniTask JumpAnimationAsync(TweenVectorData tweenVectorData, CancellationToken token)
+        public async UniTask JumpAnimationAsync(TweenVectorData tweenVectorData, int direction,
+            CancellationToken token)
         {
             if (JumpSequence.IsActive())
             {
@@ -96,7 +90,7 @@ namespace MVC.Views
 
             foreach (var vector in tweenVectorData.Vectors)
             {
-                var newVector = vector * transform.localScale.z;
+                var newVector = vector * direction;
 
                 JumpSequence.Append(DOTween.To(() => _rigidbody.velocity,
                         newValue => _rigidbody.velocity = newValue, newVector, _toMoveDuration)
@@ -106,19 +100,20 @@ namespace MVC.Views
             await JumpSequence.AwaitForComplete(cancellationToken: token);
         }
 
-        public async UniTaskVoid FallAnimationAsync(TweenVectorData tweenVectorData, CancellationToken token)
+        public async UniTaskVoid FallAnimationAsync(TweenVectorData tweenVectorData, int direction,
+            CancellationToken token)
         {
             FallSequence = DOTween.Sequence();
             foreach (var vector in tweenVectorData.Vectors)
             {
-                var newVector = vector * transform.localScale.z;
+                var newVector = vector * direction;
 
                 FallSequence.Append(DOTween.To(() => _rigidbody.velocity,
                         newValue => _rigidbody.velocity = newValue, newVector, _toMoveDuration)
                     .SetEase(tweenVectorData.Ease));
             }
 
-            var lastFallVector = tweenVectorData.Vectors.Last() * transform.localScale.z;
+            var lastFallVector = tweenVectorData.Vectors.Last() * direction;
 
             var lastTween = DOTween.To(() => _rigidbody.velocity,
                     newValue => _rigidbody.velocity = newValue, lastFallVector, _toMoveDuration)
@@ -131,7 +126,7 @@ namespace MVC.Views
 
         public async UniTask KnockBackOnFallAnimationAsync(CancellationToken token)
         {
-            var tween = transform.DOMoveX(_knockBackOnFall * transform.localScale.z * -1, _knockBackOnFallDuration)
+            var tween = transform.DOMoveX(_knockBackOnFall * GetPlayerDirection() * -1, _knockBackOnFallDuration)
                 .SetRelative(true);
 
             await tween.AwaitForComplete(cancellationToken: token);
