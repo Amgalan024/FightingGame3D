@@ -90,8 +90,10 @@ namespace MVC.Views
 
             foreach (var vector in tweenVectorData.Vectors)
             {
-                var newVector = vector * direction;
-
+                var newVector = vector;
+                
+                newVector.x *= direction;
+                
                 JumpSequence.Append(DOTween.To(() => _rigidbody.velocity,
                         newValue => _rigidbody.velocity = newValue, newVector, _toMoveDuration)
                     .SetEase(tweenVectorData.Ease));
@@ -106,14 +108,18 @@ namespace MVC.Views
             FallSequence = DOTween.Sequence();
             foreach (var vector in tweenVectorData.Vectors)
             {
-                var newVector = vector * direction;
+                var newVector = vector;
+                
+                newVector.x *= direction;
 
                 FallSequence.Append(DOTween.To(() => _rigidbody.velocity,
                         newValue => _rigidbody.velocity = newValue, newVector, _toMoveDuration)
                     .SetEase(tweenVectorData.Ease));
             }
 
-            var lastFallVector = tweenVectorData.Vectors.Last() * direction;
+            var lastFallVector = tweenVectorData.Vectors.Last();
+                
+            lastFallVector.x *= direction;
 
             var lastTween = DOTween.To(() => _rigidbody.velocity,
                     newValue => _rigidbody.velocity = newValue, lastFallVector, _toMoveDuration)
