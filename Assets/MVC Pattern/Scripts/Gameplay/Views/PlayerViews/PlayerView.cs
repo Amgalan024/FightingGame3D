@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MVC.Configs.Animation;
 using MVC.Configs.Enums;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MVC.Views
 {
@@ -19,12 +19,10 @@ namespace MVC.Views
         [SerializeField] private PlayerSideDetectorView _sideDetectorView;
         [SerializeField] private Animator _animator;
         [SerializeField] private Rigidbody _rigidbody;
-        [SerializeField] private TweenVectorData _standingJumpTweenData;
-        [SerializeField] private TweenVectorData _movingJumpTweenData;
-        [SerializeField] private TweenVectorData _fallTweenData;
-        [SerializeField] private Text _stateText;
         [SerializeField] private float _toMoveFloat;
         [SerializeField] private float _toMoveDuration;
+        [SerializeField] private float _knockBackOnFall = 2f;
+        [SerializeField] private float _knockBackOnFallDuration = 0.2f;
 
         public TriggerDetectorView TriggerDetector => _triggerDetector;
         public CollisionDetectorView CollisionDetector => _collisionDetector;
@@ -32,66 +30,111 @@ namespace MVC.Views
         public PlayerSideDetectorView SideDetectorView => _sideDetectorView;
         public Animator Animator => _animator;
         public Rigidbody Rigidbody => _rigidbody;
-        public Text StateText => _stateText;
 
-        private Tween _idleToMoveTween;
+        public Tween IdleToMoveTween { get; private set; }
+        public Tween MoveToIdleTween { get; private set; }
+        public Sequence JumpSequence { get; private set; }
+        public Sequence FallSequence { get; private set; }
 
-        private Tween _moveToIdleTween;
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                var playerTransformRotation = transform.localScale;
 
-        private Sequence _jumpSequence;
+                playerTransformRotation = new Vector3(1, 1, -playerTransformRotation.z);
+
+                transform.localScale = playerTransformRotation;
+            }
+        }
 
         public void InvokeAttackAnimationEnd()
         {
             OnAttackAnimationEnded.Invoke();
         }
 
+        public void SetParent(Transform parent)
+        {
+            transform.SetParent(parent);
+        }
+
+        public async UniTask DashForward()
+        {
+        }
+
+        public async UniTask DashBackward()
+        {
+        }
+
         public async UniTask IdleToMoveAnimationAsync(int moveHash, CancellationToken token)
         {
-            await UniTask.WaitUntil(() => !_moveToIdleTween.IsActive(), cancellationToken: token);
+            await UniTask.WaitUntil(() => !MoveToIdleTween.IsActive(), cancellationToken: token);
 
-            _idleToMoveTween = DOTween.To(() => _animator.GetFloat(moveHash),
+            IdleToMoveTween = DOTween.To(() => _animator.GetFloat(moveHash),
                 newFloat => _animator.SetFloat(moveHash, newFloat), _toMoveFloat,
                 _toMoveDuration);
 
-            await _idleToMoveTween.AwaitForComplete(cancellationToken: token);
+            await IdleToMoveTween.AwaitForComplete(cancellationToken: token);
         }
 
         public async UniTask MoveToIdleAnimationAsync(int moveHash, CancellationToken token)
         {
-            _moveToIdleTween = DOTween.To(() => _animator.GetFloat(moveHash),
+            MoveToIdleTween = DOTween.To(() => _animator.GetFloat(moveHash),
                 newFloat => _animator.SetFloat(moveHash, newFloat), 0, _toMoveDuration);
 
-            await _moveToIdleTween.AwaitForComplete(cancellationToken: token);
+            await MoveToIdleTween.AwaitForComplete(cancellationToken: token);
         }
 
-        public async UniTask StandingJumpAnimationAsync(CancellationToken token)
+        public async UniTask JumpAnimationAsync(TweenVectorData tweenVectorData, CancellationToken token)
         {
-            _jumpSequence = DOTween.Sequence();
-
-            foreach (var vector in _standingJumpTweenData.Vectors)
+            if (JumpSequence.IsActive())
             {
-                DOTween.To(() => _rigidbody.velocity,
-                        newValue => _rigidbody.velocity = newValue, vector, _toMoveDuration)
-                    .SetEase(_standingJumpTweenData.Ease);
+                JumpSequence?.Kill();
             }
 
-            await _jumpSequence.AwaitForComplete(cancellationToken: token);
+            JumpSequence = DOTween.Sequence();
+
+            foreach (var vector in tweenVectorData.Vectors)
+            {
+                var newVector = vector * transform.localScale.z;
+
+                JumpSequence.Append(DOTween.To(() => _rigidbody.velocity,
+                        newValue => _rigidbody.velocity = newValue, newVector, _toMoveDuration)
+                    .SetEase(tweenVectorData.Ease));
+            }
+
+            await JumpSequence.AwaitForComplete(cancellationToken: token);
         }
 
-        public async UniTask MovingJumpAnimationAsync(DirectionType directionType, CancellationToken token)
+        public async UniTaskVoid FallAnimationAsync(TweenVectorData tweenVectorData, CancellationToken token)
         {
-            _jumpSequence = DOTween.Sequence();
-
-            var direction = (int) directionType * transform.localScale.z;
-
-            foreach (var vector in _movingJumpTweenData.Vectors)
+            FallSequence = DOTween.Sequence();
+            foreach (var vector in tweenVectorData.Vectors)
             {
-                DOTween.To(() => _rigidbody.velocity,
-                        newValue => _rigidbody.velocity = newValue, vector * direction, _toMoveDuration)
-                    .SetEase(_standingJumpTweenData.Ease);
+                var newVector = vector * transform.localScale.z;
+
+                FallSequence.Append(DOTween.To(() => _rigidbody.velocity,
+                        newValue => _rigidbody.velocity = newValue, newVector, _toMoveDuration)
+                    .SetEase(tweenVectorData.Ease));
             }
 
-            await _jumpSequence.AwaitForComplete(cancellationToken: token);
+            var lastFallVector = tweenVectorData.Vectors.Last() * transform.localScale.z;
+
+            var lastTween = DOTween.To(() => _rigidbody.velocity,
+                    newValue => _rigidbody.velocity = newValue, lastFallVector, _toMoveDuration)
+                .SetEase(tweenVectorData.Ease).SetLoops(-1);
+
+            FallSequence.Append(lastTween);
+
+            await FallSequence.AwaitForComplete(cancellationToken: token);
+        }
+
+        public async UniTask KnockBackOnFallAnimationAsync(CancellationToken token)
+        {
+            var tween = transform.DOMoveX(_knockBackOnFall * transform.localScale.z * -1, _knockBackOnFallDuration)
+                .SetRelative(true);
+
+            await tween.AwaitForComplete(cancellationToken: token);
         }
     }
 }

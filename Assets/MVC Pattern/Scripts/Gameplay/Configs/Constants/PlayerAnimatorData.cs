@@ -12,5 +12,6 @@ namespace MVC.Gameplay.Constants
         public static readonly int IsKicking = Animator.StringToHash("IsKicking");
         public static readonly int IsPunching = Animator.StringToHash("IsPunching");
         public static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
+        public static readonly int IsStunned = Animator.StringToHash("IsStunned");
     }
 }

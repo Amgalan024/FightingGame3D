@@ -5,13 +5,14 @@ using Cysharp.Threading.Tasks;
 using MVC.Configs;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
+using MVC.Utils.Disposable;
 using MVC.Views;
 using UnityEngine;
 using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class FightSceneController : IAsyncStartable, IDisposable
+    public class FightSceneController : DisposableWithCts, IAsyncStartable, IDisposable
     {
         private readonly FightSceneFactory _factory;
         private readonly FightSceneStorage _storage;
@@ -40,11 +41,11 @@ namespace MVC.Gameplay.Controllers
 
             foreach (var modelView in _storage.PlayerModelsByView)
             {
-                var comboConfig = _storage.ComboConfigsByModel[modelView.Value];
+                var characterConfig = _storage.CharacterConfigsByModel[modelView.Value];
 
                 var playerLifetimeScope =
                     _playerLifetimeScopeFactory.CreatePlayerLifetimeScope(modelView.Value, modelView.Key,
-                        _inputConfigs[playerIndex], comboConfig);
+                        _inputConfigs[playerIndex], characterConfig);
 
                 _fightSceneModel.PlayerLifetimeScopes.Add(playerLifetimeScope);
                 playerIndex++;
@@ -81,7 +82,6 @@ namespace MVC.Gameplay.Controllers
             var opponentModel = _storage.PlayerModels.First(p => !p.Equals(playerModel));
 
             var opponentTransform = _storage.PlayerViewsByModel[opponentModel].transform;
-
             SetPlayerFaceOpponent(playerModel, playerTransform, opponentTransform);
         }
 

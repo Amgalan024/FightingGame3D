@@ -8,10 +8,12 @@ namespace MVC.Views
         public event Action<Collision> OnCollisionEntered;
         public event Action<Collision> OnCollisionStaying;
         public event Action<Collision> OnCollisionExited;
-        
+
+        [SerializeField] private Collider _collider;
+        public Collider Collider => _collider;
+
         private void OnCollisionEnter(Collision collision)
         {
-            Debug.Log("OnCollisionEnter");
             OnCollisionEntered?.Invoke(collision);
         }
 

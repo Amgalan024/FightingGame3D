@@ -6,6 +6,7 @@ using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Models;
 using MVC.StateMachine.States;
 using MVC.Views;
+using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using VContainer;
 using VContainer.Unity;
 
@@ -21,14 +22,14 @@ namespace MVC.Gameplay.Services
         }
 
         public LifetimeScope CreatePlayerLifetimeScope(PlayerModel playerModel, PlayerView playerView,
-            PlayerInputConfig playerInputConfig, ComboConfig comboConfig)
+            PlayerInputConfig playerInputConfig, CharacterConfig characterConfig)
         {
             var scope = _gameplayLifeTimeScope.CreateChild(builder =>
             {
                 builder.RegisterInstance(playerModel);
                 builder.RegisterInstance(playerView);
                 builder.RegisterInstance(playerInputConfig.InputModels);
-                builder.RegisterInstance(comboConfig);
+                builder.RegisterInstance(characterConfig);
 
                 builder.Register<StateModel>(Lifetime.Scoped);
                 builder.Register<StatesContainer>(Lifetime.Scoped);
@@ -48,6 +49,8 @@ namespace MVC.Gameplay.Services
                 builder.RegisterEntryPoint<ComboInputController>(Lifetime.Scoped);
 
                 BuildStates(builder);
+
+                BuildStateModels(builder);
             });
 
             return scope;
@@ -64,9 +67,17 @@ namespace MVC.Gameplay.Services
             builder.Register<JumpState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<KickState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<PunchState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
-            builder.Register<RunBackwardState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
-            builder.Register<RunForwardState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<RunState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<DashForwardState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<DashBackwardState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<StunnedState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+        }
+
+        private void BuildStateModels(IContainerBuilder builder)
+        {
+            builder.Register<FallStateModel>(Lifetime.Scoped);
+            builder.Register<JumpStateModel>(Lifetime.Scoped);
+            builder.Register<RunStateModel>(Lifetime.Scoped);
         }
     }
 }

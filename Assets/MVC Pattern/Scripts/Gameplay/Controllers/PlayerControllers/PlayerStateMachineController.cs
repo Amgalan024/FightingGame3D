@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks.Linq;
+using MVC.Configs.Enums;
 using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Models;
 using MVC.StateMachine.States;
 using MVC.Views;
+using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -22,13 +24,19 @@ namespace MVC.Controllers
         private readonly FightSceneModel _fightSceneModel;
         private readonly PlayerModel _playerModel;
         private readonly PlayerView _playerView;
+        private readonly InputModelsContainer _inputModelsContainer;
+
+        private readonly Transform _parent;
 
         private readonly List<IDisposable> _subscriptions = new List<IDisposable>(5);
+
+        private readonly RunStateModel _runStateModel;
 
         public PlayerStateMachineController(StateMachine.StateMachine stateMachine,
             InputActionModelsContainer inputActionModelsContainer, StatesContainer statesContainer,
             PlayerModel playerModel, PlayerView playerView, StateMachineModel stateMachineModel,
-            StateMachineProxy stateMachineProxy, FightSceneModel fightSceneModel)
+            StateMachineProxy stateMachineProxy, FightSceneModel fightSceneModel, LifetimeScope lifetimeScope,
+            RunStateModel runStateModel, InputModelsContainer inputModelsContainer)
         {
             _stateMachine = stateMachine;
             _statesContainer = statesContainer;
@@ -37,7 +45,10 @@ namespace MVC.Controllers
             _stateMachineModel = stateMachineModel;
             _stateMachineProxy = stateMachineProxy;
             _fightSceneModel = fightSceneModel;
+            _runStateModel = runStateModel;
+            _inputModelsContainer = inputModelsContainer;
             _inputActionModelsContainer = inputActionModelsContainer;
+            _parent = lifetimeScope.transform;
         }
 
         void IInitializable.Initialize()
@@ -94,6 +105,8 @@ namespace MVC.Controllers
 
         private void InitializePlayer()
         {
+            _playerView.SetParent(_parent);
+
             _playerView.OnAttackAnimationEnded += OnAttackAnimationEnded;
 
             _playerView.TriggerDetector.OnColliderEnter += OnColliderEnter;
@@ -187,12 +200,21 @@ namespace MVC.Controllers
 
         private void OnMoveForwardInput()
         {
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(RunForwardState)));
+            _runStateModel.InputKey = _inputModelsContainer.MoveForward.Key;
+            _runStateModel.AnimationHash = PlayerAnimatorData.Forward;
+            _runStateModel.DirectionType = DirectionType.Forward;
+            _runStateModel.DashStateType = typeof(DashForwardState);
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(RunState)));
         }
 
         private void OnMoveBackwardInput()
         {
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(RunBackwardState)));
+            _runStateModel.InputKey = _inputModelsContainer.MoveBackward.Key;
+            _runStateModel.AnimationHash = PlayerAnimatorData.Backward;
+            _runStateModel.DirectionType = DirectionType.Backward;
+            _runStateModel.DashStateType = typeof(DashBackwardState);
+
+            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(RunState)));
         }
 
         private void OnPunchInput()

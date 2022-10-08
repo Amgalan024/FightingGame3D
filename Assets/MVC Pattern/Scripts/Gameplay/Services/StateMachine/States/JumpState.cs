@@ -1,74 +1,83 @@
-﻿using System;
+﻿using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using MVC.Configs.Enums;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using MVC.Views;
+using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
     public class JumpState : State
     {
-        private CancellationTokenSource _fallCts;
+        private readonly JumpStateModel _jumpStateModel;
 
-        public JumpState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
-            playerView, storage)
+        private CancellationTokenSource _jumpCts;
+
+        public JumpState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage,
+            JumpStateModel jumpStateModel) : base(stateModel, playerView, storage)
         {
+            _jumpStateModel = jumpStateModel;
         }
 
         public override void Enter()
         {
             base.Enter();
 
+            _jumpStateModel.OnJumpInterrupted += OnJumpInterrupted;
+
             StateModel.InputActionModelsContainer.SetAllInputActionModels(false);
 
             StateModel.InputActionModelsContainer.SetBlockInputActionsFilter(true);
             StateModel.InputActionModelsContainer.SetAttackInputActionsFilter(true);
 
-            if (!StateModel.StateMachineModel.ComparePreviousStateTypeEquality(typeof(CommonStates.AttackState)))
-            {
-                if (StateModel.StateMachineModel.ComparePreviousStateTypeEquality(typeof(RunForwardState)))
-                {
-                    PlayerView.MovingJumpAnimationAsync(DirectionType.Forward, Token).Forget();
-                }
-                else if (StateModel.StateMachineModel.ComparePreviousStateTypeEquality(typeof(RunBackwardState)))
-                {
-                    PlayerView.MovingJumpAnimationAsync(DirectionType.Backward, Token).Forget();
-                }
-                else
-                {
-                    PlayerView.StandingJumpAnimationAsync(Token).Forget();
-                }
+            _jumpCts?.Cancel();
+            _jumpCts?.Dispose();
 
-                StateModel.PlayerModel.CurrentJumpCount++;
-                Debug.Log("CurrentJumpCount = ++ = " +  StateModel.PlayerModel.CurrentJumpCount);
+            _jumpCts = new CancellationTokenSource();
 
-            }
+            AwaitJump(_jumpCts.Token).Forget();
+        }
 
-            if (StateModel.PlayerModel.CurrentJumpCount < 2)
+        private async UniTask AwaitJump(CancellationToken token)
+        {
+            if (StateModel.PlayerModel.CurrentJumpCount < 1)
             {
                 StateModel.InputActionModelsContainer.SetJumpInputActionsFilter(true);
             }
 
-            _fallCts = new CancellationTokenSource();
+            if (!StateModel.StateMachineModel.ComparePreviousStateTypeEquality(typeof(CommonStates.AttackState)))
+            {
+                StateModel.PlayerModel.CurrentJumpCount++;
 
-            AwaitFall(_fallCts.Token).Forget();
+                await PlayerView.JumpAnimationAsync(_jumpStateModel.JumpTweenVectorData, token);
+
+                StateModel.StateMachineProxy.ChangeState(typeof(FallState));
+            }
         }
 
-        public override void Exit()
+        private void OnJumpInterrupted()
         {
-            base.Exit();
-
-            _fallCts.Cancel();
-            _fallCts.Dispose();
+            _jumpCts?.Cancel();
+            _jumpStateModel.OnJumpInterrupted -= OnJumpInterrupted;
         }
 
-        private async UniTask AwaitFall(CancellationToken token)
+        public override void OnTriggerEnter(Collider collider)
         {
-            await UniTask.WaitUntil(() => PlayerView.Rigidbody.velocity.y <= 0, cancellationToken: token);
-            StateModel.StateMachineProxy.ChangeState(typeof(FallState));
+            base.OnTriggerEnter(collider);
+
+            var opponentPlayerView = Storage.GetOpponentViewByModel(StateModel.PlayerModel);
+
+            var overlappedColliders = Physics.OverlapBox(PlayerView.TriggerDetector.TopCollider.center,
+                    PlayerView.TriggerDetector.TopCollider.size)
+                .FirstOrDefault(c => c == opponentPlayerView.TriggerDetector.BottomCollider);
+
+            if (overlappedColliders != null)
+            {
+                Physics.IgnoreCollision(PlayerView.CollisionDetector.Collider,
+                    opponentPlayerView.CollisionDetector.Collider, true);
+            }
         }
     }
 }

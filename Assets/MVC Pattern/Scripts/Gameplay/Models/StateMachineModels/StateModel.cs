@@ -1,12 +1,13 @@
-﻿using MVC.Gameplay.Models.Player;
+﻿using MVC.Configs;
+using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Models;
-using UnityEngine;
 
 namespace MVC.Gameplay.Models
 {
     public class StateModel
     {
+        public CharacterConfig CharacterConfig { get; }
         public PlayerModel PlayerModel { get; }
         public PlayerAttackModel PlayerAttackModel { get; }
         public InputModelsContainer InputModelsContainer { get; }
@@ -16,7 +17,7 @@ namespace MVC.Gameplay.Models
 
         public StateModel(PlayerModel playerModel, InputActionModelsContainer inputActionModelsContainer,
             PlayerAttackModel playerAttackModel, InputModelsContainer inputModelsContainer,
-            StateMachineProxy stateMachineProxy, StateMachineModel stateMachineModel)
+            StateMachineProxy stateMachineProxy, StateMachineModel stateMachineModel, CharacterConfig characterConfig)
         {
             PlayerModel = playerModel;
             InputActionModelsContainer = inputActionModelsContainer;
@@ -24,6 +25,7 @@ namespace MVC.Gameplay.Models
             InputModelsContainer = inputModelsContainer;
             StateMachineProxy = stateMachineProxy;
             StateMachineModel = stateMachineModel;
+            CharacterConfig = characterConfig;
         }
     }
 }

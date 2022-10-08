@@ -38,6 +38,8 @@ public class PlayerModel
 
     public bool AtLeftSide { set; get; } = true;
 
+    public int Turn { get; set; }
+
     public PlayerModel(int playerNumber, Sprite icon, int maxHealthPoints, int maxEnergyPoints, int healthPoints,
         int energyPoints, float movementSpeed, float jumpForce, int punchDamage, int kickDamage)
     {

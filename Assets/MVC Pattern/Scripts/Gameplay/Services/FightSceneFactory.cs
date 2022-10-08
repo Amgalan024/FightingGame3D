@@ -34,19 +34,22 @@ namespace MVC.Gameplay.Services
         {
             for (int i = 0; i < _charactersContainer.PlayerConfigs.Count; i++)
             {
+                var characterPrefab = _charactersContainer.PlayerConfigs[i].Prefab;
+                var rotation = characterPrefab.transform.rotation;
+                var position = _storage.FightLocationView.PlayerSpawnPoints[i].position;
+
+                var playerView = Object.Instantiate(characterPrefab, position, rotation);
+
                 var playerModel = new PlayerModel(i, _charactersContainer.PlayerConfigs[i]);
 
-                var playerView = Object.Instantiate(_charactersContainer.PlayerConfigs[i].Prefab,
-                    _storage.FightLocationView.PlayerSpawnPoints[i]);
-
-                var comboConfig = _charactersContainer.PlayerConfigs[i].ComboConfig;
+                var characterConfig = _charactersContainer.PlayerConfigs[i];
 
                 _storage.PlayerModels.Add(playerModel);
                 _storage.PlayerViews.Add(playerView);
 
                 _storage.PlayerModelsByView.Add(playerView, playerModel);
                 _storage.PlayerViewsByModel.Add(playerModel, playerView);
-                _storage.ComboConfigsByModel.Add(playerModel, comboConfig);
+                _storage.CharacterConfigsByModel.Add(playerModel, characterConfig);
 
                 var playerAttackModel = new PlayerAttackModel();
 

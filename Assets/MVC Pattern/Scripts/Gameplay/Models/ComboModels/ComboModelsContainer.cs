@@ -7,11 +7,11 @@ namespace MVC.Models
     {
         public ComboModel[] ComboModels { get; }
 
-        public ComboModelsContainer(ComboConfig comboConfig, InputModelsContainer inputModelsContainer)
+        public ComboModelsContainer(CharacterConfig characterConfig, InputModelsContainer inputModelsContainer)
         {
-            ComboModels = new ComboModel[comboConfig.ComboList.Length];
+            ComboModels = new ComboModel[characterConfig.ComboConfig.ComboList.Length];
 
-            var sortedComboList = comboConfig.ComboList.OrderByDescending(x => x.ControlNames.Length).ToList();
+            var sortedComboList = characterConfig.ComboConfig.ComboList.OrderByDescending(x => x.ControlNames.Length).ToList();
 
             for (int i = 0; i < ComboModels.Length; i++)
             {

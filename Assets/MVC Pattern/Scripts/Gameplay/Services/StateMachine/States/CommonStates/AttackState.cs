@@ -35,27 +35,7 @@ namespace MVC.StateMachine.States.CommonStates
         {
             if (!isAttacking)
             {
-                if (PlayerView.Animator.GetBool(PlayerAnimatorData.IsCrouching))
-                {
-                    StateModel.StateMachineProxy.ChangeState(typeof(CrouchState));
-                }
-                else
-                {
-                    if (StateModel.PlayerModel.MovementSpeed < 0.1)
-                    {
-                        StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
-                    }
-                    else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Forward) > 0.1)
-                    {
-                        StateModel.PlayerModel.MovementSpeed = 0;
-                        StateModel.StateMachineProxy.ChangeState(typeof(RunForwardState));
-                    }
-                    else if (PlayerView.Animator.GetFloat(PlayerAnimatorData.Backward) > 0.1)
-                    {
-                        StateModel.PlayerModel.MovementSpeed = 0;
-                        StateModel.StateMachineProxy.ChangeState(typeof(RunBackwardState));
-                    }
-                }
+                StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
             }
         }
     }

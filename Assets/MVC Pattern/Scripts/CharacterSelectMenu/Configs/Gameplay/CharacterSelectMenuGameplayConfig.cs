@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace MVC.Configs
 {
@@ -6,8 +7,8 @@ namespace MVC.Configs
         menuName = "Configs/CharacterSelectMenu/" + nameof(CharacterSelectMenuGameplayConfig))]
     public class CharacterSelectMenuGameplayConfig : ScriptableObject
     {
-        [SerializeField] private CharacterConfig[] _characterConfigs;
+        [SerializeField] private List<CharacterConfig> _characterConfigs;
 
-        public CharacterConfig[] CharacterConfigs => _characterConfigs;
+        public List<CharacterConfig> CharacterConfigs => _characterConfigs;
     }
 }

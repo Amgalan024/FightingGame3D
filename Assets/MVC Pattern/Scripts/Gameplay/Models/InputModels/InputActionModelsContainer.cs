@@ -8,7 +8,7 @@
         public readonly InputActionModel CrouchActionModel = new InputActionModel();
         public readonly InputActionModel PunchActionModel = new InputActionModel();
         public readonly InputActionModel KickActionModel = new InputActionModel();
-        
+
         public readonly InputActionModel StartBlockActionModel = new InputActionModel();
         public readonly InputActionModel StopBlockActionModel = new InputActionModel();
 

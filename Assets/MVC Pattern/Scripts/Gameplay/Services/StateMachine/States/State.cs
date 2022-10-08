@@ -17,6 +17,8 @@ namespace MVC.StateMachine.States
         public PlayerView PlayerView { get; }
         public FightSceneStorage Storage { get; }
 
+        private bool _enableDebug = true;
+
         public State(StateModel stateModel, PlayerView playerView, FightSceneStorage storage)
         {
             StateModel = stateModel;
@@ -26,7 +28,10 @@ namespace MVC.StateMachine.States
 
         public virtual void Enter()
         {
-            //Debug.Log($"Entered {this.GetType()}");
+            if (_enableDebug)
+            {
+                Debug.Log($"Entered {this.GetType()}");
+            }
 
             OnStateEntered?.Invoke();
         }
@@ -37,7 +42,10 @@ namespace MVC.StateMachine.States
 
         public virtual void Exit()
         {
-            //Debug.Log($"Exit {this.GetType()}");
+            if (_enableDebug)
+            {
+                Debug.Log($"Exit {this.GetType()}");
+            }
 
             OnStateExited?.Invoke();
         }
@@ -53,6 +61,7 @@ namespace MVC.StateMachine.States
                 else
                 {
                     StateModel.PlayerModel.InvokePlayerAttacked(attackHitBox);
+                    StateModel.StateMachineProxy.ChangeState(typeof(StunnedState));
                 }
             }
         }
