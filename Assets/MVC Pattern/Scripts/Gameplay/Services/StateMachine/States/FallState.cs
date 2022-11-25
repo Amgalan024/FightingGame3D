@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
+using DG.Tweening;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using MVC.Views;
@@ -64,11 +65,12 @@ namespace MVC.StateMachine.States
 
             var opponentPlayerView = Storage.GetOpponentViewByModel(StateModel.PlayerModel);
 
-            var overlappedColliders = Physics.OverlapBox(PlayerView.TriggerDetector.BottomCollider.center,
-                    PlayerView.TriggerDetector.BottomCollider.size)
-                .FirstOrDefault(c => c == opponentPlayerView.TriggerDetector.TopCollider);
+            var overlappedColliders = Physics.OverlapBox(PlayerView.PlayerTriggerDetector.BottomCollider.transform.position,
+                    PlayerView.PlayerTriggerDetector.BottomCollider.size);
+                
+            var topCollider = overlappedColliders.FirstOrDefault(c => c == opponentPlayerView.PlayerTriggerDetector.TopCollider);
 
-            if (overlappedColliders != null)
+            if (topCollider != null && !opponentPlayerView.KnockBackTween.IsActive())
             {
                 opponentPlayerView.KnockBackOnFallAnimationAsync(Cts.Token).Forget();
             }

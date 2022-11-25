@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MVC.Views
 {
-    public class TriggerDetectorView : MonoBehaviour
+    public class PlayerTriggerDetectorView : MonoBehaviour
     {
         public event Action<Collider> OnColliderEnter;
         public event Action<Collider> OnColliderExit;

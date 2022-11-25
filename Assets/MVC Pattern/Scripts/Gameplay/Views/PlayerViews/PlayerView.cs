@@ -4,7 +4,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MVC.Configs.Animation;
-using MVC.Configs.Enums;
 using UnityEngine;
 
 namespace MVC.Views
@@ -13,7 +12,7 @@ namespace MVC.Views
     {
         public event Action OnAttackAnimationEnded = delegate { };
 
-        [SerializeField] private TriggerDetectorView _triggerDetector;
+        [SerializeField] private PlayerTriggerDetectorView _playerTriggerDetector;
         [SerializeField] private CollisionDetectorView _collisionDetector;
         [SerializeField] private PlayerAttackHitBoxView _attackHitBoxViewView;
         [SerializeField] private PlayerSideDetectorView _sideDetectorView;
@@ -21,10 +20,10 @@ namespace MVC.Views
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private float _toMoveFloat;
         [SerializeField] private float _toMoveDuration;
-        [SerializeField] private float _knockBackOnFall = 2f;
+        [SerializeField] private float _knockBackOnFall;
         [SerializeField] private float _knockBackOnFallDuration = 0.2f;
 
-        public TriggerDetectorView TriggerDetector => _triggerDetector;
+        public PlayerTriggerDetectorView PlayerTriggerDetector => _playerTriggerDetector;
         public CollisionDetectorView CollisionDetector => _collisionDetector;
         public PlayerAttackHitBoxView AttackHitBoxView => _attackHitBoxViewView;
         public PlayerSideDetectorView SideDetectorView => _sideDetectorView;
@@ -35,6 +34,8 @@ namespace MVC.Views
         public Tween MoveToIdleTween { get; private set; }
         public Sequence JumpSequence { get; private set; }
         public Sequence FallSequence { get; private set; }
+
+        public Tween KnockBackTween { get; private set; }
 
         public void InvokeAttackAnimationEnd()
         {
@@ -91,9 +92,9 @@ namespace MVC.Views
             foreach (var vector in tweenVectorData.Vectors)
             {
                 var newVector = vector;
-                
+
                 newVector.x *= direction;
-                
+
                 JumpSequence.Append(DOTween.To(() => _rigidbody.velocity,
                         newValue => _rigidbody.velocity = newValue, newVector, _toMoveDuration)
                     .SetEase(tweenVectorData.Ease));
@@ -109,7 +110,7 @@ namespace MVC.Views
             foreach (var vector in tweenVectorData.Vectors)
             {
                 var newVector = vector;
-                
+
                 newVector.x *= direction;
 
                 FallSequence.Append(DOTween.To(() => _rigidbody.velocity,
@@ -118,7 +119,7 @@ namespace MVC.Views
             }
 
             var lastFallVector = tweenVectorData.Vectors.Last();
-                
+
             lastFallVector.x *= direction;
 
             var lastTween = DOTween.To(() => _rigidbody.velocity,
@@ -132,10 +133,10 @@ namespace MVC.Views
 
         public async UniTask KnockBackOnFallAnimationAsync(CancellationToken token)
         {
-            var tween = transform.DOMoveX(_knockBackOnFall * GetPlayerDirection() * -1, _knockBackOnFallDuration)
+            KnockBackTween = transform.DOMoveX(_knockBackOnFall * GetPlayerDirection() * -1, _knockBackOnFallDuration)
                 .SetRelative(true);
 
-            await tween.AwaitForComplete(cancellationToken: token);
+            await KnockBackTween.AwaitForComplete(cancellationToken: token);
         }
     }
 }

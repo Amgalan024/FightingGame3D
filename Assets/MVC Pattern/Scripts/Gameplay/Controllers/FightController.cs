@@ -12,7 +12,7 @@ using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class FightSceneController : DisposableWithCts, IAsyncStartable, IDisposable
+    public class FightController : DisposableWithCts, IAsyncStartable, IDisposable
     {
         private readonly FightSceneFactory _factory;
         private readonly FightSceneStorage _storage;
@@ -21,7 +21,7 @@ namespace MVC.Gameplay.Controllers
         private readonly FightSceneModel _fightSceneModel;
         private readonly PlayerInputConfig[] _inputConfigs;
 
-        public FightSceneController(FightSceneFactory factory, FightSceneStorage storage,
+        public FightController(FightSceneFactory factory, FightSceneStorage storage,
             PlayerLifetimeScopeFactory playerLifetimeScopeFactory, FightSceneModel fightSceneModel,
             PlayerInputConfig[] inputConfigs)
         {

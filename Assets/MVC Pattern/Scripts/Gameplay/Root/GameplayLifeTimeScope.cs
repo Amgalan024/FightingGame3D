@@ -28,7 +28,7 @@ namespace MVC.Root
             builder.Register<FightSceneStorage>(Lifetime.Singleton);
             builder.Register<FightSceneModel>(Lifetime.Singleton);
 
-            builder.RegisterEntryPoint<FightSceneController>();
+            builder.RegisterEntryPoint<FightController>();
         }
     }
 }

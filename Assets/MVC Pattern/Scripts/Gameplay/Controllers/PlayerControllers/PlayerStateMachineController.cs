@@ -109,8 +109,8 @@ namespace MVC.Controllers
 
             _playerView.OnAttackAnimationEnded += OnAttackAnimationEnded;
 
-            _playerView.TriggerDetector.OnColliderEnter += OnColliderEnter;
-            _playerView.TriggerDetector.OnColliderExit += OnColliderExit;
+            _playerView.PlayerTriggerDetector.OnColliderEnter += OnColliderEnter;
+            _playerView.PlayerTriggerDetector.OnColliderExit += OnColliderExit;
 
             _playerView.CollisionDetector.OnCollisionEntered += OnCollisionEntered;
             _playerView.CollisionDetector.OnCollisionExited += OnCollisionExit;
@@ -142,8 +142,8 @@ namespace MVC.Controllers
         {
             _playerView.OnAttackAnimationEnded -= OnAttackAnimationEnded;
 
-            _playerView.TriggerDetector.OnColliderEnter -= OnColliderEnter;
-            _playerView.TriggerDetector.OnColliderExit -= OnColliderExit;
+            _playerView.PlayerTriggerDetector.OnColliderEnter -= OnColliderEnter;
+            _playerView.PlayerTriggerDetector.OnColliderExit -= OnColliderExit;
 
             _playerView.CollisionDetector.OnCollisionEntered -= OnCollisionEntered;
             _playerView.CollisionDetector.OnCollisionExited -= OnCollisionExit;
