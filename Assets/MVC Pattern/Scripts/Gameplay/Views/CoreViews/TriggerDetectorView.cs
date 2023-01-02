@@ -5,8 +5,8 @@ namespace MVC.Views
 {
     public class TriggerDetectorView : MonoBehaviour
     {
-        public event Action<Collider> OnColliderEnter;
-        public event Action<Collider> OnColliderExit;
+        public event Action<Collider> OnTriggerEntered;
+        public event Action<Collider> OnTriggerExited;
 
         [SerializeField] private BoxCollider _bottomCollider;
         [SerializeField] private BoxCollider _topCollider;
@@ -16,12 +16,12 @@ namespace MVC.Views
 
         public void OnTriggerEnter(Collider other)
         {
-            OnColliderEnter?.Invoke(other);
+            OnTriggerEntered?.Invoke(other);
         }
 
         public void OnTriggerExit(Collider other)
         {
-            OnColliderExit?.Invoke(other);
+            OnTriggerExited?.Invoke(other);
         }
     }
 }

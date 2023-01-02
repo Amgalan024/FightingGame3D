@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using OLD.Scripts.Rearrange.PlayerComponents;
+using UnityEngine;
 
 public class PlayerBuilder : MonoBehaviour
 {
@@ -42,6 +43,6 @@ public class PlayerBuilder : MonoBehaviour
 
     public void InitializeEnemyForPlayer(Transform enemyTransform)
     {
-        GetComponent<PlayerStateMachineController>().InitializeEnemyForPlayer(enemyTransform);
+        GetComponent<OldPlayerStateMachineController>().InitializeEnemyForPlayer(enemyTransform);
     }
 }

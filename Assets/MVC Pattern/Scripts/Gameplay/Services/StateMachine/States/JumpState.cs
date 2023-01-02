@@ -37,10 +37,10 @@ namespace MVC.StateMachine.States
 
             _jumpCts = new CancellationTokenSource();
 
-            AwaitJump(_jumpCts.Token).Forget();
+            AwaitJumpAnimationAsync(_jumpCts.Token).Forget();
         }
 
-        private async UniTask AwaitJump(CancellationToken token)
+        private async UniTask AwaitJumpAnimationAsync(CancellationToken token)
         {
             if (StateModel.PlayerModel.CurrentJumpCount < 1)
             {

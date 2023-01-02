@@ -14,9 +14,9 @@ namespace MVC.Models
             _states = states;
         }
 
-        public IState GetStateByType(Type name)
+        public IState GetStateByType(Type type)
         {
-            return _states.FirstOrDefault(s => s.GetType() == name);
+            return _states.FirstOrDefault(s => s.GetType() == type);
         }
     }
 }

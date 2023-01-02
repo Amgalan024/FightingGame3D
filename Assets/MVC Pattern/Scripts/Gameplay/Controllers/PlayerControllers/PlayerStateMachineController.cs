@@ -55,10 +55,10 @@ namespace MVC.Controllers
         {
             _stateMachine.StartStateMachine(_statesContainer.GetStateByType(typeof(IdleState)));
 
-            _stateMachineProxy.OnStateChanged += OnStateChanged;
+            _stateMachineProxy.OnStateChanged += OnStateChangedByProxy;
 
-            InitializeInput();
-            InitializePlayer();
+            HandleInputEvents();
+            HandlePlayerEvents();
         }
 
         void IFixedTickable.FixedTick()
@@ -68,18 +68,18 @@ namespace MVC.Controllers
 
         void IDisposable.Dispose()
         {
-            _stateMachineProxy.OnStateChanged -= OnStateChanged;
+            _stateMachineProxy.OnStateChanged -= OnStateChangedByProxy;
 
             DisposeInput();
             DisposePlayer();
         }
 
-        private void OnStateChanged(Type stateType)
+        private void OnStateChangedByProxy(Type stateType)
         {
             _stateMachine.ChangeState(_statesContainer.GetStateByType(stateType));
         }
 
-        private void InitializeInput()
+        private void HandleInputEvents()
         {
             _inputActionModelsContainer.MoveForwardActionModel.OnInput += OnMoveForwardInput;
             _inputActionModelsContainer.MoveBackwardActionModel.OnInput += OnMoveBackwardInput;
@@ -103,19 +103,20 @@ namespace MVC.Controllers
             _inputActionModelsContainer.StopBlockActionModel.OnInput -= OnStopBlock;
         }
 
-        private void InitializePlayer()
+        private void HandlePlayerEvents()
         {
             _playerView.SetParent(_parent);
 
             _playerView.OnAttackAnimationEnded += OnAttackAnimationEnded;
 
-            _playerView.MainTriggerDetector.OnColliderEnter += OnColliderEnter;
-            _playerView.MainTriggerDetector.OnColliderExit += OnColliderExit;
+            _playerView.MainTriggerDetector.OnTriggerEntered += OnTriggerEntered;
+            _playerView.MainTriggerDetector.OnTriggerExited += OnTriggerExited;
 
             _playerView.CollisionDetector.OnCollisionEntered += OnCollisionEntered;
             _playerView.CollisionDetector.OnCollisionExited += OnCollisionExit;
 
-            _playerView.SideDetectorView.OnColliderEnter += OnSideDetectorTriggerEntered;
+            _playerView.SideDetectorView.OnTriggerEntered += InvokePlayerSideCheck;
+            _playerView.SideDetectorView.OnTriggerExited += InvokePlayerSideCheck;
 
             _playerModel.OnWin += OnWin;
             _playerModel.OnLose += OnLose;
@@ -130,7 +131,7 @@ namespace MVC.Controllers
                 _playerView.Animator.SetBool(PlayerAnimatorData.IsCrouching, isCrouching)));
         }
 
-        private void OnSideDetectorTriggerEntered(Collider collider)
+        private void InvokePlayerSideCheck(Collider collider)
         {
             if (collider.GetComponent<CollisionDetectorView>())
             {
@@ -142,8 +143,8 @@ namespace MVC.Controllers
         {
             _playerView.OnAttackAnimationEnded -= OnAttackAnimationEnded;
 
-            _playerView.MainTriggerDetector.OnColliderEnter -= OnColliderEnter;
-            _playerView.MainTriggerDetector.OnColliderExit -= OnColliderExit;
+            _playerView.MainTriggerDetector.OnTriggerEntered -= OnTriggerEntered;
+            _playerView.MainTriggerDetector.OnTriggerExited -= OnTriggerExited;
 
             _playerView.CollisionDetector.OnCollisionEntered -= OnCollisionEntered;
             _playerView.CollisionDetector.OnCollisionExited -= OnCollisionExit;
@@ -162,12 +163,12 @@ namespace MVC.Controllers
             _playerModel.IsAttacking.Value = false;
         }
 
-        private void OnColliderEnter(Collider collider)
+        private void OnTriggerEntered(Collider collider)
         {
             _stateMachineModel.CurrentState.OnTriggerEnter(collider);
         }
 
-        private void OnColliderExit(Collider collider)
+        private void OnTriggerExited(Collider collider)
         {
             _stateMachineModel.CurrentState.OnTriggerExit(collider);
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using MVC.Models;
+﻿using MVC.Models;
 using MVC.StateMachine.States;
 using UnityEngine;
 using VContainer.Unity;

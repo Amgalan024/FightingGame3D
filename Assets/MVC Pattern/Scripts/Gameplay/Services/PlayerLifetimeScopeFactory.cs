@@ -43,8 +43,7 @@ namespace MVC.Gameplay.Services
 
                 builder.Register<StateMachineProxy>(Lifetime.Scoped);
                 builder.Register<StateMachine.StateMachine>(Lifetime.Scoped).AsSelf().AsImplementedInterfaces();
-
-                builder.RegisterEntryPoint<MVC.Controllers.PlayerStateMachineController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerStateMachineController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<BaseInputController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<ComboInputController>(Lifetime.Scoped);
 

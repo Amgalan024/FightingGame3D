@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-using MVC.Configs;
-using MVC.Gameplay;
+﻿using MVC.Configs;
 using MVC.Gameplay.Controllers;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
@@ -28,7 +26,7 @@ namespace MVC.Root
             builder.Register<FightSceneStorage>(Lifetime.Singleton);
             builder.Register<FightSceneModel>(Lifetime.Singleton);
 
-            builder.RegisterEntryPoint<FightController>();
+            builder.RegisterEntryPoint<FightSceneController>();
         }
     }
 }
