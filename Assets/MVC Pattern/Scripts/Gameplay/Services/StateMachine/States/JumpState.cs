@@ -54,7 +54,7 @@ namespace MVC.StateMachine.States
                 await PlayerView.JumpAnimationAsync(_jumpStateModel.JumpTweenVectorData, _jumpStateModel.Direction,
                     token);
 
-                StateModel.StateMachineProxy.ChangeState(typeof(FallState));
+                StateModel.StateMachineProxy.ChangeState<FallState>();
             }
         }
 

@@ -44,7 +44,7 @@ namespace MVC.StateMachine.States
         {
             if (!Input.GetKey(_inputs.Crouch.Key))
             {
-                StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
+                StateModel.StateMachineProxy.ChangeState<IdleState>();
             }
         }
     }

@@ -8,7 +8,7 @@ using VContainer.Unity;
 
 namespace MVC.Root
 {
-    public class GameplayLifeTimeScope : LifetimeScope
+    public class GameplayEntryPoint : LifetimeScope
     {
         [SerializeField] private GameplayVisualConfig _visualConfig;
         [SerializeField] private PlayerInputConfig[] _playerInputConfigs;

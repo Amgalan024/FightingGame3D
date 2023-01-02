@@ -51,12 +51,12 @@ namespace MVC.StateMachine.States
             {
                 if (StateModel.PlayerModel.IsBlocking)
                 {
-                    StateModel.StateMachineProxy.ChangeState(typeof(BlockState));
+                    StateModel.StateMachineProxy.ChangeState<BlockState>();
                 }
                 else
                 {
                     StateModel.PlayerModel.InvokePlayerAttacked(attackHitBox);
-                    StateModel.StateMachineProxy.ChangeState(typeof(StunnedState));
+                    StateModel.StateMachineProxy.ChangeState<StunnedState>();
                 }
             }
         }

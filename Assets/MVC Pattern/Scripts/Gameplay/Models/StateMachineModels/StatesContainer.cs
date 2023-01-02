@@ -18,5 +18,10 @@ namespace MVC.Models
         {
             return _states.FirstOrDefault(s => s.GetType() == type);
         }
+
+        public IState GetStateByType<T>() where T : IState
+        {
+            return _states.FirstOrDefault(s => s.GetType() == typeof(T));
+        }
     }
 }

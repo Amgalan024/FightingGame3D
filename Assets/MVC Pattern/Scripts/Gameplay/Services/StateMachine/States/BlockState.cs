@@ -39,11 +39,11 @@ namespace MVC.StateMachine.States
             {
                 if (PlayerView.Animator.GetBool(PlayerAnimatorData.IsCrouching))
                 {
-                    StateModel.StateMachineProxy.ChangeState(typeof(CrouchState));
+                    StateModel.StateMachineProxy.ChangeState<CrouchState>();
                 }
                 else
                 {
-                    StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
+                    StateModel.StateMachineProxy.ChangeState<IdleState>();
                 }
             }
         }

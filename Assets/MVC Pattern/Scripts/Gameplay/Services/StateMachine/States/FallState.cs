@@ -84,7 +84,7 @@ namespace MVC.StateMachine.States
             {
                 StateModel.PlayerModel.CurrentJumpCount = 0;
 
-                StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
+                StateModel.StateMachineProxy.ChangeState<IdleState>();
             }
         }
     }

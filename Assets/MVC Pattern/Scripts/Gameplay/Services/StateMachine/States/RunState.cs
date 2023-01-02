@@ -68,7 +68,7 @@ namespace MVC.StateMachine.States
             {
                 PlayerView.Rigidbody.velocity = Vector3.zero;
 
-                StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
+                StateModel.StateMachineProxy.ChangeState<IdleState>();
             }
             else
             {
@@ -94,9 +94,20 @@ namespace MVC.StateMachine.States
             UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: _dashCts.Token).ContinueWith(_dashCts.Cancel)
                 .Forget();
 
-            UniTask.WaitUntil(() => Input.GetKeyDown(_runStateModel.InputKey),
-                    cancellationToken: _dashCts.Token)
-                .ContinueWith(() => StateModel.StateMachineProxy.ChangeState(_runStateModel.DashStateType))
+            UniTask.WaitUntil(() => Input.GetKeyDown(_runStateModel.InputKey), cancellationToken: _dashCts.Token)
+                .ContinueWith(() =>
+                    {
+                        switch (_runStateModel.DirectionType)
+                        {
+                            case DirectionType.Forward:
+                                StateModel.StateMachineProxy.ChangeState<DashForwardState>();
+                                break;
+                            case DirectionType.Backward:
+                                StateModel.StateMachineProxy.ChangeState<DashBackwardState>();
+                                break;
+                        }
+                    }
+                )
                 .Forget();
         }
     }

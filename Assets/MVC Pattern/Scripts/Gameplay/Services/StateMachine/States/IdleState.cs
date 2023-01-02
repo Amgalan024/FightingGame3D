@@ -1,6 +1,7 @@
 ﻿using MVC.Configs.Enums;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
+using MVC.Models;
 using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using UnityEngine;

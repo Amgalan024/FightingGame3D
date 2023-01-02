@@ -5,7 +5,7 @@ using VContainer.Unity;
 
 namespace MVC.Root
 {
-    public class MainMenuLifetimeScope : LifetimeScope
+    public class MainMenuEntryPoint : LifetimeScope
     {
         [SerializeField] private MainMenuVisualConfig _visualConfig;
         

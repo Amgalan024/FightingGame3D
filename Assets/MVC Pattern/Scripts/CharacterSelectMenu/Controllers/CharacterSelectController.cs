@@ -80,7 +80,7 @@ namespace MVC.Menu.Controllers
             {
                 var selectedButton = _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]];
                 _selectedCharactersContainer.PlayerConfigs.Add(_menuStorage.CharacterConfigsByButtons[selectedButton]);
-                StartFightSceneAsync().Forget();
+                LoadFightSceneAsync().Forget();
             }
         }
 
@@ -93,7 +93,7 @@ namespace MVC.Menu.Controllers
             _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].SelectButton(index);
         }
 
-        private async UniTaskVoid StartFightSceneAsync()
+        private async UniTaskVoid LoadFightSceneAsync()
         {
             if (_selectedCharactersContainer.PlayerConfigs.Count >= 2)
             {

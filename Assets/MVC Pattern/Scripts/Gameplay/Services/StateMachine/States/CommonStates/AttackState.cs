@@ -35,7 +35,7 @@ namespace MVC.StateMachine.States.CommonStates
         {
             if (!isAttacking)
             {
-                StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
+                StateModel.StateMachineProxy.ChangeState<IdleState>();
             }
         }
     }

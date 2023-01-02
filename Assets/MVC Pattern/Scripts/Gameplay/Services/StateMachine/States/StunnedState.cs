@@ -28,7 +28,7 @@ namespace MVC.StateMachine.States
 
             await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: token);
 
-            StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
+            StateModel.StateMachineProxy.ChangeState<IdleState>();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace MVC.StateMachine.States
         {
             base.Enter();
             
-            StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
+            StateModel.StateMachineProxy.ChangeState<IdleState>();
         }
     }
 }

@@ -14,11 +14,8 @@ using VContainer.Unity;
 
 namespace MVC.Controllers
 {
-    public class PlayerStateMachineController : IInitializable, IDisposable, IFixedTickable
+    public class PlayerStatesController : IInitializable, IDisposable
     {
-        private readonly StateMachine.StateMachine _stateMachine;
-        private readonly StatesContainer _statesContainer;
-        private readonly StateMachineModel _stateMachineModel;
         private readonly StateMachineProxy _stateMachineProxy;
         private readonly InputActionModelsContainer _inputActionModelsContainer;
         private readonly FightSceneModel _fightSceneModel;
@@ -32,17 +29,12 @@ namespace MVC.Controllers
 
         private readonly RunStateModel _runStateModel;
 
-        public PlayerStateMachineController(StateMachine.StateMachine stateMachine,
-            InputActionModelsContainer inputActionModelsContainer, StatesContainer statesContainer,
-            PlayerModel playerModel, PlayerView playerView, StateMachineModel stateMachineModel,
-            StateMachineProxy stateMachineProxy, FightSceneModel fightSceneModel, LifetimeScope lifetimeScope,
-            RunStateModel runStateModel, InputModelsContainer inputModelsContainer)
+        public PlayerStatesController(InputActionModelsContainer inputActionModelsContainer, PlayerModel playerModel,
+            PlayerView playerView, StateMachineProxy stateMachineProxy, FightSceneModel fightSceneModel,
+            LifetimeScope lifetimeScope, RunStateModel runStateModel, InputModelsContainer inputModelsContainer)
         {
-            _stateMachine = stateMachine;
-            _statesContainer = statesContainer;
             _playerModel = playerModel;
             _playerView = playerView;
-            _stateMachineModel = stateMachineModel;
             _stateMachineProxy = stateMachineProxy;
             _fightSceneModel = fightSceneModel;
             _runStateModel = runStateModel;
@@ -53,41 +45,26 @@ namespace MVC.Controllers
 
         void IInitializable.Initialize()
         {
-            _stateMachine.StartStateMachine(_statesContainer.GetStateByType(typeof(IdleState)));
-
-            _stateMachineProxy.OnStateChanged += OnStateChangedByProxy;
+            _stateMachineProxy.ChangeState<IdleState>();
 
             HandleInputEvents();
             HandlePlayerEvents();
         }
 
-        void IFixedTickable.FixedTick()
-        {
-            _stateMachineModel.FixedTickState?.OnFixedTick();
-        }
-
         void IDisposable.Dispose()
         {
-            _stateMachineProxy.OnStateChanged -= OnStateChangedByProxy;
-
             DisposeInputEvents();
             DisposePlayerEvents();
-        }
-
-        private void OnStateChangedByProxy(Type stateType)
-        {
-            var newState = _statesContainer.GetStateByType(stateType);
-            _stateMachine.ChangeState(newState);
         }
 
         private void HandleInputEvents()
         {
             _inputActionModelsContainer.MoveForwardActionModel.OnInput += OnMoveForwardInput;
             _inputActionModelsContainer.MoveBackwardActionModel.OnInput += OnMoveBackwardInput;
-            _inputActionModelsContainer.PunchActionModel.OnInput += OnPunchInput;
-            _inputActionModelsContainer.KickActionModel.OnInput += OnKickInput;
-            _inputActionModelsContainer.JumpActionModel.OnInput += OnJumpInput;
-            _inputActionModelsContainer.CrouchActionModel.OnInput += OnCrouchInput;
+            _inputActionModelsContainer.PunchActionModel.OnInput += _stateMachineProxy.ChangeState<PunchState>;
+            _inputActionModelsContainer.KickActionModel.OnInput += _stateMachineProxy.ChangeState<KickState>;
+            _inputActionModelsContainer.JumpActionModel.OnInput += _stateMachineProxy.ChangeState<JumpState>;
+            _inputActionModelsContainer.CrouchActionModel.OnInput += _stateMachineProxy.ChangeState<CrouchState>;
             _inputActionModelsContainer.StartBlockActionModel.OnInput += OnStartBlockInput;
             _inputActionModelsContainer.StopBlockActionModel.OnInput += OnStopBlock;
         }
@@ -96,10 +73,10 @@ namespace MVC.Controllers
         {
             _inputActionModelsContainer.MoveForwardActionModel.OnInput -= OnMoveForwardInput;
             _inputActionModelsContainer.MoveBackwardActionModel.OnInput -= OnMoveBackwardInput;
-            _inputActionModelsContainer.PunchActionModel.OnInput -= OnPunchInput;
-            _inputActionModelsContainer.KickActionModel.OnInput -= OnKickInput;
-            _inputActionModelsContainer.JumpActionModel.OnInput -= OnJumpInput;
-            _inputActionModelsContainer.CrouchActionModel.OnInput -= OnCrouchInput;
+            _inputActionModelsContainer.PunchActionModel.OnInput -= _stateMachineProxy.ChangeState<PunchState>;
+            _inputActionModelsContainer.KickActionModel.OnInput -= _stateMachineProxy.ChangeState<KickState>;
+            _inputActionModelsContainer.JumpActionModel.OnInput -= _stateMachineProxy.ChangeState<JumpState>;
+            _inputActionModelsContainer.CrouchActionModel.OnInput -= _stateMachineProxy.ChangeState<CrouchState>;
             _inputActionModelsContainer.StartBlockActionModel.OnInput -= OnStartBlockInput;
             _inputActionModelsContainer.StopBlockActionModel.OnInput -= OnStopBlock;
         }
@@ -110,17 +87,14 @@ namespace MVC.Controllers
 
             _playerView.OnAttackAnimationEnded += OnAttackAnimationEnded;
 
-            _playerView.MainTriggerDetector.OnTriggerEntered += OnTriggerEntered;
-            _playerView.MainTriggerDetector.OnTriggerExited += OnTriggerExited;
-
             _playerView.CollisionDetector.OnCollisionEntered += OnCollisionEntered;
             _playerView.CollisionDetector.OnCollisionExited += OnCollisionExit;
 
             _playerView.SideDetectorView.OnTriggerEntered += InvokePlayerSideCheck;
             _playerView.SideDetectorView.OnTriggerExited += InvokePlayerSideCheck;
 
-            _playerModel.OnWin += OnWin;
-            _playerModel.OnLose += OnLose;
+            _playerModel.OnWin += _stateMachineProxy.ChangeState<WinState>;
+            _playerModel.OnLose += _stateMachineProxy.ChangeState<LoseState>;
 
             _subscriptions.Add(_playerModel.IsAttacking.Subscribe(isAttacking =>
                 _playerView.Animator.SetBool(PlayerAnimatorData.IsAttacking, isAttacking)));
@@ -137,17 +111,14 @@ namespace MVC.Controllers
         {
             _playerView.OnAttackAnimationEnded -= OnAttackAnimationEnded;
 
-            _playerView.MainTriggerDetector.OnTriggerEntered -= OnTriggerEntered;
-            _playerView.MainTriggerDetector.OnTriggerExited -= OnTriggerExited;
-
             _playerView.CollisionDetector.OnCollisionEntered -= OnCollisionEntered;
             _playerView.CollisionDetector.OnCollisionExited -= OnCollisionExit;
 
             _playerView.SideDetectorView.OnTriggerEntered -= InvokePlayerSideCheck;
             _playerView.SideDetectorView.OnTriggerExited -= InvokePlayerSideCheck;
 
-            _playerModel.OnWin -= OnWin;
-            _playerModel.OnLose -= OnLose;
+            _playerModel.OnWin -= _stateMachineProxy.ChangeState<WinState>;
+            _playerModel.OnLose -= _stateMachineProxy.ChangeState<LoseState>;
 
             foreach (var subscription in _subscriptions)
             {
@@ -168,15 +139,6 @@ namespace MVC.Controllers
             _playerModel.IsAttacking.Value = false;
         }
 
-        private void OnTriggerEntered(Collider collider)
-        {
-            _stateMachineModel.TriggerEnterState?.OnTriggerEnter(collider);
-        }
-
-        private void OnTriggerExited(Collider collider)
-        {
-            _stateMachineModel.TriggerExitState?.OnTriggerExit(collider);
-        }
 
         private void OnCollisionExit(Collision collision)
         {
@@ -194,22 +156,12 @@ namespace MVC.Controllers
             }
         }
 
-        private void OnWin()
-        {
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(WinState)));
-        }
-
-        private void OnLose()
-        {
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(LoseState)));
-        }
-
         private void OnMoveForwardInput()
         {
             _runStateModel.SetData(_inputModelsContainer.MoveForward.Key, DirectionType.Forward,
                 PlayerAnimatorData.Forward, typeof(DashForwardState));
 
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(RunState)));
+            _stateMachineProxy.ChangeState<RunState>();
         }
 
         private void OnMoveBackwardInput()
@@ -217,27 +169,7 @@ namespace MVC.Controllers
             _runStateModel.SetData(_inputModelsContainer.MoveBackward.Key, DirectionType.Backward,
                 PlayerAnimatorData.Backward, typeof(DashBackwardState));
 
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(RunState)));
-        }
-
-        private void OnPunchInput()
-        {
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(PunchState)));
-        }
-
-        private void OnKickInput()
-        {
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(KickState)));
-        }
-
-        private void OnJumpInput()
-        {
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(JumpState)));
-        }
-
-        private void OnCrouchInput()
-        {
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(CrouchState)));
+            _stateMachineProxy.ChangeState<RunState>();
         }
 
         private void OnStartBlockInput()

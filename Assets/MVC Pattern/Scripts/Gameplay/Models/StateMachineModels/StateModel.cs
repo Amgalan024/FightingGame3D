@@ -2,6 +2,7 @@
 using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Models;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.Gameplay.Models
 {

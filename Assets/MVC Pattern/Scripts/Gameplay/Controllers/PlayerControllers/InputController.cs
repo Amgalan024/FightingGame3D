@@ -5,14 +5,14 @@ using VContainer.Unity;
 
 namespace MVC.Controllers
 {
-    public class BaseInputController : IInitializable, ITickable, IDisposable
+    public class InputController : IInitializable, ITickable, IDisposable
     {
         private readonly PlayerModel _playerModel;
 
         private readonly InputModelsContainer _inputModelsContainer;
         private readonly InputActionModelsContainer _inputActionModelsContainer;
 
-        public BaseInputController(InputActionModelsContainer inputActionModelsContainer,
+        public InputController(InputActionModelsContainer inputActionModelsContainer,
             InputModelsContainer inputModelsContainer, PlayerModel playerModel)
         {
             _inputActionModelsContainer = inputActionModelsContainer;

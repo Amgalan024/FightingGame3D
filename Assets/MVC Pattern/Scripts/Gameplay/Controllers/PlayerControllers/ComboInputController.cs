@@ -5,7 +5,7 @@ using VContainer.Unity;
 
 namespace MVC.Controllers
 {
-    public class ComboInputController : ITickable
+    public class ComboInputController : IFixedTickable
     {
         private readonly StateMachine.StateMachine _stateMachine;
 
@@ -26,7 +26,7 @@ namespace MVC.Controllers
             _stateMachine = stateMachine;
         }
 
-        void ITickable.Tick()
+        void IFixedTickable.FixedTick()
         {
             CountComboTimer();
 
@@ -34,12 +34,12 @@ namespace MVC.Controllers
             {
                 foreach (var comboModel in _comboModelsContainer.ComboModels)
                 {
-                    ComboCheck(comboModel);
+                    HandleComboInput(comboModel);
                 }
             }
         }
 
-        private void ComboCheck(ComboModel comboModel)
+        private void HandleComboInput(ComboModel comboModel)
         {
             if (Input.GetKeyDown(comboModel.InputModels[comboModel.ComboCount].Key))
             {
@@ -69,7 +69,7 @@ namespace MVC.Controllers
                 _comboState.Name = comboModel.Name;
                 _comboState.Damage = comboModel.Damage;
 
-                _stateMachine.ChangeState(_comboState);
+                _stateMachine.ChangeState<ComboState>();
             }
         }
 
@@ -77,7 +77,7 @@ namespace MVC.Controllers
         {
             if (_comboTimer >= 0)
             {
-                _comboTimer -= Time.deltaTime;
+                _comboTimer -= Time.fixedDeltaTime;
             }
         }
 

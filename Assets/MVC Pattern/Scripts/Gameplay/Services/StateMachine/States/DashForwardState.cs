@@ -39,7 +39,7 @@ namespace MVC.StateMachine.States
             {
                 PlayerView.Rigidbody.velocity = Vector3.zero;
 
-                StateModel.StateMachineProxy.ChangeState(typeof(IdleState));
+                StateModel.StateMachineProxy.ChangeState<IdleState>();
             }
             else
             {
