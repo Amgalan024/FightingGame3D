@@ -63,20 +63,21 @@ namespace MVC.Controllers
 
         void IFixedTickable.FixedTick()
         {
-            _stateMachineModel.CurrentState.OnFixedTick();
+            _stateMachineModel.FixedTickState?.OnFixedTick();
         }
 
         void IDisposable.Dispose()
         {
             _stateMachineProxy.OnStateChanged -= OnStateChangedByProxy;
 
-            DisposeInput();
-            DisposePlayer();
+            DisposeInputEvents();
+            DisposePlayerEvents();
         }
 
         private void OnStateChangedByProxy(Type stateType)
         {
-            _stateMachine.ChangeState(_statesContainer.GetStateByType(stateType));
+            var newState = _statesContainer.GetStateByType(stateType);
+            _stateMachine.ChangeState(newState);
         }
 
         private void HandleInputEvents()
@@ -91,7 +92,7 @@ namespace MVC.Controllers
             _inputActionModelsContainer.StopBlockActionModel.OnInput += OnStopBlock;
         }
 
-        private void DisposeInput()
+        private void DisposeInputEvents()
         {
             _inputActionModelsContainer.MoveForwardActionModel.OnInput -= OnMoveForwardInput;
             _inputActionModelsContainer.MoveBackwardActionModel.OnInput -= OnMoveBackwardInput;
@@ -131,15 +132,8 @@ namespace MVC.Controllers
                 _playerView.Animator.SetBool(PlayerAnimatorData.IsCrouching, isCrouching)));
         }
 
-        private void InvokePlayerSideCheck(Collider collider)
-        {
-            if (collider.GetComponent<CollisionDetectorView>())
-            {
-                _fightSceneModel.InvokePlayerSideCheck(_playerModel);
-            }
-        }
 
-        private void DisposePlayer()
+        private void DisposePlayerEvents()
         {
             _playerView.OnAttackAnimationEnded -= OnAttackAnimationEnded;
 
@@ -148,6 +142,9 @@ namespace MVC.Controllers
 
             _playerView.CollisionDetector.OnCollisionEntered -= OnCollisionEntered;
             _playerView.CollisionDetector.OnCollisionExited -= OnCollisionExit;
+
+            _playerView.SideDetectorView.OnTriggerEntered -= InvokePlayerSideCheck;
+            _playerView.SideDetectorView.OnTriggerExited -= InvokePlayerSideCheck;
 
             _playerModel.OnWin -= OnWin;
             _playerModel.OnLose -= OnLose;
@@ -158,6 +155,14 @@ namespace MVC.Controllers
             }
         }
 
+        private void InvokePlayerSideCheck(Collider collider)
+        {
+            if (collider.GetComponent<CollisionDetectorView>())
+            {
+                _fightSceneModel.InvokePlayerSideCheck(_playerModel);
+            }
+        }
+
         private void OnAttackAnimationEnded()
         {
             _playerModel.IsAttacking.Value = false;
@@ -165,12 +170,12 @@ namespace MVC.Controllers
 
         private void OnTriggerEntered(Collider collider)
         {
-            _stateMachineModel.CurrentState.OnTriggerEnter(collider);
+            _stateMachineModel.TriggerEnterState?.OnTriggerEnter(collider);
         }
 
         private void OnTriggerExited(Collider collider)
         {
-            _stateMachineModel.CurrentState.OnTriggerExit(collider);
+            _stateMachineModel.TriggerExitState?.OnTriggerExit(collider);
         }
 
         private void OnCollisionExit(Collision collision)

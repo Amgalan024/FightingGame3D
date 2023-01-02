@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class FallState : State
+    public class FallState : State, ITriggerEnterState
     {
         private readonly FallStateModel _fallStateModel;
 
@@ -59,16 +59,18 @@ namespace MVC.StateMachine.States
             _fallSubscription?.Dispose();
         }
 
-        public override void OnTriggerEnter(Collider collider)
+        void ITriggerEnterState.OnTriggerEnter(Collider collider)
         {
-            base.OnTriggerEnter(collider);
+            HandleBlock(collider);
 
             var opponentPlayerView = Storage.GetOpponentViewByModel(StateModel.PlayerModel);
 
-            var overlappedColliders = Physics.OverlapBox(PlayerView.MainTriggerDetector.BottomCollider.transform.position,
-                    PlayerView.MainTriggerDetector.BottomCollider.size);
-                
-            var topCollider = overlappedColliders.FirstOrDefault(c => c == opponentPlayerView.MainTriggerDetector.TopCollider);
+            var overlappedColliders = Physics.OverlapBox(
+                PlayerView.MainTriggerDetector.BottomCollider.transform.position,
+                PlayerView.MainTriggerDetector.BottomCollider.size);
+
+            var topCollider =
+                overlappedColliders.FirstOrDefault(c => c == opponentPlayerView.MainTriggerDetector.TopCollider);
 
             if (topCollider != null && !opponentPlayerView.KnockBackTween.IsActive())
             {

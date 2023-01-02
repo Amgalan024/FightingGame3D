@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Triggers;
-using MVC.Gameplay.Constants;
+using MVC.Configs.Enums;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using MVC.Views;
@@ -11,7 +10,7 @@ using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class RunState : State
+    public class RunState : State, IFixedTickState, ITriggerEnterState
     {
         private readonly RunStateModel _runStateModel;
         private readonly JumpStateModel _jumpStateModel;
@@ -56,7 +55,14 @@ namespace MVC.StateMachine.States
             PlayerView.IdleToMoveAnimationAsync(_runStateModel.AnimationHash, Token).Forget();
         }
 
-        public override void OnFixedTick()
+        public override void Exit()
+        {
+            base.Exit();
+
+            PlayerView.MoveToIdleAnimationAsync(_runStateModel.AnimationHash, Token).Forget();
+        }
+
+        void IFixedTickState.OnFixedTick()
         {
             if (!Input.GetKey(_runStateModel.InputKey))
             {
@@ -75,11 +81,12 @@ namespace MVC.StateMachine.States
             }
         }
 
-        public override void Exit()
+        void ITriggerEnterState.OnTriggerEnter(Collider collider)
         {
-            base.Exit();
-
-            PlayerView.MoveToIdleAnimationAsync(_runStateModel.AnimationHash, Token).Forget();
+            if (_runStateModel.DirectionType == DirectionType.Backward)
+            {
+                HandleBlock(collider);
+            }
         }
 
         private void InputDash()

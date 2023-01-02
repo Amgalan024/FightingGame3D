@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using MVC.Gameplay.Constants;
+﻿using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using MVC.Views;
@@ -7,7 +6,7 @@ using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class BlockState : State
+    public class BlockState : State, ITriggerExitState
     {
         public BlockState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
             playerView, storage)
@@ -28,10 +27,13 @@ namespace MVC.StateMachine.States
             PlayerView.Animator.SetBool(PlayerAnimatorData.IsBlocking, false);
         }
 
-        public override void OnTriggerExit(Collider collider)
+        void ITriggerExitState.OnTriggerExit(Collider collider)
         {
-            base.OnTriggerExit(collider);
+            ExitBlockState(collider);
+        }
 
+        private void ExitBlockState(Collider collider)
+        {
             if (collider.GetComponent<TriggerDetectorView>() ==
                 Storage.GetOpponentAttackViewByModel(StateModel.PlayerAttackModel))
             {

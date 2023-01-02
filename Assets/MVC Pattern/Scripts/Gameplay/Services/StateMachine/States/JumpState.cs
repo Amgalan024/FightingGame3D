@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class JumpState : State
+    public class JumpState : State, ITriggerEnterState
     {
         private readonly JumpStateModel _jumpStateModel;
 
@@ -58,15 +58,9 @@ namespace MVC.StateMachine.States
             }
         }
 
-        private void OnJumpInterrupted()
+        void ITriggerEnterState.OnTriggerEnter(Collider collider)
         {
-            _jumpCts?.Cancel();
-            _jumpStateModel.OnJumpInterrupted -= OnJumpInterrupted;
-        }
-
-        public override void OnTriggerEnter(Collider collider)
-        {
-            base.OnTriggerEnter(collider);
+            HandleBlock(collider);
 
             var opponentPlayerView = Storage.GetOpponentViewByModel(StateModel.PlayerModel);
 
@@ -79,6 +73,12 @@ namespace MVC.StateMachine.States
                 Physics.IgnoreCollision(PlayerView.CollisionDetector.Collider,
                     opponentPlayerView.CollisionDetector.Collider, true);
             }
+        }
+
+        private void OnJumpInterrupted()
+        {
+            _jumpCts?.Cancel();
+            _jumpStateModel.OnJumpInterrupted -= OnJumpInterrupted;
         }
     }
 }

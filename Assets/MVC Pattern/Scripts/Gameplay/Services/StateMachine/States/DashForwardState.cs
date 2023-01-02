@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class DashForwardState : State
+    public class DashForwardState : State, IFixedTickState
     {
         public DashForwardState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(
             stateModel, playerView, storage)
@@ -26,7 +26,14 @@ namespace MVC.StateMachine.States
             PlayerView.IdleToMoveAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
         }
 
-        public override void OnFixedTick()
+        public override void Exit()
+        {
+            base.Enter();
+
+            PlayerView.MoveToIdleAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
+        }
+
+        void IFixedTickState.OnFixedTick()
         {
             if (!Input.GetKey(StateModel.InputModelsContainer.MoveForward.Key))
             {
@@ -42,13 +49,6 @@ namespace MVC.StateMachine.States
 
                 PlayerView.Rigidbody.velocity = velocity;
             }
-        }
-
-        public override void Exit()
-        {
-            base.Enter();
-
-            PlayerView.MoveToIdleAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
         }
     }
 }

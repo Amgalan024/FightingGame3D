@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class CrouchState : State
+    public class CrouchState : State, IFixedTickState
     {
         private readonly InputModelsContainer _inputs;
 
@@ -28,16 +28,16 @@ namespace MVC.StateMachine.States
             StateModel.InputActionModelsContainer.SetBlockInputActionsFilter(true);
         }
 
-        public override void OnFixedTick()
-        {
-            StopCrouch();
-        }
-
         public override void Exit()
         {
             base.Exit();
 
             StateModel.PlayerModel.IsCrouching.Value = false;
+        }
+
+        void IFixedTickState.OnFixedTick()
+        {
+            StopCrouch();
         }
 
         private void StopCrouch()

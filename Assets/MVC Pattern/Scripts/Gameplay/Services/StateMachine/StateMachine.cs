@@ -1,6 +1,5 @@
 ﻿using MVC.Gameplay.Models;
 using MVC.StateMachine.States;
-using UnityEngine;
 
 namespace MVC.StateMachine
 {
@@ -15,7 +14,7 @@ namespace MVC.StateMachine
 
         public void StartStateMachine(IState startingState)
         {
-            _stateMachineModel.CurrentState = startingState;
+            _stateMachineModel.SetCurrentState(startingState);
             startingState.Enter();
         }
 
@@ -23,11 +22,9 @@ namespace MVC.StateMachine
         {
             _stateMachineModel.PreviousState = _stateMachineModel.CurrentState;
 
-            _stateMachineModel.CurrentState.IsActive = false;
             _stateMachineModel.CurrentState.Exit();
-            _stateMachineModel.CurrentState = newState;
+            _stateMachineModel.SetCurrentState(newState);
 
-            newState.IsActive = true;
             newState.Enter();
         }
     }

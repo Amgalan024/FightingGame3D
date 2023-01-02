@@ -11,7 +11,6 @@ namespace MVC.StateMachine.States
     {
         public event Action OnStateEntered;
         public event Action OnStateExited;
-        public bool IsActive { get; set; }
         public StateModel StateModel { get; }
         public PlayerView PlayerView { get; }
         public FightSceneStorage Storage { get; }
@@ -35,10 +34,6 @@ namespace MVC.StateMachine.States
             OnStateEntered?.Invoke();
         }
 
-        public virtual void OnFixedTick()
-        {
-        }
-
         public virtual void Exit()
         {
             if (_debugEnabled)
@@ -49,7 +44,7 @@ namespace MVC.StateMachine.States
             OnStateExited?.Invoke();
         }
 
-        public virtual void OnTriggerEnter(Collider collider)
+        protected void HandleBlock(Collider collider)
         {
             if (collider.TryGetComponent(out TriggerDetectorView attackHitBox) &&
                 attackHitBox == Storage.GetOpponentAttackViewByModel(StateModel.PlayerAttackModel))
@@ -64,10 +59,6 @@ namespace MVC.StateMachine.States
                     StateModel.StateMachineProxy.ChangeState(typeof(StunnedState));
                 }
             }
-        }
-
-        public virtual void OnTriggerExit(Collider collider)
-        {
         }
     }
 }
