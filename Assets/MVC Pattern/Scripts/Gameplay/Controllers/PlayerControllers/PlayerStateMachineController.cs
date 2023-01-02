@@ -109,13 +109,13 @@ namespace MVC.Controllers
 
             _playerView.OnAttackAnimationEnded += OnAttackAnimationEnded;
 
-            _playerView.PlayerTriggerDetector.OnColliderEnter += OnColliderEnter;
-            _playerView.PlayerTriggerDetector.OnColliderExit += OnColliderExit;
+            _playerView.MainTriggerDetector.OnColliderEnter += OnColliderEnter;
+            _playerView.MainTriggerDetector.OnColliderExit += OnColliderExit;
 
             _playerView.CollisionDetector.OnCollisionEntered += OnCollisionEntered;
             _playerView.CollisionDetector.OnCollisionExited += OnCollisionExit;
 
-            _playerView.SideDetectorView.OnTriggerEntered += OnSideDetectorTriggerEntered;
+            _playerView.SideDetectorView.OnColliderEnter += OnSideDetectorTriggerEntered;
 
             _playerModel.OnWin += OnWin;
             _playerModel.OnLose += OnLose;
@@ -142,8 +142,8 @@ namespace MVC.Controllers
         {
             _playerView.OnAttackAnimationEnded -= OnAttackAnimationEnded;
 
-            _playerView.PlayerTriggerDetector.OnColliderEnter -= OnColliderEnter;
-            _playerView.PlayerTriggerDetector.OnColliderExit -= OnColliderExit;
+            _playerView.MainTriggerDetector.OnColliderEnter -= OnColliderEnter;
+            _playerView.MainTriggerDetector.OnColliderExit -= OnColliderExit;
 
             _playerView.CollisionDetector.OnCollisionEntered -= OnCollisionEntered;
             _playerView.CollisionDetector.OnCollisionExited -= OnCollisionExit;
@@ -200,19 +200,16 @@ namespace MVC.Controllers
 
         private void OnMoveForwardInput()
         {
-            _runStateModel.InputKey = _inputModelsContainer.MoveForward.Key;
-            _runStateModel.AnimationHash = PlayerAnimatorData.Forward;
-            _runStateModel.DirectionType = DirectionType.Forward;
-            _runStateModel.DashStateType = typeof(DashForwardState);
+            _runStateModel.SetData(_inputModelsContainer.MoveForward.Key, DirectionType.Forward,
+                PlayerAnimatorData.Forward, typeof(DashForwardState));
+
             _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(RunState)));
         }
 
         private void OnMoveBackwardInput()
         {
-            _runStateModel.InputKey = _inputModelsContainer.MoveBackward.Key;
-            _runStateModel.AnimationHash = PlayerAnimatorData.Backward;
-            _runStateModel.DirectionType = DirectionType.Backward;
-            _runStateModel.DashStateType = typeof(DashBackwardState);
+            _runStateModel.SetData(_inputModelsContainer.MoveBackward.Key, DirectionType.Backward,
+                PlayerAnimatorData.Backward, typeof(DashBackwardState));
 
             _stateMachine.ChangeState(_statesContainer.GetStateByType(typeof(RunState)));
         }

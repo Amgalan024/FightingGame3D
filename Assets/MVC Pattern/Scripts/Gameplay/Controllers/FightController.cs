@@ -109,7 +109,7 @@ namespace MVC.Gameplay.Controllers
             }
         }
 
-        private void OnPlayerAttacked(PlayerModel playerModel, PlayerAttackHitBoxView attackHitBoxView)
+        private void OnPlayerAttacked(PlayerModel playerModel, TriggerDetectorView attackHitBoxView)
         {
             playerModel.TakeDamage(_storage.PlayerAttackModelsByView[attackHitBoxView].Damage);
         }

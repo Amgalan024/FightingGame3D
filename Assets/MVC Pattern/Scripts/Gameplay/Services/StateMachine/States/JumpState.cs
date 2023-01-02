@@ -70,9 +70,9 @@ namespace MVC.StateMachine.States
 
             var opponentPlayerView = Storage.GetOpponentViewByModel(StateModel.PlayerModel);
 
-            var overlappedColliders = Physics.OverlapBox(PlayerView.PlayerTriggerDetector.TopCollider.center,
-                    PlayerView.PlayerTriggerDetector.TopCollider.size)
-                .FirstOrDefault(c => c == opponentPlayerView.PlayerTriggerDetector.BottomCollider);
+            var overlappedColliders = Physics.OverlapBox(PlayerView.MainTriggerDetector.TopCollider.center,
+                    PlayerView.MainTriggerDetector.TopCollider.size)
+                .FirstOrDefault(c => c == opponentPlayerView.MainTriggerDetector.BottomCollider);
 
             if (overlappedColliders != null)
             {

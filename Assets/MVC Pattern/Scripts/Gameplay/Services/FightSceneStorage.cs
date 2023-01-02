@@ -24,8 +24,8 @@ namespace MVC.Gameplay.Services
         public Dictionary<PlayerView, PlayerModel> PlayerModelsByView { get; } =
             new Dictionary<PlayerView, PlayerModel>(5);
 
-        public Dictionary<PlayerAttackHitBoxView, PlayerAttackModel> PlayerAttackModelsByView { get; } =
-            new Dictionary<PlayerAttackHitBoxView, PlayerAttackModel>();
+        public Dictionary<TriggerDetectorView, PlayerAttackModel> PlayerAttackModelsByView { get; } =
+            new Dictionary<TriggerDetectorView, PlayerAttackModel>();
 
         public PlayerView GetOpponentViewByModel(PlayerModel playerModel)
         {
@@ -35,6 +35,11 @@ namespace MVC.Gameplay.Services
         public PlayerModel GetOpponentModelByModel(PlayerModel playerModel)
         {
             return PlayerViewsByModel.FirstOrDefault(p => p.Key != playerModel).Key;
+        }
+
+        public TriggerDetectorView GetOpponentAttackViewByModel(PlayerAttackModel playerAttackModel)
+        {
+            return PlayerAttackModelsByView.FirstOrDefault(p => p.Value != playerAttackModel).Key;
         }
     }
 }

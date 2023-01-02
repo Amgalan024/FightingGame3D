@@ -12,10 +12,10 @@ namespace MVC.Views
     {
         public event Action OnAttackAnimationEnded = delegate { };
 
-        [SerializeField] private PlayerTriggerDetectorView _playerTriggerDetector;
+        [SerializeField] private TriggerDetectorView _mainTriggerDetector;
+        [SerializeField] private TriggerDetectorView _attackHitBoxView;
+        [SerializeField] private TriggerDetectorView _sideDetectorView;
         [SerializeField] private CollisionDetectorView _collisionDetector;
-        [SerializeField] private PlayerAttackHitBoxView _attackHitBoxViewView;
-        [SerializeField] private PlayerSideDetectorView _sideDetectorView;
         [SerializeField] private Animator _animator;
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private float _toMoveFloat;
@@ -23,10 +23,10 @@ namespace MVC.Views
         [SerializeField] private float _knockBackOnFall;
         [SerializeField] private float _knockBackOnFallDuration = 0.2f;
 
-        public PlayerTriggerDetectorView PlayerTriggerDetector => _playerTriggerDetector;
+        public TriggerDetectorView MainTriggerDetector => _mainTriggerDetector;
+        public TriggerDetectorView AttackHitBoxView => _attackHitBoxView;
+        public TriggerDetectorView SideDetectorView => _sideDetectorView;
         public CollisionDetectorView CollisionDetector => _collisionDetector;
-        public PlayerAttackHitBoxView AttackHitBoxView => _attackHitBoxViewView;
-        public PlayerSideDetectorView SideDetectorView => _sideDetectorView;
         public Animator Animator => _animator;
         public Rigidbody Rigidbody => _rigidbody;
 

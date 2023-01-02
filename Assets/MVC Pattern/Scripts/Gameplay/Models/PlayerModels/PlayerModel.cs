@@ -8,7 +8,7 @@ public class PlayerModel
 {
     public const int PLAYER1_NUMBER = 1;
     public const int PLAYER2_NUMBER = 2;
-    public event Action<PlayerModel, PlayerAttackHitBoxView> OnPlayerAttacked;
+    public event Action<PlayerModel, TriggerDetectorView> OnPlayerAttacked;
     public event Action OnPlayerTurned;
     public event Action OnLose;
     public event Action OnPlayerRefreshed;
@@ -99,7 +99,7 @@ public class PlayerModel
         OnPlayerTurned?.Invoke();
     }
 
-    public void InvokePlayerAttacked(PlayerAttackHitBoxView playerAttackHitBoxView)
+    public void InvokePlayerAttacked(TriggerDetectorView playerAttackHitBoxView)
     {
         OnPlayerAttacked?.Invoke(this, playerAttackHitBoxView);
     }

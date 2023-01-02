@@ -1,6 +1,5 @@
 ﻿using System;
 using MVC.Gameplay.Models;
-using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Gameplay.Services;
 using MVC.Utils.Disposable;
 using MVC.Views;
@@ -17,7 +16,7 @@ namespace MVC.StateMachine.States
         public PlayerView PlayerView { get; }
         public FightSceneStorage Storage { get; }
 
-        private bool _enableDebug = true;
+        private bool _debugEnabled = true;
 
         public State(StateModel stateModel, PlayerView playerView, FightSceneStorage storage)
         {
@@ -28,7 +27,7 @@ namespace MVC.StateMachine.States
 
         public virtual void Enter()
         {
-            if (_enableDebug)
+            if (_debugEnabled)
             {
                 Debug.Log($"Entered {this.GetType()}");
             }
@@ -42,7 +41,7 @@ namespace MVC.StateMachine.States
 
         public virtual void Exit()
         {
-            if (_enableDebug)
+            if (_debugEnabled)
             {
                 Debug.Log($"Exit {this.GetType()}");
             }
@@ -52,7 +51,8 @@ namespace MVC.StateMachine.States
 
         public virtual void OnTriggerEnter(Collider collider)
         {
-            if (collider.TryGetComponent(out PlayerAttackHitBoxView attackHitBox))
+            if (collider.TryGetComponent(out TriggerDetectorView attackHitBox) &&
+                attackHitBox == Storage.GetOpponentAttackViewByModel(StateModel.PlayerAttackModel))
             {
                 if (StateModel.PlayerModel.IsBlocking)
                 {

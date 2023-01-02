@@ -1,4 +1,5 @@
-﻿using MVC.Gameplay.Constants;
+﻿using System.Linq;
+using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using MVC.Views;
@@ -31,7 +32,8 @@ namespace MVC.StateMachine.States
         {
             base.OnTriggerExit(collider);
 
-            if (collider.GetComponent<PlayerAttackHitBoxView>())
+            if (collider.GetComponent<TriggerDetectorView>() ==
+                Storage.GetOpponentAttackViewByModel(StateModel.PlayerAttackModel))
             {
                 if (PlayerView.Animator.GetBool(PlayerAnimatorData.IsCrouching))
                 {

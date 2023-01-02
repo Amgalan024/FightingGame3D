@@ -9,7 +9,9 @@ namespace MVC.Utils.Disposable
         protected void ThrowIfDisposed()
         {
             if (IsDisposed)
+            {
                 throw new ObjectDisposedException(GetType().Name);
+            }
         }
 
         public virtual void Dispose()
