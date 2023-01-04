@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using MVC.Configs;
+﻿using MVC.Configs;
 using MVC.Gameplay.Models.Player;
 using MVC.Menu.Models;
 using MVC.Models;

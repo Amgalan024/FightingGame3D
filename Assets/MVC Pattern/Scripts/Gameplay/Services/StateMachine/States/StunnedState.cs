@@ -2,11 +2,8 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using MVC.Gameplay.Constants;
-using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
-using MVC.Gameplay.Services;
 using MVC.Utils.Disposable;
-using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.StateMachine.States

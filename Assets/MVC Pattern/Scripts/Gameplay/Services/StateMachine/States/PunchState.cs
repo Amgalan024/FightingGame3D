@@ -1,8 +1,5 @@
 ﻿using MVC.Gameplay.Constants;
-using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
-using MVC.Gameplay.Services;
-using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.StateMachine.States

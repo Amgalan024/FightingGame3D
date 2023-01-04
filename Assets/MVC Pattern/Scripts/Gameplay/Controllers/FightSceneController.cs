@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using MVC.Configs;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using MVC.Utils.Disposable;

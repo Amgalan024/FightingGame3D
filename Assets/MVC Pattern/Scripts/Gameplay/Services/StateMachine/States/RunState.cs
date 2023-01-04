@@ -2,11 +2,8 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using MVC.Configs.Enums;
-using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
-using MVC.Gameplay.Services;
 using MVC.Utils.Disposable;
-using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;

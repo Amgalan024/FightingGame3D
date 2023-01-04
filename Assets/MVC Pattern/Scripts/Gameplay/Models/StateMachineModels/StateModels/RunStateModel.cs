@@ -1,5 +1,4 @@
-﻿using System;
-using MVC.Configs.Enums;
+﻿using MVC.Configs.Enums;
 using UnityEngine;
 
 namespace MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels

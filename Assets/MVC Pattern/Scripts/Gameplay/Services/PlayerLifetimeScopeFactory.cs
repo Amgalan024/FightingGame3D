@@ -1,5 +1,4 @@
-﻿using MVC.Configs;
-using MVC.Controllers;
+﻿using MVC.Controllers;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Models.StateMachineModels;

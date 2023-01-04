@@ -1,5 +1,4 @@
-﻿using MVC.Menu.Configs.SOData;
-using MVC.Menu.Views;
+﻿using MVC.Menu.Views;
 using UnityEngine;
 
 namespace MVC.Configs

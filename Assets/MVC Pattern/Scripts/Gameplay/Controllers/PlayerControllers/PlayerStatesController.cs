@@ -5,7 +5,6 @@ using MVC.Configs.Enums;
 using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
-using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Models;
 using MVC.StateMachine.States;
 using MVC.Views;

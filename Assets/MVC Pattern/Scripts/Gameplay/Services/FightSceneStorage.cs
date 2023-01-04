@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using MVC.Configs;
 using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Views;
 using MVC.Views;

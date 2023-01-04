@@ -1,5 +1,4 @@
-﻿using System;
-using MVC.StateMachine.States;
+﻿using MVC.StateMachine.States;
 
 namespace MVC_Pattern.Scripts.Gameplay.Services.StateMachine
 {

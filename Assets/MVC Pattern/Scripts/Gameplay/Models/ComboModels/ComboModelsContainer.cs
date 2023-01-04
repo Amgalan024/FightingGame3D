@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using MVC.Configs;
 using MVC.Configs.SODataModels;
 
 namespace MVC.Models
