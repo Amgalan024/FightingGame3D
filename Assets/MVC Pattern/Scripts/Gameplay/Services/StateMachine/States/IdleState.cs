@@ -1,32 +1,32 @@
 ﻿using MVC.Configs.Enums;
-using MVC.Gameplay.Models;
-using MVC.Gameplay.Services;
-using MVC.Models;
-using MVC.Views;
+using MVC.Gameplay.Models.Player;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
-using UnityEngine;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.StateMachine.States
 {
-    public class IdleState : State, ITriggerEnterState
+    public class IdleState : IPlayerState
     {
+        public PlayerContainer PlayerContainer { get; }
+        public IStateMachineProxy StateMachineProxy { get; }
+
         private readonly JumpStateModel _jumpStateModel;
         private readonly FallStateModel _fallStateModel;
 
-        public IdleState(StateModel stateModel, PlayerView playerView, JumpStateModel jumpStateModel,
-            FallStateModel fallStateModel) : base(stateModel, playerView)
+        public IdleState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
+            JumpStateModel jumpStateModel, FallStateModel fallStateModel)
         {
+            PlayerContainer = playerContainer;
+            StateMachineProxy = stateMachineProxy;
             _jumpStateModel = jumpStateModel;
             _fallStateModel = fallStateModel;
         }
 
-        public override void Enter()
+        public void Enter()
         {
-            base.Enter();
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(true);
 
-            StateModel.InputActionModelsContainer.SetAllInputActionModels(true);
-
-            var animationData = StateModel.PlayerAnimationData;
+            var animationData = PlayerContainer.AnimationData;
 
             _jumpStateModel.JumpTweenVectorData =
                 animationData.GetTweenDataByDirection(animationData.JumpTweenData, DirectionType.Standing);
@@ -34,9 +34,8 @@ namespace MVC.StateMachine.States
                 animationData.GetTweenDataByDirection(animationData.FallTweenData, DirectionType.Standing);
         }
 
-        void ITriggerEnterState.OnTriggerEnter(Collider collider)
+        public void Exit()
         {
-            HandleBlock(collider);
         }
     }
 }

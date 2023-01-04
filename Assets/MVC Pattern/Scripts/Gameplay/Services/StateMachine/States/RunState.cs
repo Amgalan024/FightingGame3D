@@ -3,40 +3,52 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using MVC.Configs.Enums;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Services;
+using MVC.Utils.Disposable;
 using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class RunState : State, IFixedTickState, ITriggerEnterState
+    public class RunState : DisposableWithCts, IPlayerState, IFixedTickState
     {
+        public PlayerContainer PlayerContainer { get; }
+        public IStateMachineProxy StateMachineProxy { get; }
+
         private readonly RunStateModel _runStateModel;
         private readonly JumpStateModel _jumpStateModel;
         private readonly FallStateModel _fallStateModel;
 
         private CancellationTokenSource _dashCts;
 
-        public RunState(StateModel stateModel, PlayerView playerView, RunStateModel runStateModel,
-            JumpStateModel jumpStateModel, FallStateModel fallStateModel) : base(stateModel, playerView)
+        public RunState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
+            RunStateModel runStateModel, JumpStateModel jumpStateModel, FallStateModel fallStateModel)
         {
+            PlayerContainer = playerContainer;
+            StateMachineProxy = stateMachineProxy;
             _runStateModel = runStateModel;
             _jumpStateModel = jumpStateModel;
             _fallStateModel = fallStateModel;
         }
 
-        public override void Enter()
+        public void Enter()
         {
-            base.Enter();
+            if (_runStateModel.DirectionType == DirectionType.Backward)
+            {
+                PlayerContainer.InputActionModelsContainer.SetBlockInputActionsFilter(true);
+            }
 
-            var animationData = StateModel.PlayerAnimationData;
+            var animationData = PlayerContainer.AnimationData;
+            var playerView = PlayerContainer.View;
 
-            _jumpStateModel.Direction = PlayerView.GetPlayerDirection();
+            _jumpStateModel.Direction = playerView.GetPlayerDirection();
             _jumpStateModel.JumpTweenVectorData =
                 animationData.GetTweenDataByDirection(animationData.JumpTweenData, _runStateModel.DirectionType);
 
-            _fallStateModel.Direction = PlayerView.GetPlayerDirection();
+            _fallStateModel.Direction = playerView.GetPlayerDirection();
             _fallStateModel.FallTweenVectorData =
                 animationData.GetTweenDataByDirection(animationData.FallTweenData, _runStateModel.DirectionType);
 
@@ -46,45 +58,37 @@ namespace MVC.StateMachine.States
 
             InputDash();
 
-            StateModel.InputActionModelsContainer.SetAllInputActionModels(false);
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(false);
 
-            StateModel.InputActionModelsContainer.SetAttackInputActionsFilter(true);
-            StateModel.InputActionModelsContainer.SetJumpInputActionsFilter(true);
+            PlayerContainer.InputActionModelsContainer.SetAttackInputActionsFilter(true);
+            PlayerContainer.InputActionModelsContainer.SetJumpInputActionsFilter(true);
 
-            PlayerView.IdleToMoveAnimationAsync(_runStateModel.AnimationHash, Token).Forget();
+            playerView.IdleToMoveAnimationAsync(_runStateModel.AnimationHash, Token).Forget();
         }
 
-        public override void Exit()
+        public void Exit()
         {
-            base.Exit();
-
-            PlayerView.MoveToIdleAnimationAsync(_runStateModel.AnimationHash, Token).Forget();
+            PlayerContainer.View.MoveToIdleAnimationAsync(_runStateModel.AnimationHash, Token).Forget();
         }
 
         void IFixedTickState.OnFixedTick()
         {
+            var playerView = PlayerContainer.View;
+
             if (!Input.GetKey(_runStateModel.InputKey))
             {
-                PlayerView.Rigidbody.velocity = Vector3.zero;
+                playerView.Rigidbody.velocity = Vector3.zero;
 
-                StateModel.StateMachineProxy.ChangeState<IdleState>();
+                StateMachineProxy.ChangeState<IdleState>();
             }
             else
             {
-                var velocity = PlayerView.Rigidbody.velocity;
+                var velocity = playerView.Rigidbody.velocity;
 
-                velocity.x = (int) _runStateModel.DirectionType * StateModel.PlayerModel.MaxMovementSpeed *
-                             PlayerView.GetPlayerDirection();
+                velocity.x = (int) _runStateModel.DirectionType * PlayerContainer.Model.MaxMovementSpeed *
+                             playerView.GetPlayerDirection();
 
-                PlayerView.Rigidbody.velocity = velocity;
-            }
-        }
-
-        void ITriggerEnterState.OnTriggerEnter(Collider collider)
-        {
-            if (_runStateModel.DirectionType == DirectionType.Backward)
-            {
-                HandleBlock(collider);
+                playerView.Rigidbody.velocity = velocity;
             }
         }
 
@@ -99,10 +103,10 @@ namespace MVC.StateMachine.States
                         switch (_runStateModel.DirectionType)
                         {
                             case DirectionType.Forward:
-                                StateModel.StateMachineProxy.ChangeState<DashForwardState>();
+                                StateMachineProxy.ChangeState<DashForwardState>();
                                 break;
                             case DirectionType.Backward:
-                                StateModel.StateMachineProxy.ChangeState<DashBackwardState>();
+                                StateMachineProxy.ChangeState<DashBackwardState>();
                                 break;
                         }
                     }

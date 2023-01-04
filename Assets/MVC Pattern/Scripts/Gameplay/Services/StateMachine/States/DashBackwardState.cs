@@ -1,20 +1,20 @@
-﻿using MVC.Gameplay.Models;
-using MVC.Gameplay.Services;
-using MVC.Views;
+﻿using MVC.Gameplay.Models.Player;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.StateMachine.States
 {
-    public class DashBackwardState : State
+    public class DashBackwardState : IPlayerState
     {
-        public DashBackwardState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
+        public PlayerContainer PlayerContainer { get; }
+        public IStateMachineProxy StateMachineProxy { get; }
+
+        public void Enter()
         {
+            StateMachineProxy.ChangeState<IdleState>();
         }
 
-        public override void Enter()
+        public void Exit()
         {
-            base.Enter();
-            
-            StateModel.StateMachineProxy.ChangeState<IdleState>();
         }
     }
 }

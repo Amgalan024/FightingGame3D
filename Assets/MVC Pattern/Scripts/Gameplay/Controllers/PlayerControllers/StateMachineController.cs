@@ -1,5 +1,6 @@
 ﻿using System;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Models.Player;
 using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
@@ -15,12 +16,12 @@ namespace MVC.Controllers
 
         private readonly PlayerView _playerView;
 
-        public StateMachineController(StateMachineModel stateMachineModel, IStateMachine stateMachine,
-            PlayerView playerView, IStateMachineProxy stateMachineProxy)
+        public StateMachineController(PlayerContainer playerContainer, StateMachineModel stateMachineModel,
+            IStateMachine stateMachine, IStateMachineProxy stateMachineProxy)
         {
+            _playerView = playerContainer.View;
             _stateMachineModel = stateMachineModel;
             _stateMachine = stateMachine;
-            _playerView = playerView;
             _stateMachineProxy = stateMachineProxy;
         }
 

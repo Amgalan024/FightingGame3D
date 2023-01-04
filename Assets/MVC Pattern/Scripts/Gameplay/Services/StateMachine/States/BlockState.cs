@@ -1,29 +1,30 @@
 ﻿using MVC.Gameplay.Constants;
-using MVC.Gameplay.Models;
-using MVC.Gameplay.Services;
+using MVC.Gameplay.Models.Player;
 using MVC.Views;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class BlockState : State, ITriggerExitState
+    public class BlockState : IPlayerState, ITriggerExitState
     {
-        public BlockState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
+        public PlayerContainer PlayerContainer { get; }
+        public IStateMachineProxy StateMachineProxy { get; }
+
+        public BlockState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
         {
+            PlayerContainer = playerContainer;
+            StateMachineProxy = stateMachineProxy;
         }
 
-        public override void Enter()
+        public void Enter()
         {
-            base.Enter();
-
-            PlayerView.Animator.SetBool(PlayerAnimatorData.IsBlocking, true);
+            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsBlocking, true);
         }
 
-        public override void Exit()
+        public void Exit()
         {
-            base.Exit();
-
-            PlayerView.Animator.SetBool(PlayerAnimatorData.IsBlocking, false);
+            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsBlocking, false);
         }
 
         void ITriggerExitState.OnTriggerExit(Collider collider)
@@ -34,15 +35,15 @@ namespace MVC.StateMachine.States
         private void ExitBlockState(Collider collider)
         {
             if (collider.GetComponent<TriggerDetectorView>() ==
-                StateModel.OpponentContainer.PlayerAttackHitBox)
+                PlayerContainer.OpponentContainer.AttackHitBox)
             {
-                if (PlayerView.Animator.GetBool(PlayerAnimatorData.IsCrouching))
+                if (PlayerContainer.View.Animator.GetBool(PlayerAnimatorData.IsCrouching))
                 {
-                    StateModel.StateMachineProxy.ChangeState<CrouchState>();
+                    StateMachineProxy.ChangeState<CrouchState>();
                 }
                 else
                 {
-                    StateModel.StateMachineProxy.ChangeState<IdleState>();
+                    StateMachineProxy.ChangeState<IdleState>();
                 }
             }
         }

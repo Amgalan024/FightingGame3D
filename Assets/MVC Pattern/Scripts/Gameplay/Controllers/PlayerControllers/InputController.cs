@@ -1,4 +1,5 @@
 ﻿using System;
+using MVC.Gameplay.Models.Player;
 using MVC.Models;
 using UnityEngine;
 using VContainer.Unity;
@@ -12,12 +13,11 @@ namespace MVC.Controllers
         private readonly InputModelsContainer _inputModelsContainer;
         private readonly InputActionModelsContainer _inputActionModelsContainer;
 
-        public InputController(InputActionModelsContainer inputActionModelsContainer,
-            InputModelsContainer inputModelsContainer, PlayerModel playerModel)
+        public InputController(PlayerContainer playerContainer)
         {
-            _inputActionModelsContainer = inputActionModelsContainer;
-            _inputModelsContainer = inputModelsContainer;
-            _playerModel = playerModel;
+            _playerModel = playerContainer.Model;
+            _inputModelsContainer = playerContainer.InputModelsContainer;
+            _inputActionModelsContainer = playerContainer.InputActionModelsContainer;
         }
 
         void IInitializable.Initialize()
@@ -42,12 +42,12 @@ namespace MVC.Controllers
         {
             if (Input.GetKeyDown(_inputModelsContainer.Punch.Key))
             {
-                _inputActionModelsContainer.PunchActionModel.InvokeInput();
+                _inputActionModelsContainer.PunchAction.InvokeInput();
             }
 
             if (Input.GetKeyDown(_inputModelsContainer.Kick.Key))
             {
-                _inputActionModelsContainer.KickActionModel.InvokeInput();
+                _inputActionModelsContainer.KickAction.InvokeInput();
             }
         }
 
@@ -55,7 +55,7 @@ namespace MVC.Controllers
         {
             if (Input.GetKeyDown(_inputModelsContainer.Jump.Key))
             {
-                _inputActionModelsContainer.JumpActionModel.InvokeInput();
+                _inputActionModelsContainer.JumpAction.InvokeInput();
             }
         }
 
@@ -63,17 +63,17 @@ namespace MVC.Controllers
         {
             if (Input.GetKey(_inputModelsContainer.MoveForward.Key))
             {
-                _inputActionModelsContainer.MoveForwardActionModel.InvokeInput();
+                _inputActionModelsContainer.MoveForwardAction.InvokeInput();
             }
 
             if (Input.GetKey(_inputModelsContainer.MoveBackward.Key))
             {
-                _inputActionModelsContainer.MoveBackwardActionModel.InvokeInput();
+                _inputActionModelsContainer.MoveBackwardAction.InvokeInput();
             }
 
             if (Input.GetKey(_inputModelsContainer.Crouch.Key))
             {
-                _inputActionModelsContainer.CrouchActionModel.InvokeInput();
+                _inputActionModelsContainer.CrouchAction.InvokeInput();
             }
         }
 
@@ -81,11 +81,16 @@ namespace MVC.Controllers
         {
             if (Input.GetKey(_inputModelsContainer.MoveBackward.Key))
             {
-                _inputActionModelsContainer.StartBlockActionModel.InvokeInput();
+                _inputActionModelsContainer.StartBlockAction.InvokeInput();
+
+                if (!_inputActionModelsContainer.StartBlockAction.Filter)
+                {
+                    _inputActionModelsContainer.StopBlockAction.InvokeInput();
+                }
             }
             else
             {
-                _inputActionModelsContainer.StopBlockActionModel.InvokeInput();
+                _inputActionModelsContainer.StopBlockAction.InvokeInput();
             }
         }
     }

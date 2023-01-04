@@ -2,35 +2,40 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using MVC.Gameplay.Models;
-using MVC.Gameplay.Services;
-using MVC.Views;
+using MVC.Gameplay.Models.Player;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class JumpState : State, ITriggerEnterState
+    public class JumpState : IPlayerState, ITriggerEnterState
     {
+        public PlayerContainer PlayerContainer { get; }
+        public IStateMachineProxy StateMachineProxy { get; }
+
         private readonly JumpStateModel _jumpStateModel;
+        private readonly StateMachineModel _stateMachineModel;
 
         private CancellationTokenSource _jumpCts;
 
-        public JumpState(StateModel stateModel, PlayerView playerView, JumpStateModel jumpStateModel) : base(stateModel,
-            playerView)
+        public JumpState(IStateMachineProxy stateMachineProxy, PlayerContainer playerContainer,
+            JumpStateModel jumpStateModel, StateMachineModel stateMachineModel)
         {
+            StateMachineProxy = stateMachineProxy;
+            PlayerContainer = playerContainer;
             _jumpStateModel = jumpStateModel;
+            _stateMachineModel = stateMachineModel;
         }
 
-        public override void Enter()
+        public void Enter()
         {
-            base.Enter();
-
             _jumpStateModel.OnJumpInterrupted += OnJumpInterrupted;
 
-            StateModel.InputActionModelsContainer.SetAllInputActionModels(false);
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(false);
 
-            StateModel.InputActionModelsContainer.SetBlockInputActionsFilter(true);
-            StateModel.InputActionModelsContainer.SetAttackInputActionsFilter(true);
+            PlayerContainer.InputActionModelsContainer.SetBlockInputActionsFilter(true);
+            PlayerContainer.InputActionModelsContainer.SetAttackInputActionsFilter(true);
 
             _jumpCts?.Cancel();
             _jumpCts?.Dispose();
@@ -40,38 +45,42 @@ namespace MVC.StateMachine.States
             AwaitJumpAnimationAsync(_jumpCts.Token).Forget();
         }
 
+        public void Exit()
+        {
+        }
+
         private async UniTask AwaitJumpAnimationAsync(CancellationToken token)
         {
-            if (StateModel.PlayerModel.CurrentJumpCount < 1)
+            if (PlayerContainer.Model.CurrentJumpCount < 1)
             {
-                StateModel.InputActionModelsContainer.SetJumpInputActionsFilter(true);
+                PlayerContainer.InputActionModelsContainer.SetJumpInputActionsFilter(true);
             }
 
-            if (!StateModel.StateMachineModel.CheckPreviousStateType<CommonStates.AttackState>())
+            if (!_stateMachineModel.CheckPreviousStateType<CommonStates.AttackState>())
             {
-                StateModel.PlayerModel.CurrentJumpCount++;
+                PlayerContainer.Model.CurrentJumpCount++;
 
-                await PlayerView.JumpAnimationAsync(_jumpStateModel.JumpTweenVectorData, _jumpStateModel.Direction,
+                await PlayerContainer.OpponentContainer.View.JumpAnimationAsync(
+                    _jumpStateModel.JumpTweenVectorData, _jumpStateModel.Direction,
                     token);
 
-                StateModel.StateMachineProxy.ChangeState<FallState>();
+                StateMachineProxy.ChangeState<FallState>();
             }
         }
 
         void ITriggerEnterState.OnTriggerEnter(Collider collider)
         {
-            HandleBlock(collider);
+            var opponentView = PlayerContainer.OpponentContainer.View;
+            var playerView = PlayerContainer.View;
 
-            var opponentPlayerView = StateModel.OpponentContainer.PlayerView;
-
-            var overlappedColliders = Physics.OverlapBox(PlayerView.MainTriggerDetector.TopCollider.center,
-                    PlayerView.MainTriggerDetector.TopCollider.size)
-                .FirstOrDefault(c => c == opponentPlayerView.MainTriggerDetector.BottomCollider);
+            var overlappedColliders = Physics.OverlapBox(playerView.MainTriggerDetector.TopCollider.center,
+                    playerView.MainTriggerDetector.TopCollider.size)
+                .FirstOrDefault(c => c == opponentView.MainTriggerDetector.BottomCollider);
 
             if (overlappedColliders != null)
             {
-                Physics.IgnoreCollision(PlayerView.CollisionDetector.Collider,
-                    opponentPlayerView.CollisionDetector.Collider, true);
+                Physics.IgnoreCollision(playerView.CollisionDetector.Collider,
+                    opponentView.CollisionDetector.Collider, true);
             }
         }
 

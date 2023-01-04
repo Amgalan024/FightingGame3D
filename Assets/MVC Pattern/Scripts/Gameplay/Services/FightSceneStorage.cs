@@ -13,9 +13,6 @@ namespace MVC.Gameplay.Services
 
         public List<PlayerContainer> PlayerContainers { get; } = new List<PlayerContainer>();
 
-        public Dictionary<PlayerContainer, PlayerContainer> OpponentContainerByPlayer { get; } =
-            new Dictionary<PlayerContainer, PlayerContainer>(2);
-
         /// <summary>
         /// todo: На каждый коллайдер атаки(может быть проджектайл) делать свою аттак модель, и по коллайдеру брать привязанную модель и наносить урон. Так же сделать привязку атак модели к плеер модели что бы понимать кто атакует
         /// </summary>

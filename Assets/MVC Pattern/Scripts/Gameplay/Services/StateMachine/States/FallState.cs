@@ -4,53 +4,56 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using DG.Tweening;
-using MVC.Gameplay.Models;
-using MVC.Gameplay.Services;
+using MVC.Gameplay.Models.Player;
+using MVC.Utils.Disposable;
 using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class FallState : State, ITriggerEnterState
+    public class FallState : DisposableWithCts, IPlayerState, ITriggerEnterState
     {
+        public PlayerContainer PlayerContainer { get; }
+        public IStateMachineProxy StateMachineProxy { get; }
+
         private readonly FallStateModel _fallStateModel;
 
         private IDisposable _fallSubscription;
 
         private CancellationTokenSource _fallCts;
 
-        public FallState(StateModel stateModel, PlayerView playerView, FallStateModel fallStateModel) : base(stateModel,
-            playerView)
+        public FallState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
+            FallStateModel fallStateModel)
         {
+            PlayerContainer = playerContainer;
+            StateMachineProxy = stateMachineProxy;
             _fallStateModel = fallStateModel;
         }
 
-        public override void Enter()
+        public void Enter()
         {
-            base.Enter();
-
             _fallCts?.Dispose();
 
             _fallCts = new CancellationTokenSource();
 
-            StateModel.InputActionModelsContainer.SetAllInputActionModels(false);
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(false);
 
-            StateModel.InputActionModelsContainer.SetBlockInputActionsFilter(true);
+            PlayerContainer.InputActionModelsContainer.SetBlockInputActionsFilter(true);
 
-            _fallSubscription = StateModel.PlayerModel.IsGrounded.Subscribe(OnPlayerFell);
+            _fallSubscription = PlayerContainer.Model.IsGrounded.Subscribe(OnPlayerFell);
 
-            PlayerView.FallAnimationAsync(_fallStateModel.FallTweenVectorData, _fallStateModel.Direction,
+            PlayerContainer.View.FallAnimationAsync(_fallStateModel.FallTweenVectorData,
+                _fallStateModel.Direction,
                 _fallCts.Token).Forget();
         }
 
-        public override void Exit()
+        public void Exit()
         {
-            base.Exit();
+            var opponentPlayerView = PlayerContainer.OpponentContainer.View;
 
-            var opponentPlayerView = StateModel.OpponentContainer.PlayerView;
-
-            Physics.IgnoreCollision(PlayerView.CollisionDetector.Collider,
+            Physics.IgnoreCollision(PlayerContainer.View.CollisionDetector.Collider,
                 opponentPlayerView.CollisionDetector.Collider, false);
 
             _fallCts?.Cancel();
@@ -61,13 +64,11 @@ namespace MVC.StateMachine.States
 
         void ITriggerEnterState.OnTriggerEnter(Collider collider)
         {
-            HandleBlock(collider);
-
-            var opponentPlayerView = StateModel.OpponentContainer.PlayerView;
+            var opponentPlayerView = PlayerContainer.OpponentContainer.View;
 
             var overlappedColliders = Physics.OverlapBox(
-                PlayerView.MainTriggerDetector.BottomCollider.transform.position,
-                PlayerView.MainTriggerDetector.BottomCollider.size);
+                PlayerContainer.View.MainTriggerDetector.BottomCollider.transform.position,
+                PlayerContainer.View.MainTriggerDetector.BottomCollider.size);
 
             var topCollider =
                 overlappedColliders.FirstOrDefault(c => c == opponentPlayerView.MainTriggerDetector.TopCollider);
@@ -82,9 +83,9 @@ namespace MVC.StateMachine.States
         {
             if (isGrounded)
             {
-                StateModel.PlayerModel.CurrentJumpCount = 0;
+                PlayerContainer.Model.CurrentJumpCount = 0;
 
-                StateModel.StateMachineProxy.ChangeState<IdleState>();
+                StateMachineProxy.ChangeState<IdleState>();
             }
         }
     }

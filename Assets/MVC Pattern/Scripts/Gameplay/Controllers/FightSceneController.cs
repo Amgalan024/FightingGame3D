@@ -18,17 +18,14 @@ namespace MVC.Gameplay.Controllers
         private readonly PlayerLifetimeScopeFactory _playerLifetimeScopeFactory;
 
         private readonly FightSceneModel _fightSceneModel;
-        private readonly PlayerInputConfig[] _inputConfigs;
 
         public FightSceneController(FightSceneFactory factory, FightSceneStorage storage,
-            PlayerLifetimeScopeFactory playerLifetimeScopeFactory, FightSceneModel fightSceneModel,
-            PlayerInputConfig[] inputConfigs)
+            PlayerLifetimeScopeFactory playerLifetimeScopeFactory, FightSceneModel fightSceneModel)
         {
             _factory = factory;
             _storage = storage;
             _playerLifetimeScopeFactory = playerLifetimeScopeFactory;
             _fightSceneModel = fightSceneModel;
-            _inputConfigs = inputConfigs;
         }
 
         async UniTask IAsyncStartable.StartAsync(CancellationToken token)
@@ -36,15 +33,11 @@ namespace MVC.Gameplay.Controllers
             _factory.CreateFightLocation();
             _factory.CreatePlayers();
 
-            int playerIndex = 0;
-
             foreach (var playerContainer in _storage.PlayerContainers)
             {
-                var playerLifetimeScope =
-                    _playerLifetimeScopeFactory.CreatePlayerLifetimeScope(playerContainer, _inputConfigs[playerIndex]);
+                var playerLifetimeScope = _playerLifetimeScopeFactory.CreatePlayerLifetimeScope(playerContainer);
 
                 _fightSceneModel.PlayerLifetimeScopes.Add(playerLifetimeScope);
-                playerIndex++;
             }
 
             await UniTask.DelayFrame(1, cancellationToken: token);
@@ -56,8 +49,8 @@ namespace MVC.Gameplay.Controllers
         {
             foreach (var playerContainer in _storage.PlayerContainers)
             {
-                var playerModel = playerContainer.PlayerModel;
-                var opponentModel = _storage.OpponentContainerByPlayer[playerContainer].PlayerModel;
+                var playerModel = playerContainer.Model;
+                var opponentModel = playerContainer.OpponentContainer.Model;
 
                 playerModel.OnPlayerAttacked -= OnPlayerAttacked;
                 playerModel.OnLose -= opponentModel.ScoreWin;
@@ -72,8 +65,8 @@ namespace MVC.Gameplay.Controllers
 
             foreach (var playerContainer in _storage.PlayerContainers)
             {
-                var playerModel = playerContainer.PlayerModel;
-                var opponentModel = _storage.OpponentContainerByPlayer[playerContainer].PlayerModel;
+                var playerModel = playerContainer.Model;
+                var opponentModel = playerContainer.OpponentContainer.Model;
 
                 SetPlayerFaceOpponent(playerModel);
 
@@ -90,17 +83,17 @@ namespace MVC.Gameplay.Controllers
             {
                 var opponentContainer = _storage.PlayerContainers.First(c => c != playerContainer);
 
-                _storage.OpponentContainerByPlayer.Add(playerContainer, opponentContainer);
+                playerContainer.SetOpponent(opponentContainer);
             }
         }
 
         private void SetPlayerFaceOpponent(PlayerModel playerModel)
         {
-            var playerContainer = _storage.PlayerContainers.First(p => p.PlayerModel == playerModel);
+            var playerContainer = _storage.PlayerContainers.First(p => p.Model == playerModel);
 
-            var playerTransform = playerContainer.PlayerView.transform;
+            var playerTransform = playerContainer.View.transform;
 
-            var opponentTransform = _storage.OpponentContainerByPlayer[playerContainer].PlayerView.transform;
+            var opponentTransform = playerContainer.OpponentContainer.View.transform;
 
             if (playerModel.AtLeftSide && playerTransform.position.x > opponentTransform.position.x)
             {

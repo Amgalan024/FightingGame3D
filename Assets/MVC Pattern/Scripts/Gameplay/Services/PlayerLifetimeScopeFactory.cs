@@ -20,20 +20,16 @@ namespace MVC.Gameplay.Services
             _gameplayLifeTimeScope = gameplayLifeTimeScope;
         }
 
-        public LifetimeScope CreatePlayerLifetimeScope(PlayerContainer playerContainer,
-            PlayerInputConfig inputConfig)
+        public LifetimeScope CreatePlayerLifetimeScope(PlayerContainer playerContainer)
         {
             var scope = _gameplayLifeTimeScope.CreateChild(builder =>
             {
-                builder.RegisterInstance(playerContainer.PlayerModel);
-                builder.RegisterInstance(playerContainer.PlayerView);
-                builder.RegisterInstance(inputConfig.InputModels);
-                builder.RegisterInstance(playerContainer.CharacterConfig);
-                builder.RegisterInstance(playerContainer.PlayerAttackModel);
+                builder.RegisterInstance(playerContainer.Model);
+                builder.RegisterInstance(playerContainer.View);
+                builder.RegisterInstance(playerContainer.AttackModel);
 
                 builder.RegisterInstance(playerContainer);
 
-                builder.Register<StateModel>(Lifetime.Scoped);
                 builder.Register<StatesContainer>(Lifetime.Scoped);
                 builder.Register<StateMachineModel>(Lifetime.Scoped);
 

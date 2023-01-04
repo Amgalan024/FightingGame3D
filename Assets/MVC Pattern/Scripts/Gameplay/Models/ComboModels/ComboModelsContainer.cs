@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using MVC.Configs;
+using MVC.Configs.SODataModels;
 
 namespace MVC.Models
 {
@@ -7,11 +8,11 @@ namespace MVC.Models
     {
         public ComboModel[] ComboModels { get; }
 
-        public ComboModelsContainer(CharacterConfig characterConfig, InputModelsContainer inputModelsContainer)
+        public ComboModelsContainer(ComboData[] comboList, InputModelsContainer inputModelsContainer)
         {
-            ComboModels = new ComboModel[characterConfig.ComboConfig.ComboList.Length];
+            ComboModels = new ComboModel[comboList.Length];
 
-            var sortedComboList = characterConfig.ComboConfig.ComboList.OrderByDescending(x => x.ControlNames.Length).ToList();
+            var sortedComboList = comboList.OrderByDescending(x => x.ControlNames.Length).ToList();
 
             for (int i = 0; i < ComboModels.Length; i++)
             {

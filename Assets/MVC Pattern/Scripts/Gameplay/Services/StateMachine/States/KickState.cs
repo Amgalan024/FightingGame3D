@@ -1,14 +1,17 @@
 ﻿using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Services;
 using MVC.Views;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
     public class KickState : CommonStates.AttackState
     {
-        public KickState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
+        public KickState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy) : base(playerContainer,
+            stateMachineProxy)
         {
         }
 
@@ -16,16 +19,16 @@ namespace MVC.StateMachine.States
         {
             base.Enter();
 
-            PlayerView.Animator.SetBool(PlayerAnimatorData.IsKicking, true);
+            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsKicking, true);
 
-            StateModel.PlayerAttackModel.Damage = StateModel.PlayerModel.KickDamage;
+            PlayerContainer.AttackModel.Damage = PlayerContainer.Model.KickDamage;
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            PlayerView.Animator.SetBool(PlayerAnimatorData.IsKicking, false);
+            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsKicking, false);
         }
     }
 }

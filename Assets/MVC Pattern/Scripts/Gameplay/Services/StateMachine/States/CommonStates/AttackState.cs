@@ -1,32 +1,31 @@
 ﻿using System;
 using Cysharp.Threading.Tasks.Linq;
-using MVC.Gameplay.Constants;
-using MVC.Gameplay.Models;
-using MVC.Gameplay.Services;
-using MVC.Views;
+using MVC.Gameplay.Models.Player;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.StateMachine.States.CommonStates
 {
-    public class AttackState : State
+    public class AttackState : IPlayerState
     {
+        public PlayerContainer PlayerContainer { get; }
+        public IStateMachineProxy StateMachineProxy { get; }
+
         private IDisposable _exitStateSubscription;
 
-        public AttackState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
+        public AttackState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
         {
+            PlayerContainer = playerContainer;
+            StateMachineProxy = stateMachineProxy;
         }
 
-        public override void Enter()
+        public virtual void Enter()
         {
-            base.Enter();
-
-            StateModel.PlayerModel.IsAttacking.Value = true;
-            _exitStateSubscription = StateModel.PlayerModel.IsAttacking.Subscribe(ExitAttackState);
+            PlayerContainer.Model.IsAttacking.Value = true;
+            _exitStateSubscription = PlayerContainer.Model.IsAttacking.Subscribe(ExitAttackState);
         }
 
-        public override void Exit()
+        public virtual void Exit()
         {
-            base.Exit();
-
             _exitStateSubscription?.Dispose();
         }
 
@@ -34,7 +33,7 @@ namespace MVC.StateMachine.States.CommonStates
         {
             if (!isAttacking)
             {
-                StateModel.StateMachineProxy.ChangeState<IdleState>();
+                StateMachineProxy.ChangeState<IdleState>();
             }
         }
     }

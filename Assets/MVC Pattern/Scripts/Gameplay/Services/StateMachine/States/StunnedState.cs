@@ -3,31 +3,43 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Services;
+using MVC.Utils.Disposable;
 using MVC.Views;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.StateMachine.States
 {
-    public class StunnedState : State
+    public class StunnedState : DisposableWithCts, IPlayerState
     {
-        public StunnedState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
+        public PlayerContainer PlayerContainer { get; }
+        public IStateMachineProxy StateMachineProxy { get; }
+
+        public StunnedState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
         {
+            PlayerContainer = playerContainer;
+            StateMachineProxy = stateMachineProxy;
         }
 
-        public override void Enter()
+        public void Enter()
         {
-            base.Enter();
-            StateModel.InputActionModelsContainer.SetAllInputActionModels(false);
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(false);
             PlayStunnedAnimationAsync(Cts.Token).Forget();
+        }
+
+        public void Exit()
+        {
+            throw new NotImplementedException();
         }
 
         private async UniTask PlayStunnedAnimationAsync(CancellationToken token)
         {
-            PlayerView.Animator.SetBool(PlayerAnimatorData.IsStunned, true);
+            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsStunned, true);
 
             await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: token);
 
-            StateModel.StateMachineProxy.ChangeState<IdleState>();
+            StateMachineProxy.ChangeState<IdleState>();
         }
     }
 }

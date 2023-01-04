@@ -2,6 +2,6 @@
 {
     public interface IFixedTickState
     {
-        abstract void OnFixedTick();
+        void OnFixedTick();
     }
 }

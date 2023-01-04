@@ -4,6 +4,6 @@ namespace MVC.StateMachine.States
 {
     public interface ITriggerEnterState
     {
-        abstract void OnTriggerEnter(Collider collider);
+        void OnTriggerEnter(Collider collider);
     }
 }

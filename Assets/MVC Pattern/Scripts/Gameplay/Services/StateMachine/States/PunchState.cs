@@ -1,13 +1,16 @@
 ﻿using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Services;
 using MVC.Views;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.StateMachine.States
 {
     public class PunchState : CommonStates.AttackState
     {
-        public PunchState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
+        public PunchState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy) : base(playerContainer,
+            stateMachineProxy)
         {
         }
 
@@ -15,16 +18,16 @@ namespace MVC.StateMachine.States
         {
             base.Enter();
 
-            PlayerView.Animator.SetBool(PlayerAnimatorData.IsPunching, true);
+            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsPunching, true);
 
-            StateModel.PlayerAttackModel.Damage = StateModel.PlayerModel.PunchDamage;
+            PlayerContainer.AttackModel.Damage = PlayerContainer.Model.PunchDamage;
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            PlayerView.Animator.SetBool(PlayerAnimatorData.IsPunching, false);
+            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsPunching, false);
         }
     }
 }

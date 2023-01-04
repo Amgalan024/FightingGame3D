@@ -1,6 +1,8 @@
 ﻿using MVC.Gameplay.Models;
+using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Services;
 using MVC.Views;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.StateMachine.States
 {
@@ -9,7 +11,8 @@ namespace MVC.StateMachine.States
         public string Name { set; get; }
         public int Damage { set; get; }
 
-        public ComboState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
+        public ComboState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy) : base(playerContainer,
+            stateMachineProxy)
         {
         }
 
@@ -17,18 +20,18 @@ namespace MVC.StateMachine.States
         {
             base.Enter();
 
-            PlayerView.Animator.Play(Name);
-            PlayerView.Animator.SetBool(Name, true);
-            StateModel.PlayerAttackModel.Damage = Damage;
-            StateModel.PlayerModel.IsDoingCombo.Value = true;
+            PlayerContainer.View.Animator.Play(Name);
+            PlayerContainer.View.Animator.SetBool(Name, true);
+            PlayerContainer.AttackModel.Damage = Damage;
+            PlayerContainer.Model.IsDoingCombo.Value = true;
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            PlayerView.Animator.SetBool(Name, false);
-            StateModel.PlayerModel.IsDoingCombo.Value = false;
+            PlayerContainer.View.Animator.SetBool(Name, false);
+            PlayerContainer.Model.IsDoingCombo.Value = false;
         }
     }
 }

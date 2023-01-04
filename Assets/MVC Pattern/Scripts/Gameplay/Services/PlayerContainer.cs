@@ -1,4 +1,4 @@
-﻿using MVC.Configs;
+﻿using MVC.Configs.Animation;
 using MVC.Models;
 using MVC.Views;
 
@@ -6,28 +6,35 @@ namespace MVC.Gameplay.Models.Player
 {
     public class PlayerContainer
     {
-        public CharacterConfig CharacterConfig { get; }
-        public PlayerModel PlayerModel { get; }
-        public PlayerView PlayerView { get; }
-        public PlayerAttackModel PlayerAttackModel { get; }
-        public TriggerDetectorView PlayerAttackHitBox { get; }
+        public PlayerAnimationData AnimationData { get; }
+        public PlayerModel Model { get; }
+        public PlayerView View { get; }
+        public PlayerAttackModel AttackModel { get; }
+        public TriggerDetectorView AttackHitBox { get; }
         public InputModelsContainer InputModelsContainer { get; }
-        public InputActionModelsContainer ActionModelsContainer { get; }
+        public InputActionModelsContainer InputActionModelsContainer { get; }
         public ComboModelsContainer ComboModelsContainer { get; }
 
-        public PlayerContainer(PlayerModel playerModel, PlayerView playerView, PlayerAttackModel playerAttackModel,
-            TriggerDetectorView playerAttackHitBox, CharacterConfig characterConfig,
-            InputModelsContainer inputModelsContainer, InputActionModelsContainer actionModelsContainer,
+        public PlayerContainer OpponentContainer { private set; get; }
+
+        public PlayerContainer(PlayerModel model, PlayerView view, PlayerAttackModel attackModel,
+            TriggerDetectorView attackHitBox, PlayerAnimationData animationData,
+            InputModelsContainer inputModelsContainer, InputActionModelsContainer inputActionModelsContainer,
             ComboModelsContainer comboModelsContainer)
         {
-            PlayerModel = playerModel;
-            PlayerView = playerView;
-            PlayerAttackModel = playerAttackModel;
-            PlayerAttackHitBox = playerAttackHitBox;
-            CharacterConfig = characterConfig;
+            Model = model;
+            View = view;
+            AttackModel = attackModel;
+            AttackHitBox = attackHitBox;
+            AnimationData = animationData;
             InputModelsContainer = inputModelsContainer;
-            ActionModelsContainer = actionModelsContainer;
+            InputActionModelsContainer = inputActionModelsContainer;
             ComboModelsContainer = comboModelsContainer;
+        }
+
+        public void SetOpponent(PlayerContainer playerContainer)
+        {
+            OpponentContainer = playerContainer;
         }
     }
 }

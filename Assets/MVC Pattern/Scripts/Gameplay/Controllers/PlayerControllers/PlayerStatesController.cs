@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks.Linq;
 using MVC.Configs.Enums;
 using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Models;
 using MVC.StateMachine.States;
@@ -22,6 +23,7 @@ namespace MVC.Controllers
         private readonly FightSceneModel _fightSceneModel;
         private readonly PlayerModel _playerModel;
         private readonly PlayerView _playerView;
+        private readonly PlayerContainer _opponentContainer;
         private readonly InputModelsContainer _inputModelsContainer;
 
         private readonly Transform _parent;
@@ -30,17 +32,17 @@ namespace MVC.Controllers
 
         private readonly RunStateModel _runStateModel;
 
-        public PlayerStatesController(InputActionModelsContainer inputActionModelsContainer, PlayerModel playerModel,
-            PlayerView playerView, IStateMachineProxy stateMachineProxy, FightSceneModel fightSceneModel,
-            LifetimeScope lifetimeScope, RunStateModel runStateModel, InputModelsContainer inputModelsContainer)
+        public PlayerStatesController(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
+            FightSceneModel fightSceneModel, LifetimeScope lifetimeScope, RunStateModel runStateModel)
         {
-            _playerModel = playerModel;
-            _playerView = playerView;
+            _playerModel = playerContainer.Model;
+            _playerView = playerContainer.View;
+            _inputModelsContainer = playerContainer.InputModelsContainer;
+            _inputActionModelsContainer = playerContainer.InputActionModelsContainer;
+            _opponentContainer = playerContainer.OpponentContainer;
             _stateMachineProxy = stateMachineProxy;
             _fightSceneModel = fightSceneModel;
             _runStateModel = runStateModel;
-            _inputModelsContainer = inputModelsContainer;
-            _inputActionModelsContainer = inputActionModelsContainer;
             _parent = lifetimeScope.transform;
         }
 
@@ -62,31 +64,33 @@ namespace MVC.Controllers
 
         private void HandleInputEvents()
         {
-            _inputActionModelsContainer.MoveForwardActionModel.OnInput += OnMoveForwardInput;
-            _inputActionModelsContainer.MoveBackwardActionModel.OnInput += OnMoveBackwardInput;
-            _inputActionModelsContainer.PunchActionModel.OnInput += _stateMachineProxy.ChangeState<PunchState>;
-            _inputActionModelsContainer.KickActionModel.OnInput += _stateMachineProxy.ChangeState<KickState>;
-            _inputActionModelsContainer.JumpActionModel.OnInput += _stateMachineProxy.ChangeState<JumpState>;
-            _inputActionModelsContainer.CrouchActionModel.OnInput += _stateMachineProxy.ChangeState<CrouchState>;
-            _inputActionModelsContainer.StartBlockActionModel.OnInput += OnStartBlockInput;
-            _inputActionModelsContainer.StopBlockActionModel.OnInput += OnStopBlock;
+            _inputActionModelsContainer.MoveForwardAction.OnInput += OnMoveForwardInput;
+            _inputActionModelsContainer.MoveBackwardAction.OnInput += OnMoveBackwardInput;
+            _inputActionModelsContainer.PunchAction.OnInput += _stateMachineProxy.ChangeState<PunchState>;
+            _inputActionModelsContainer.KickAction.OnInput += _stateMachineProxy.ChangeState<KickState>;
+            _inputActionModelsContainer.JumpAction.OnInput += _stateMachineProxy.ChangeState<JumpState>;
+            _inputActionModelsContainer.CrouchAction.OnInput += _stateMachineProxy.ChangeState<CrouchState>;
+            _inputActionModelsContainer.StartBlockAction.OnInput += OnStartBlockInput;
+            _inputActionModelsContainer.StopBlockAction.OnInput += OnStopBlock;
         }
 
         private void DisposeInputEvents()
         {
-            _inputActionModelsContainer.MoveForwardActionModel.OnInput -= OnMoveForwardInput;
-            _inputActionModelsContainer.MoveBackwardActionModel.OnInput -= OnMoveBackwardInput;
-            _inputActionModelsContainer.PunchActionModel.OnInput -= _stateMachineProxy.ChangeState<PunchState>;
-            _inputActionModelsContainer.KickActionModel.OnInput -= _stateMachineProxy.ChangeState<KickState>;
-            _inputActionModelsContainer.JumpActionModel.OnInput -= _stateMachineProxy.ChangeState<JumpState>;
-            _inputActionModelsContainer.CrouchActionModel.OnInput -= _stateMachineProxy.ChangeState<CrouchState>;
-            _inputActionModelsContainer.StartBlockActionModel.OnInput -= OnStartBlockInput;
-            _inputActionModelsContainer.StopBlockActionModel.OnInput -= OnStopBlock;
+            _inputActionModelsContainer.MoveForwardAction.OnInput -= OnMoveForwardInput;
+            _inputActionModelsContainer.MoveBackwardAction.OnInput -= OnMoveBackwardInput;
+            _inputActionModelsContainer.PunchAction.OnInput -= _stateMachineProxy.ChangeState<PunchState>;
+            _inputActionModelsContainer.KickAction.OnInput -= _stateMachineProxy.ChangeState<KickState>;
+            _inputActionModelsContainer.JumpAction.OnInput -= _stateMachineProxy.ChangeState<JumpState>;
+            _inputActionModelsContainer.CrouchAction.OnInput -= _stateMachineProxy.ChangeState<CrouchState>;
+            _inputActionModelsContainer.StartBlockAction.OnInput -= OnStartBlockInput;
+            _inputActionModelsContainer.StopBlockAction.OnInput -= OnStopBlock;
         }
 
         private void HandlePlayerEvents()
         {
             _playerView.OnAttackAnimationEnded += OnAttackAnimationEnded;
+
+            _playerView.MainTriggerDetector.OnTriggerEntered += HandleBlock;
 
             _playerView.CollisionDetector.OnCollisionEntered += OnCollisionEntered;
             _playerView.CollisionDetector.OnCollisionExited += OnCollisionExit;
@@ -111,6 +115,8 @@ namespace MVC.Controllers
         private void DisposePlayerEvents()
         {
             _playerView.OnAttackAnimationEnded -= OnAttackAnimationEnded;
+
+            _playerView.MainTriggerDetector.OnTriggerEntered -= HandleBlock;
 
             _playerView.CollisionDetector.OnCollisionEntered -= OnCollisionEntered;
             _playerView.CollisionDetector.OnCollisionExited -= OnCollisionExit;
@@ -145,6 +151,23 @@ namespace MVC.Controllers
             if (collision.gameObject.GetComponent<PlatformView>())
             {
                 _playerModel.IsGrounded.Value = false;
+            }
+        }
+
+        private void HandleBlock(Collider collider)
+        {
+            if (collider.TryGetComponent(out TriggerDetectorView attackHitBox) &&
+                attackHitBox == _opponentContainer.AttackHitBox)
+            {
+                if (_playerModel.IsBlocking)
+                {
+                    _stateMachineProxy.ChangeState<BlockState>();
+                }
+                else
+                {
+                    _playerModel.InvokePlayerAttacked(attackHitBox);
+                    _stateMachineProxy.ChangeState<StunnedState>();
+                }
             }
         }
 

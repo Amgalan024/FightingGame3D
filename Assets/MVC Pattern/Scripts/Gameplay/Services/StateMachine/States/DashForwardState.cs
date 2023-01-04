@@ -1,57 +1,59 @@
 ﻿using Cysharp.Threading.Tasks;
 using MVC.Gameplay.Constants;
-using MVC.Gameplay.Models;
-using MVC.Gameplay.Services;
-using MVC.Views;
+using MVC.Gameplay.Models.Player;
+using MVC.Utils.Disposable;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class DashForwardState : State, IFixedTickState
+    public class DashForwardState : DisposableWithCts, IPlayerState, IFixedTickState
     {
-        private RunStateModel _runStateModel;
+        public PlayerContainer PlayerContainer { get; }
+        public IStateMachineProxy StateMachineProxy { get; }
 
-        public DashForwardState(StateModel stateModel, PlayerView playerView, RunStateModel runStateModel) : base(
-            stateModel, playerView)
+        private readonly RunStateModel _runStateModel;
+
+        public DashForwardState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
+            RunStateModel runStateModel)
         {
+            PlayerContainer = playerContainer;
+            StateMachineProxy = stateMachineProxy;
             _runStateModel = runStateModel;
         }
 
-        public override void Enter()
+        public void Enter()
         {
-            base.Enter();
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(false);
 
-            StateModel.InputActionModelsContainer.SetAllInputActionModels(false);
+            PlayerContainer.InputActionModelsContainer.SetAttackInputActionsFilter(true);
+            PlayerContainer.InputActionModelsContainer.SetJumpInputActionsFilter(true);
 
-            StateModel.InputActionModelsContainer.SetAttackInputActionsFilter(true);
-            StateModel.InputActionModelsContainer.SetJumpInputActionsFilter(true);
-
-            PlayerView.IdleToMoveAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
+            PlayerContainer.View.IdleToMoveAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
         }
 
-        public override void Exit()
+        public void Exit()
         {
-            base.Enter();
-
-            PlayerView.MoveToIdleAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
+            PlayerContainer.View.MoveToIdleAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
         }
 
         void IFixedTickState.OnFixedTick()
         {
             if (!Input.GetKey(_runStateModel.InputKey))
             {
-                PlayerView.Rigidbody.velocity = Vector3.zero;
+                PlayerContainer.View.Rigidbody.velocity = Vector3.zero;
 
-                StateModel.StateMachineProxy.ChangeState<IdleState>();
+                StateMachineProxy.ChangeState<IdleState>();
             }
             else
             {
-                var velocity = PlayerView.Rigidbody.velocity;
+                var velocity = PlayerContainer.View.Rigidbody.velocity;
 
-                velocity.x = StateModel.PlayerModel.MaxMovementSpeed * 2 * PlayerView.GetPlayerDirection();
+                velocity.x = PlayerContainer.Model.MaxMovementSpeed * 2 *
+                             PlayerContainer.View.GetPlayerDirection();
 
-                PlayerView.Rigidbody.velocity = velocity;
+                PlayerContainer.View.Rigidbody.velocity = velocity;
             }
         }
     }

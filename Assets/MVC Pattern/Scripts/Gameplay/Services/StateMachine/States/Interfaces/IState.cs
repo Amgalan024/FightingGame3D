@@ -8,10 +8,7 @@ namespace MVC.StateMachine.States
 {
     public interface IState
     {
-        public event Action OnStateEntered;
-        public event Action OnStateExited;
-
-        abstract void Enter();
-        abstract void Exit();
+        void Enter();
+        void Exit();
     }
 }

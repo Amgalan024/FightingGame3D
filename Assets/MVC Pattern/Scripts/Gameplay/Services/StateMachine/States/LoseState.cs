@@ -1,25 +1,26 @@
-﻿using MVC.Gameplay.Models;
-using MVC.Gameplay.Services;
-using MVC.Models;
-using MVC.Views;
-using UnityEngine;
+﻿using MVC.Gameplay.Models.Player;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.StateMachine.States
 {
-    public class LoseState : State
+    public class LoseState : IPlayerState
     {
-        public LoseState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
+        public PlayerContainer PlayerContainer { get; }
+        public IStateMachineProxy StateMachineProxy { get; }
+
+        public LoseState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
+        {
+            PlayerContainer = playerContainer;
+            StateMachineProxy = stateMachineProxy;
+        }
+
+
+        public void Enter()
         {
         }
 
-        public override void Enter()
+        public void Exit()
         {
-            base.Enter();
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
         }
     }
 }

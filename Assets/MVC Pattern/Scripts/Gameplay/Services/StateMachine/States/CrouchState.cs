@@ -1,38 +1,34 @@
-﻿using MVC.Gameplay.Models;
-using MVC.Gameplay.Services;
-using MVC.Models;
-using MVC.Views;
+﻿using MVC.Gameplay.Models.Player;
+using MVC.Gameplay.Models.StateMachineModels;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class CrouchState : State, IFixedTickState
+    public class CrouchState : IPlayerState, IFixedTickState
     {
-        private readonly InputModelsContainer _inputs;
+        public PlayerContainer PlayerContainer { get; }
+        public IStateMachineProxy StateMachineProxy { get; }
 
-        public CrouchState(StateModel stateModel, PlayerView playerView, InputModelsContainer inputs) : base(stateModel,
-            playerView)
+        public CrouchState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
         {
-            _inputs = inputs;
+            PlayerContainer = playerContainer;
+            StateMachineProxy = stateMachineProxy;
         }
 
-        public override void Enter()
+        public void Enter()
         {
-            base.Enter();
+            PlayerContainer.Model.IsCrouching.Value = true;
 
-            StateModel.PlayerModel.IsCrouching.Value = true;
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(false);
 
-            StateModel.InputActionModelsContainer.SetAllInputActionModels(false);
-
-            StateModel.InputActionModelsContainer.SetAttackInputActionsFilter(true);
-            StateModel.InputActionModelsContainer.SetBlockInputActionsFilter(true);
+            PlayerContainer.InputActionModelsContainer.SetAttackInputActionsFilter(true);
+            PlayerContainer.InputActionModelsContainer.SetBlockInputActionsFilter(true);
         }
 
-        public override void Exit()
+        public void Exit()
         {
-            base.Exit();
-
-            StateModel.PlayerModel.IsCrouching.Value = false;
+            PlayerContainer.Model.IsCrouching.Value = false;
         }
 
         void IFixedTickState.OnFixedTick()
@@ -42,9 +38,9 @@ namespace MVC.StateMachine.States
 
         private void StopCrouch()
         {
-            if (!Input.GetKey(_inputs.Crouch.Key))
+            if (!Input.GetKey(PlayerContainer.InputModelsContainer.Crouch.Key))
             {
-                StateModel.StateMachineProxy.ChangeState<IdleState>();
+                StateMachineProxy.ChangeState<IdleState>();
             }
         }
     }

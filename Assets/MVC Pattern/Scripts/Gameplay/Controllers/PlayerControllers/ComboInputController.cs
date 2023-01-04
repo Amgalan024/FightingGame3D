@@ -1,4 +1,5 @@
-﻿using MVC.Models;
+﻿using MVC.Gameplay.Models.Player;
+using MVC.Models;
 using MVC.StateMachine.States;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
@@ -18,13 +19,13 @@ namespace MVC.Controllers
 
         private float _comboTimer;
 
-        public ComboInputController(PlayerModel playerModel, IStateMachineProxy stateMachineProxy,
-            ComboModelsContainer comboModelsContainer, ComboState comboState)
+        public ComboInputController(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
+            ComboState comboState)
         {
-            _comboModelsContainer = comboModelsContainer;
-            _comboState = comboState;
-            _playerModel = playerModel;
+            _playerModel = playerContainer.Model;
+            _comboModelsContainer = playerContainer.ComboModelsContainer;
             _stateMachineProxy = stateMachineProxy;
+            _comboState = comboState;
         }
 
         void IFixedTickable.FixedTick()

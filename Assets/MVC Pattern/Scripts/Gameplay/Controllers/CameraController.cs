@@ -18,7 +18,7 @@ namespace MVC.Gameplay.Controllers
         public CameraController(CameraView cameraView, FightSceneStorage storage)
         {
             _cameraView = cameraView;
-            _playerTransforms = storage.PlayerContainers.Select(p => p.PlayerView.transform).ToList();
+            _playerTransforms = storage.PlayerContainers.Select(p => p.View.transform).ToList();
         }
 
         void IInitializable.Initialize()
