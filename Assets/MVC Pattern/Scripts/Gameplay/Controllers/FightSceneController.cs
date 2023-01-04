@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Services;
 using MVC.Utils.Disposable;
 using MVC.Views;
@@ -60,14 +61,14 @@ namespace MVC.Gameplay.Controllers
 
         private void InitializePlayers()
         {
-            SetOpponentsForPlayers();
-
             foreach (var playerContainer in _storage.PlayerContainers)
             {
+                SetOpponentForPlayer(playerContainer);
+
                 var playerModel = playerContainer.Model;
                 var opponentModel = playerContainer.OpponentContainer.Model;
 
-                SetPlayerFaceOpponent(playerModel);
+                SetPlayerFaceOpponent(playerContainer);
 
                 playerModel.OnPlayerAttacked += OnPlayerAttacked;
                 playerModel.OnLose += opponentModel.ScoreWin;
@@ -76,19 +77,16 @@ namespace MVC.Gameplay.Controllers
             _fightSceneModel.OnPlayerSideCheck += SetPlayerFaceOpponent;
         }
 
-        private void SetOpponentsForPlayers()
+        private void SetOpponentForPlayer(PlayerContainer playerContainer)
         {
-            foreach (var playerContainer in _storage.PlayerContainers)
-            {
-                var opponentContainer = _storage.PlayerContainers.First(c => c != playerContainer);
+            var opponentContainer = _storage.PlayerContainers.First(c => c != playerContainer);
 
-                playerContainer.SetOpponent(opponentContainer);
-            }
+            playerContainer.SetOpponent(opponentContainer);
         }
 
-        private void SetPlayerFaceOpponent(PlayerModel playerModel)
+        private void SetPlayerFaceOpponent(PlayerContainer playerContainer)
         {
-            var playerContainer = _storage.PlayerContainers.First(p => p.Model == playerModel);
+            var playerModel = playerContainer.Model;
 
             var playerTransform = playerContainer.View.transform;
 

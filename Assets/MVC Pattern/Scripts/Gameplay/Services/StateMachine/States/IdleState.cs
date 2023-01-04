@@ -28,9 +28,9 @@ namespace MVC.StateMachine.States
 
             var animationData = PlayerContainer.AnimationData;
 
-            _jumpStateModel.JumpTweenVectorData =
+            _jumpStateModel.JumpTweenConfig =
                 animationData.GetTweenDataByDirection(animationData.JumpTweenData, DirectionType.Standing);
-            _fallStateModel.FallTweenVectorData =
+            _fallStateModel.FallTweenConfig =
                 animationData.GetTweenDataByDirection(animationData.FallTweenData, DirectionType.Standing);
         }
 

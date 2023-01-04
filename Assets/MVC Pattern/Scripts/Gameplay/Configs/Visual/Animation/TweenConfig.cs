@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace MVC.Configs.Animation
 {
-    [CreateAssetMenu(fileName = nameof(TweenVectorData), menuName = "Configs/Gameplay/" + nameof(TweenVectorData))]
-    public class TweenVectorData : ScriptableObject
+    [CreateAssetMenu(fileName = nameof(TweenConfig), menuName = "Configs/Gameplay/" + nameof(TweenConfig))]
+    public class TweenConfig : ScriptableObject
     {
         [SerializeField] private Vector3[] _vectors;
         [SerializeField] private Ease _ease;

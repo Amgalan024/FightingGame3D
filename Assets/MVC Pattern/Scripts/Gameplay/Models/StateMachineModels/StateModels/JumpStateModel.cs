@@ -8,7 +8,7 @@ namespace MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels
         public event Action OnJumpInterrupted;
         
         public int Direction { get; set; }
-        public TweenVectorData JumpTweenVectorData { get; set; }
+        public TweenConfig JumpTweenConfig { get; set; }
 
         public void InvokeJumpInterruption()
         {

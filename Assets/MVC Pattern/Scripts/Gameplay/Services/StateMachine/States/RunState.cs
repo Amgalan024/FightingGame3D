@@ -42,11 +42,11 @@ namespace MVC.StateMachine.States
             var playerView = PlayerContainer.View;
 
             _jumpStateModel.Direction = playerView.GetPlayerDirection();
-            _jumpStateModel.JumpTweenVectorData =
+            _jumpStateModel.JumpTweenConfig =
                 animationData.GetTweenDataByDirection(animationData.JumpTweenData, _runStateModel.DirectionType);
 
             _fallStateModel.Direction = playerView.GetPlayerDirection();
-            _fallStateModel.FallTweenVectorData =
+            _fallStateModel.FallTweenConfig =
                 animationData.GetTweenDataByDirection(animationData.FallTweenData, _runStateModel.DirectionType);
 
             _dashCts?.Cancel();

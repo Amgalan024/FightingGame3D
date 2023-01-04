@@ -43,7 +43,7 @@ namespace MVC.StateMachine.States
 
             _fallSubscription = PlayerContainer.Model.IsGrounded.Subscribe(OnPlayerFell);
 
-            PlayerContainer.View.FallAnimationAsync(_fallStateModel.FallTweenVectorData,
+            PlayerContainer.View.FallAnimationAsync(_fallStateModel.FallTweenConfig,
                 _fallStateModel.Direction,
                 _fallCts.Token).Forget();
         }

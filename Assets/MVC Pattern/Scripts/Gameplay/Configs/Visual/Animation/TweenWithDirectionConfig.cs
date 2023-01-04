@@ -5,12 +5,12 @@ using UnityEngine;
 namespace MVC.Configs.Animation
 {
     [Serializable]
-    public class DirectionTweenVector
+    public class TweenWithDirectionConfig
     {
         [SerializeField] private DirectionType _directionType;
-        [SerializeField] private TweenVectorData _tweenVectorData;
+        [SerializeField] private TweenConfig _tweenConfig;
 
         public DirectionType DirectionType => _directionType;
-        public TweenVectorData TweenVectorData => _tweenVectorData;
+        public TweenConfig TweenConfig => _tweenConfig;
     }
 }

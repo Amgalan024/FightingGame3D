@@ -79,7 +79,7 @@ namespace MVC.Views
             await MoveToIdleTween.AwaitForComplete(cancellationToken: token);
         }
 
-        public async UniTask JumpAnimationAsync(TweenVectorData tweenVectorData, int direction,
+        public async UniTask JumpAnimationAsync(TweenConfig tweenConfig, int direction,
             CancellationToken token)
         {
             if (JumpSequence.IsActive())
@@ -89,7 +89,7 @@ namespace MVC.Views
 
             JumpSequence = DOTween.Sequence();
 
-            foreach (var vector in tweenVectorData.Vectors)
+            foreach (var vector in tweenConfig.Vectors)
             {
                 var newVector = vector;
 
@@ -97,17 +97,17 @@ namespace MVC.Views
 
                 JumpSequence.Append(DOTween.To(() => _rigidbody.velocity,
                         newValue => _rigidbody.velocity = newValue, newVector, _toMoveDuration)
-                    .SetEase(tweenVectorData.Ease));
+                    .SetEase(tweenConfig.Ease));
             }
 
             await JumpSequence.AwaitForComplete(cancellationToken: token);
         }
 
-        public async UniTaskVoid FallAnimationAsync(TweenVectorData tweenVectorData, int direction,
+        public async UniTaskVoid FallAnimationAsync(TweenConfig tweenConfig, int direction,
             CancellationToken token)
         {
             FallSequence = DOTween.Sequence();
-            foreach (var vector in tweenVectorData.Vectors)
+            foreach (var vector in tweenConfig.Vectors)
             {
                 var newVector = vector;
 
@@ -115,16 +115,16 @@ namespace MVC.Views
 
                 FallSequence.Append(DOTween.To(() => _rigidbody.velocity,
                         newValue => _rigidbody.velocity = newValue, newVector, _toMoveDuration)
-                    .SetEase(tweenVectorData.Ease));
+                    .SetEase(tweenConfig.Ease));
             }
 
-            var lastFallVector = tweenVectorData.Vectors.Last();
+            var lastFallVector = tweenConfig.Vectors.Last();
 
             lastFallVector.x *= direction;
 
             var lastTween = DOTween.To(() => _rigidbody.velocity,
                     newValue => _rigidbody.velocity = newValue, lastFallVector, _toMoveDuration)
-                .SetEase(tweenVectorData.Ease).SetLoops(-1);
+                .SetEase(tweenConfig.Ease).SetLoops(-1);
 
             FallSequence.Append(lastTween);
 

@@ -23,6 +23,7 @@ namespace MVC.Controllers
         private readonly PlayerModel _playerModel;
         private readonly PlayerView _playerView;
         private readonly PlayerContainer _opponentContainer;
+        private readonly PlayerContainer _playerContainer;
         private readonly InputModelsContainer _inputModelsContainer;
 
         private readonly Transform _parent;
@@ -34,6 +35,7 @@ namespace MVC.Controllers
         public PlayerStatesController(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
             FightSceneModel fightSceneModel, LifetimeScope lifetimeScope, RunStateModel runStateModel)
         {
+            _playerContainer = playerContainer;
             _playerModel = playerContainer.Model;
             _playerView = playerContainer.View;
             _inputModelsContainer = playerContainer.InputModelsContainer;
@@ -136,7 +138,7 @@ namespace MVC.Controllers
         {
             if (collider.GetComponent<CollisionDetectorView>())
             {
-                _fightSceneModel.InvokePlayerSideCheck(_playerModel);
+                _fightSceneModel.InvokePlayerSideCheck(_playerContainer);
             }
         }
 
