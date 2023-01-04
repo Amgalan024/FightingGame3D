@@ -13,9 +13,8 @@ namespace MVC.StateMachine.States
         private readonly JumpStateModel _jumpStateModel;
         private readonly FallStateModel _fallStateModel;
 
-        public IdleState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage,
-            JumpStateModel jumpStateModel, FallStateModel fallStateModel) : base(stateModel,
-            playerView, storage)
+        public IdleState(StateModel stateModel, PlayerView playerView, JumpStateModel jumpStateModel,
+            FallStateModel fallStateModel) : base(stateModel, playerView)
         {
             _jumpStateModel = jumpStateModel;
             _fallStateModel = fallStateModel;
@@ -27,7 +26,7 @@ namespace MVC.StateMachine.States
 
             StateModel.InputActionModelsContainer.SetAllInputActionModels(true);
 
-            var animationData = StateModel.CharacterConfig.PlayerAnimationData;
+            var animationData = StateModel.PlayerAnimationData;
 
             _jumpStateModel.JumpTweenVectorData =
                 animationData.GetTweenDataByDirection(animationData.JumpTweenData, DirectionType.Standing);

@@ -7,8 +7,7 @@ namespace MVC.StateMachine.States
 {
     public class PunchState : CommonStates.AttackState
     {
-        public PunchState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
-            playerView, storage)
+        public PunchState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
         {
         }
 

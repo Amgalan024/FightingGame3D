@@ -10,8 +10,6 @@ namespace MVC.StateMachine.States
     {
         public event Action OnStateEntered;
         public event Action OnStateExited;
-        public StateModel StateModel { get; }
-        public PlayerView PlayerView { get; }
 
         abstract void Enter();
         abstract void Exit();

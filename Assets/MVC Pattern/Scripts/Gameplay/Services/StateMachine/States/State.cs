@@ -1,5 +1,6 @@
 ﻿using System;
 using MVC.Gameplay.Models;
+using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Services;
 using MVC.Utils.Disposable;
 using MVC.Views;
@@ -11,17 +12,16 @@ namespace MVC.StateMachine.States
     {
         public event Action OnStateEntered;
         public event Action OnStateExited;
-        public StateModel StateModel { get; }
-        public PlayerView PlayerView { get; }
-        public FightSceneStorage Storage { get; }
+
+        protected StateModel StateModel { get; }
+        protected PlayerView PlayerView { get; }
 
         private bool _debugEnabled = true;
 
-        public State(StateModel stateModel, PlayerView playerView, FightSceneStorage storage)
+        public State(StateModel stateModel, PlayerView playerView)
         {
             StateModel = stateModel;
             PlayerView = playerView;
-            Storage = storage;
         }
 
         public virtual void Enter()
@@ -47,7 +47,7 @@ namespace MVC.StateMachine.States
         protected void HandleBlock(Collider collider)
         {
             if (collider.TryGetComponent(out TriggerDetectorView attackHitBox) &&
-                attackHitBox == Storage.GetOpponentAttackViewByModel(StateModel.PlayerAttackModel))
+                attackHitBox == StateModel.OpponentContainer.PlayerAttackHitBox)
             {
                 if (StateModel.PlayerModel.IsBlocking)
                 {

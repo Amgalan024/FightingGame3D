@@ -1,4 +1,5 @@
-﻿using MVC.Configs;
+﻿using System.Linq;
+using MVC.Configs;
 using MVC.Gameplay.Models.Player;
 using MVC.Menu.Models;
 using UnityEngine;
@@ -53,7 +54,21 @@ namespace MVC.Gameplay.Services
 
                 var playerAttackModel = new PlayerAttackModel();
 
-                _storage.PlayerAttackModelsByView.Add(playerView.AttackHitBoxView, playerAttackModel);
+                _storage.AttackModelsByPlayer.Add(playerModel, playerAttackModel);
+                _storage.AttackModelsByView.Add(playerView.AttackHitBoxView, playerAttackModel);
+
+                //
+                var playerContainer = new PlayerContainer(playerModel, playerView, playerAttackModel,
+                    playerView.AttackHitBoxView);
+
+                _storage.PlayerContainers.Add(playerContainer);
+                //
+            }
+
+            foreach (var playerContainer in _storage.PlayerContainers)
+            {
+                var opponentContainer = _storage.PlayerContainers.FirstOrDefault(c => c != playerContainer);
+                _storage.OpponentContainerByPlayer.Add(playerContainer, opponentContainer);
             }
         }
     }

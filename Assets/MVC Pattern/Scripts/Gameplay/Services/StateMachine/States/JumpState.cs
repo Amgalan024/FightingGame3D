@@ -15,8 +15,8 @@ namespace MVC.StateMachine.States
 
         private CancellationTokenSource _jumpCts;
 
-        public JumpState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage,
-            JumpStateModel jumpStateModel) : base(stateModel, playerView, storage)
+        public JumpState(StateModel stateModel, PlayerView playerView, JumpStateModel jumpStateModel) : base(stateModel,
+            playerView)
         {
             _jumpStateModel = jumpStateModel;
         }
@@ -47,7 +47,7 @@ namespace MVC.StateMachine.States
                 StateModel.InputActionModelsContainer.SetJumpInputActionsFilter(true);
             }
 
-            if (!StateModel.StateMachineModel.ComparePreviousStateTypeEquality(typeof(CommonStates.AttackState)))
+            if (!StateModel.StateMachineModel.CheckPreviousStateType<CommonStates.AttackState>())
             {
                 StateModel.PlayerModel.CurrentJumpCount++;
 
@@ -62,7 +62,7 @@ namespace MVC.StateMachine.States
         {
             HandleBlock(collider);
 
-            var opponentPlayerView = Storage.GetOpponentViewByModel(StateModel.PlayerModel);
+            var opponentPlayerView = StateModel.OpponentContainer.PlayerView;
 
             var overlappedColliders = Physics.OverlapBox(PlayerView.MainTriggerDetector.TopCollider.center,
                     PlayerView.MainTriggerDetector.TopCollider.size)

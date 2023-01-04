@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-class PlayerAttackHitBox : MonoBehaviour, IPlayerComponent
+public class PlayerAttackHitBox : MonoBehaviour, IPlayerComponent
 {
     public int Damage { private set; get; }
 

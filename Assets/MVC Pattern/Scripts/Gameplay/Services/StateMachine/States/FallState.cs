@@ -20,8 +20,8 @@ namespace MVC.StateMachine.States
 
         private CancellationTokenSource _fallCts;
 
-        public FallState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage,
-            FallStateModel fallStateModel) : base(stateModel, playerView, storage)
+        public FallState(StateModel stateModel, PlayerView playerView, FallStateModel fallStateModel) : base(stateModel,
+            playerView)
         {
             _fallStateModel = fallStateModel;
         }
@@ -48,7 +48,7 @@ namespace MVC.StateMachine.States
         {
             base.Exit();
 
-            var opponentPlayerView = Storage.GetOpponentViewByModel(StateModel.PlayerModel);
+            var opponentPlayerView = StateModel.OpponentContainer.PlayerView;
 
             Physics.IgnoreCollision(PlayerView.CollisionDetector.Collider,
                 opponentPlayerView.CollisionDetector.Collider, false);
@@ -63,7 +63,7 @@ namespace MVC.StateMachine.States
         {
             HandleBlock(collider);
 
-            var opponentPlayerView = Storage.GetOpponentViewByModel(StateModel.PlayerModel);
+            var opponentPlayerView = StateModel.OpponentContainer.PlayerView;
 
             var overlappedColliders = Physics.OverlapBox(
                 PlayerView.MainTriggerDetector.BottomCollider.transform.position,

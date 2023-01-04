@@ -6,7 +6,7 @@ namespace MVC.StateMachine.States
 {
     public class DashBackwardState : State
     {
-        public DashBackwardState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel, playerView, storage)
+        public DashBackwardState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
         {
         }
 

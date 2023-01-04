@@ -3,15 +3,19 @@ using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using MVC.Views;
+using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
     public class DashForwardState : State, IFixedTickState
     {
-        public DashForwardState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(
-            stateModel, playerView, storage)
+        private RunStateModel _runStateModel;
+
+        public DashForwardState(StateModel stateModel, PlayerView playerView, RunStateModel runStateModel) : base(
+            stateModel, playerView)
         {
+            _runStateModel = runStateModel;
         }
 
         public override void Enter()
@@ -35,7 +39,7 @@ namespace MVC.StateMachine.States
 
         void IFixedTickState.OnFixedTick()
         {
-            if (!Input.GetKey(StateModel.InputModelsContainer.MoveForward.Key))
+            if (!Input.GetKey(_runStateModel.InputKey))
             {
                 PlayerView.Rigidbody.velocity = Vector3.zero;
 

@@ -8,8 +8,7 @@ namespace MVC.StateMachine.States
 {
     public class LoseState : State
     {
-        public LoseState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
-            playerView, storage)
+        public LoseState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
         {
         }
 

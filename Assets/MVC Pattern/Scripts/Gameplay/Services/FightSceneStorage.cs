@@ -11,6 +11,11 @@ namespace MVC.Gameplay.Services
     {
         public FightLocationView FightLocationView { get; set; }
 
+        public List<PlayerContainer> PlayerContainers = new List<PlayerContainer>();
+
+        public Dictionary<PlayerContainer, PlayerContainer> OpponentContainerByPlayer { get; } =
+            new Dictionary<PlayerContainer, PlayerContainer>(2);
+
         public List<PlayerView> PlayerViews { get; } = new List<PlayerView>(2);
 
         public List<PlayerModel> PlayerModels { get; } = new List<PlayerModel>(2);
@@ -24,7 +29,10 @@ namespace MVC.Gameplay.Services
         public Dictionary<PlayerView, PlayerModel> PlayerModelsByView { get; } =
             new Dictionary<PlayerView, PlayerModel>(2);
 
-        public Dictionary<TriggerDetectorView, PlayerAttackModel> PlayerAttackModelsByView { get; } =
+        public Dictionary<PlayerModel, PlayerAttackModel> AttackModelsByPlayer { get; } =
+            new Dictionary<PlayerModel, PlayerAttackModel>(2);
+
+        public Dictionary<TriggerDetectorView, PlayerAttackModel> AttackModelsByView { get; } =
             new Dictionary<TriggerDetectorView, PlayerAttackModel>(2);
 
         public PlayerView GetOpponentViewByModel(PlayerModel playerModel)
@@ -32,14 +40,16 @@ namespace MVC.Gameplay.Services
             return PlayerViewsByModel.FirstOrDefault(p => p.Key != playerModel).Value;
         }
 
-        public PlayerModel GetOpponentModelByModel(PlayerModel playerModel)
+        public PlayerModel GetOpponentModel(PlayerModel playerModel)
         {
             return PlayerViewsByModel.FirstOrDefault(p => p.Key != playerModel).Key;
         }
 
-        public TriggerDetectorView GetOpponentAttackViewByModel(PlayerAttackModel playerAttackModel)
+        public TriggerDetectorView GetAttackViewByModel(PlayerModel playerModel)
         {
-            return PlayerAttackModelsByView.FirstOrDefault(p => p.Value != playerAttackModel).Key;
+            var playerAttackModel = AttackModelsByPlayer.FirstOrDefault(a => a.Key != playerModel).Value;
+
+            return AttackModelsByView.FirstOrDefault(p => p.Value != playerAttackModel).Key;
         }
     }
 }

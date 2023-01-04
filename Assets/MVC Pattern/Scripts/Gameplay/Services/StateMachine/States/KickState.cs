@@ -8,8 +8,7 @@ namespace MVC.StateMachine.States
 {
     public class KickState : CommonStates.AttackState
     {
-        public KickState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
-            playerView, storage)
+        public KickState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
         {
         }
 

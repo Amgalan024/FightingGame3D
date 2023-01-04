@@ -10,8 +10,7 @@ namespace MVC.StateMachine.States
 {
     public class StunnedState : State
     {
-        public StunnedState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
-            playerView, storage)
+        public StunnedState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
         {
         }
 

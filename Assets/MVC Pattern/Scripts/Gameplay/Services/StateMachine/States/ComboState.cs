@@ -9,8 +9,7 @@ namespace MVC.StateMachine.States
         public string Name { set; get; }
         public int Damage { set; get; }
 
-        public ComboState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
-            playerView, storage)
+        public ComboState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
         {
         }
 

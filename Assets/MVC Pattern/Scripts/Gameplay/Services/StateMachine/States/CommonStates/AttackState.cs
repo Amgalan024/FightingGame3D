@@ -11,8 +11,7 @@ namespace MVC.StateMachine.States.CommonStates
     {
         private IDisposable _exitStateSubscription;
 
-        public AttackState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
-            playerView, storage)
+        public AttackState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
         {
         }
 

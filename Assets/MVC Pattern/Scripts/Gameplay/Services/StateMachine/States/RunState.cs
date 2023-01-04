@@ -18,9 +18,8 @@ namespace MVC.StateMachine.States
 
         private CancellationTokenSource _dashCts;
 
-        public RunState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage,
-            RunStateModel runStateModel, JumpStateModel jumpStateModel, FallStateModel fallStateModel) : base(
-            stateModel, playerView, storage)
+        public RunState(StateModel stateModel, PlayerView playerView, RunStateModel runStateModel,
+            JumpStateModel jumpStateModel, FallStateModel fallStateModel) : base(stateModel, playerView)
         {
             _runStateModel = runStateModel;
             _jumpStateModel = jumpStateModel;
@@ -31,7 +30,7 @@ namespace MVC.StateMachine.States
         {
             base.Enter();
 
-            var animationData = StateModel.CharacterConfig.PlayerAnimationData;
+            var animationData = StateModel.PlayerAnimationData;
 
             _jumpStateModel.Direction = PlayerView.GetPlayerDirection();
             _jumpStateModel.JumpTweenVectorData =

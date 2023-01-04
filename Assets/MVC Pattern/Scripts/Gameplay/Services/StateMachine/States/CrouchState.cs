@@ -10,8 +10,8 @@ namespace MVC.StateMachine.States
     {
         private readonly InputModelsContainer _inputs;
 
-        public CrouchState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage,
-            InputModelsContainer inputs) : base(stateModel, playerView, storage)
+        public CrouchState(StateModel stateModel, PlayerView playerView, InputModelsContainer inputs) : base(stateModel,
+            playerView)
         {
             _inputs = inputs;
         }

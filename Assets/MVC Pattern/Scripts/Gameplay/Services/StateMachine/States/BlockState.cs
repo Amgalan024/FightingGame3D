@@ -8,8 +8,7 @@ namespace MVC.StateMachine.States
 {
     public class BlockState : State, ITriggerExitState
     {
-        public BlockState(StateModel stateModel, PlayerView playerView, FightSceneStorage storage) : base(stateModel,
-            playerView, storage)
+        public BlockState(StateModel stateModel, PlayerView playerView) : base(stateModel, playerView)
         {
         }
 
@@ -35,7 +34,7 @@ namespace MVC.StateMachine.States
         private void ExitBlockState(Collider collider)
         {
             if (collider.GetComponent<TriggerDetectorView>() ==
-                Storage.GetOpponentAttackViewByModel(StateModel.PlayerAttackModel))
+                StateModel.OpponentContainer.PlayerAttackHitBox)
             {
                 if (PlayerView.Animator.GetBool(PlayerAnimatorData.IsCrouching))
                 {
