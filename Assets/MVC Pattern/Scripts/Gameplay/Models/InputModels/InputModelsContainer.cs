@@ -23,12 +23,12 @@ namespace MVC.Models
                 InputModels.Add(inputModel.GetCopy());
             }
 
-            MoveForward = GetControlModelByControlName(ControlNames.MoveForward);
-            MoveBackward = GetControlModelByControlName(ControlNames.MoveBackward);
-            Jump = GetControlModelByControlName(ControlNames.Jump);
-            Crouch = GetControlModelByControlName(ControlNames.Crouch);
-            Punch = GetControlModelByControlName(ControlNames.Punch);
-            Kick = GetControlModelByControlName(ControlNames.Kick);
+            MoveForward = GetControlModel(ControlNames.MoveForward);
+            MoveBackward = GetControlModel(ControlNames.MoveBackward);
+            Jump = GetControlModel(ControlNames.Jump);
+            Crouch = GetControlModel(ControlNames.Crouch);
+            Punch = GetControlModel(ControlNames.Punch);
+            Kick = GetControlModel(ControlNames.Kick);
         }
 
         public void SwitchMovementControllers()
@@ -40,7 +40,7 @@ namespace MVC.Models
             MoveBackward.Key = forwardKey;
         }
 
-        private InputModel GetControlModelByControlName(ControlNames controlName)
+        private InputModel GetControlModel(ControlNames controlName)
         {
             return InputModels.First(x => x.Name == controlName);
         }

@@ -9,6 +9,7 @@ using MVC.Models;
 using MVC.StateMachine.States;
 using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -16,7 +17,7 @@ namespace MVC.Controllers
 {
     public class PlayerStatesController : IInitializable, IDisposable
     {
-        private readonly StateMachineProxy _stateMachineProxy;
+        private readonly IStateMachineProxy _stateMachineProxy;
         private readonly InputActionModelsContainer _inputActionModelsContainer;
         private readonly FightSceneModel _fightSceneModel;
         private readonly PlayerModel _playerModel;
@@ -30,7 +31,7 @@ namespace MVC.Controllers
         private readonly RunStateModel _runStateModel;
 
         public PlayerStatesController(InputActionModelsContainer inputActionModelsContainer, PlayerModel playerModel,
-            PlayerView playerView, StateMachineProxy stateMachineProxy, FightSceneModel fightSceneModel,
+            PlayerView playerView, IStateMachineProxy stateMachineProxy, FightSceneModel fightSceneModel,
             LifetimeScope lifetimeScope, RunStateModel runStateModel, InputModelsContainer inputModelsContainer)
         {
             _playerModel = playerModel;
@@ -45,6 +46,8 @@ namespace MVC.Controllers
 
         void IInitializable.Initialize()
         {
+            _playerView.SetParent(_parent);
+
             _stateMachineProxy.ChangeState<IdleState>();
 
             HandleInputEvents();
@@ -83,8 +86,6 @@ namespace MVC.Controllers
 
         private void HandlePlayerEvents()
         {
-            _playerView.SetParent(_parent);
-
             _playerView.OnAttackAnimationEnded += OnAttackAnimationEnded;
 
             _playerView.CollisionDetector.OnCollisionEntered += OnCollisionEntered;
@@ -139,7 +140,6 @@ namespace MVC.Controllers
             _playerModel.IsAttacking.Value = false;
         }
 
-
         private void OnCollisionExit(Collision collision)
         {
             if (collision.gameObject.GetComponent<PlatformView>())
@@ -159,7 +159,7 @@ namespace MVC.Controllers
         private void OnMoveForwardInput()
         {
             _runStateModel.SetData(_inputModelsContainer.MoveForward.Key, DirectionType.Forward,
-                PlayerAnimatorData.Forward, typeof(DashForwardState));
+                PlayerAnimatorData.Forward);
 
             _stateMachineProxy.ChangeState<RunState>();
         }
@@ -167,7 +167,7 @@ namespace MVC.Controllers
         private void OnMoveBackwardInput()
         {
             _runStateModel.SetData(_inputModelsContainer.MoveBackward.Key, DirectionType.Backward,
-                PlayerAnimatorData.Backward, typeof(DashBackwardState));
+                PlayerAnimatorData.Backward);
 
             _stateMachineProxy.ChangeState<RunState>();
         }

@@ -1,21 +1,20 @@
-﻿using System;
-using MVC.StateMachine.States;
+﻿using MVC.StateMachine.States;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.Gameplay.Models.StateMachineModels
 {
-    public class StateMachineProxy : IStateMachine
+    public class StateMachineProxy : IStateMachineProxy
     {
-        public event Action<Type> OnStateChanged;
+        private IStateMachine _stateMachine;
+
+        public void SetStateMachine(IStateMachine stateMachine)
+        {
+            _stateMachine = stateMachine;
+        }
 
         public void ChangeState<T>() where T : IState
         {
-            OnStateChanged?.Invoke(typeof(T));
-        }
-
-        public void ChangeState(Type type)
-        {
-            OnStateChanged?.Invoke(type);
+            _stateMachine.ChangeState<T>();
         }
     }
 }

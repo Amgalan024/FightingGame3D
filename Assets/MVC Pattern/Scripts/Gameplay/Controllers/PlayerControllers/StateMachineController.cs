@@ -1,7 +1,7 @@
 ﻿using System;
 using MVC.Gameplay.Models;
-using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Views;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -9,14 +9,14 @@ namespace MVC.Controllers
 {
     public class StateMachineController : IInitializable, IFixedTickable, IDisposable
     {
-        private readonly StateMachine.StateMachine _stateMachine;
-        private readonly StateMachineProxy _stateMachineProxy;
+        private readonly IStateMachine _stateMachine;
+        private readonly IStateMachineProxy _stateMachineProxy;
         private readonly StateMachineModel _stateMachineModel;
 
         private readonly PlayerView _playerView;
 
-        public StateMachineController(StateMachineModel stateMachineModel, StateMachine.StateMachine stateMachine,
-            PlayerView playerView, StateMachineProxy stateMachineProxy)
+        public StateMachineController(StateMachineModel stateMachineModel, IStateMachine stateMachine,
+            PlayerView playerView, IStateMachineProxy stateMachineProxy)
         {
             _stateMachineModel = stateMachineModel;
             _stateMachine = stateMachine;
@@ -29,7 +29,7 @@ namespace MVC.Controllers
             _playerView.MainTriggerDetector.OnTriggerEntered += OnTriggerEntered;
             _playerView.MainTriggerDetector.OnTriggerExited += OnTriggerExited;
 
-            _stateMachineProxy.OnStateChanged += _stateMachine.ChangeState;
+            _stateMachineProxy.SetStateMachine(_stateMachine);
         }
 
         void IFixedTickable.FixedTick()
@@ -41,8 +41,6 @@ namespace MVC.Controllers
         {
             _playerView.MainTriggerDetector.OnTriggerEntered -= OnTriggerEntered;
             _playerView.MainTriggerDetector.OnTriggerExited -= OnTriggerExited;
-
-            _stateMachineProxy.OnStateChanged -= _stateMachine.ChangeState;
         }
 
         private void OnTriggerEntered(Collider collider)

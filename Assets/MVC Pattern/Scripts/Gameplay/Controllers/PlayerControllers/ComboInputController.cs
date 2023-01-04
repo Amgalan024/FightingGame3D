@@ -1,5 +1,6 @@
 ﻿using MVC.Models;
 using MVC.StateMachine.States;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -7,7 +8,7 @@ namespace MVC.Controllers
 {
     public class ComboInputController : IFixedTickable
     {
-        private readonly StateMachine.StateMachine _stateMachine;
+        private readonly IStateMachineProxy _stateMachineProxy;
 
         private readonly ComboState _comboState;
 
@@ -17,13 +18,13 @@ namespace MVC.Controllers
 
         private float _comboTimer;
 
-        public ComboInputController(PlayerModel playerModel, StateMachine.StateMachine stateMachine,
+        public ComboInputController(PlayerModel playerModel, IStateMachineProxy stateMachineProxy,
             ComboModelsContainer comboModelsContainer, ComboState comboState)
         {
             _comboModelsContainer = comboModelsContainer;
             _comboState = comboState;
             _playerModel = playerModel;
-            _stateMachine = stateMachine;
+            _stateMachineProxy = stateMachineProxy;
         }
 
         void IFixedTickable.FixedTick()
@@ -69,7 +70,7 @@ namespace MVC.Controllers
                 _comboState.Name = comboModel.Name;
                 _comboState.Damage = comboModel.Damage;
 
-                _stateMachine.ChangeState<ComboState>();
+                _stateMachineProxy.ChangeState<ComboState>();
             }
         }
 

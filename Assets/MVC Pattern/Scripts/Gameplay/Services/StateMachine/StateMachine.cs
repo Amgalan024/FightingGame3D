@@ -1,5 +1,4 @@
-﻿using System;
-using MVC.Gameplay.Models;
+﻿using MVC.Gameplay.Models;
 using MVC.Models;
 using MVC.StateMachine.States;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
@@ -15,13 +14,6 @@ namespace MVC.StateMachine
         {
             _stateMachineModel = stateMachineModel;
             _statesContainer = statesContainer;
-        }
-
-        public void ChangeState(Type type)
-        {
-            var newState = _statesContainer.GetStateByType(type);
-
-            ChangeState(newState);
         }
 
         public void ChangeState<T>() where T : IState

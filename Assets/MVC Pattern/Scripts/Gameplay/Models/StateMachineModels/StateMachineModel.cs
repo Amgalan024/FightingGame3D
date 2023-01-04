@@ -1,5 +1,4 @@
-﻿using System;
-using MVC.StateMachine.States;
+﻿using MVC.StateMachine.States;
 
 namespace MVC.Gameplay.Models
 {
@@ -17,11 +16,11 @@ namespace MVC.Gameplay.Models
             ExtractStateInterfaces(CurrentState);
         }
 
-        public bool ComparePreviousStateTypeEquality(Type stateType)
+        public bool CheckPreviousStateType<T>() where T : IState
         {
             var memberInfo = PreviousState.GetType();
 
-            if (memberInfo.IsEquivalentTo(stateType))
+            if (memberInfo.IsEquivalentTo(typeof(T)))
             {
                 return true;
             }
