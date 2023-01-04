@@ -5,7 +5,6 @@ using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Models;
 using MVC.StateMachine.States;
-using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using VContainer;
 using VContainer.Unity;
@@ -15,35 +14,24 @@ namespace MVC.Gameplay.Services
     public class PlayerLifetimeScopeFactory
     {
         private readonly LifetimeScope _gameplayLifeTimeScope;
-        private readonly FightSceneStorage _storage;
 
-        public PlayerLifetimeScopeFactory(LifetimeScope gameplayLifeTimeScope, FightSceneStorage storage)
+        public PlayerLifetimeScopeFactory(LifetimeScope gameplayLifeTimeScope)
         {
             _gameplayLifeTimeScope = gameplayLifeTimeScope;
-            _storage = storage;
         }
 
-        public LifetimeScope CreatePlayerLifetimeScope(PlayerModel playerModel, PlayerView playerView,
-            PlayerInputConfig playerInputConfig, CharacterConfig characterConfig)
+        public LifetimeScope CreatePlayerLifetimeScope(PlayerContainer playerContainer,
+            PlayerInputConfig inputConfig)
         {
-            var opponentModel = _storage.GetOpponentModel(playerModel);
-            var opponentView = _storage.PlayerViewsByModel[opponentModel];
-            var opponentAttackModel = _storage.AttackModelsByPlayer[opponentModel];
-            var opponentAttackView = _storage.GetAttackViewByModel(opponentModel);
-
-            var opponentContainer =
-                new PlayerContainer(opponentModel, opponentView, opponentAttackModel, opponentAttackView);
-
             var scope = _gameplayLifeTimeScope.CreateChild(builder =>
             {
-                builder.RegisterInstance(playerModel);
-                builder.RegisterInstance(playerView);
-                builder.RegisterInstance(playerInputConfig.InputModels);
-                builder.RegisterInstance(characterConfig);
-                var playerAttackModel = _storage.AttackModelsByPlayer[playerModel];
-                builder.RegisterInstance(playerAttackModel);
+                builder.RegisterInstance(playerContainer.PlayerModel);
+                builder.RegisterInstance(playerContainer.PlayerView);
+                builder.RegisterInstance(inputConfig.InputModels);
+                builder.RegisterInstance(playerContainer.CharacterConfig);
+                builder.RegisterInstance(playerContainer.PlayerAttackModel);
 
-                builder.RegisterInstance(opponentContainer);
+                builder.RegisterInstance(playerContainer);
 
                 builder.Register<StateModel>(Lifetime.Scoped);
                 builder.Register<StatesContainer>(Lifetime.Scoped);

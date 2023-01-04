@@ -2,6 +2,7 @@
 using MVC.Configs;
 using MVC.Gameplay.Models.Player;
 using MVC.Menu.Models;
+using MVC.Models;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -12,6 +13,7 @@ namespace MVC.Gameplay.Services
         private readonly GameplayVisualConfig _visualConfig;
         private readonly FightSceneStorage _storage;
         private readonly SelectedCharactersContainer _charactersContainer;
+        private readonly PlayerInputConfig[] _inputConfigs;
 
         private readonly Transform _parent;
 
@@ -45,29 +47,27 @@ namespace MVC.Gameplay.Services
 
                 var characterConfig = _charactersContainer.PlayerConfigs[i];
 
-                _storage.PlayerModels.Add(playerModel);
-                _storage.PlayerViews.Add(playerView);
+                var inputModelsContainer = new InputModelsContainer(_inputConfigs[i].InputModels);
 
-                _storage.PlayerModelsByView.Add(playerView, playerModel);
-                _storage.PlayerViewsByModel.Add(playerModel, playerView);
-                _storage.CharacterConfigsByModel.Add(playerModel, characterConfig);
+                var inputActionModelsContainer = new InputActionModelsContainer();
+
+                var comboModelsContainer = new ComboModelsContainer(characterConfig, inputModelsContainer);
 
                 var playerAttackModel = new PlayerAttackModel();
 
-                _storage.AttackModelsByPlayer.Add(playerModel, playerAttackModel);
-                _storage.AttackModelsByView.Add(playerView.AttackHitBoxView, playerAttackModel);
-
-                //
                 var playerContainer = new PlayerContainer(playerModel, playerView, playerAttackModel,
-                    playerView.AttackHitBoxView);
+                    playerView.AttackHitBoxView, characterConfig, inputModelsContainer, inputActionModelsContainer,
+                    comboModelsContainer);
 
                 _storage.PlayerContainers.Add(playerContainer);
-                //
+
+                _storage.AttackModelsByView.Add(playerView.AttackHitBoxView, playerAttackModel);
             }
 
             foreach (var playerContainer in _storage.PlayerContainers)
             {
                 var opponentContainer = _storage.PlayerContainers.FirstOrDefault(c => c != playerContainer);
+
                 _storage.OpponentContainerByPlayer.Add(playerContainer, opponentContainer);
             }
         }

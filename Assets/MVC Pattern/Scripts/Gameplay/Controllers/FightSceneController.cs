@@ -7,7 +7,6 @@ using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using MVC.Utils.Disposable;
 using MVC.Views;
-using UnityEngine;
 using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
@@ -39,13 +38,10 @@ namespace MVC.Gameplay.Controllers
 
             int playerIndex = 0;
 
-            foreach (var modelView in _storage.PlayerModelsByView)
+            foreach (var playerContainer in _storage.PlayerContainers)
             {
-                var characterConfig = _storage.CharacterConfigsByModel[modelView.Value];
-
                 var playerLifetimeScope =
-                    _playerLifetimeScopeFactory.CreatePlayerLifetimeScope(modelView.Value, modelView.Key,
-                        _inputConfigs[playerIndex], characterConfig);
+                    _playerLifetimeScopeFactory.CreatePlayerLifetimeScope(playerContainer, _inputConfigs[playerIndex]);
 
                 _fightSceneModel.PlayerLifetimeScopes.Add(playerLifetimeScope);
                 playerIndex++;
@@ -53,41 +49,59 @@ namespace MVC.Gameplay.Controllers
 
             await UniTask.DelayFrame(1, cancellationToken: token);
 
-            _storage.PlayerModels.ForEach(SetPlayerFaceToFace);
-
-            _fightSceneModel.OnPlayerSideCheck += SetPlayerFaceToFace;
-
-            _storage.PlayerModels[0].OnPlayerAttacked += OnPlayerAttacked;
-            _storage.PlayerModels[1].OnPlayerAttacked += OnPlayerAttacked;
-
-            _storage.PlayerModels[0].OnLose += _storage.PlayerModels[1].ScoreWin;
-            _storage.PlayerModels[1].OnLose += _storage.PlayerModels[0].ScoreWin;
+            InitializePlayers();
         }
 
         void IDisposable.Dispose()
         {
-            _fightSceneModel.OnPlayerSideCheck -= SetPlayerFaceToFace;
+            foreach (var playerContainer in _storage.PlayerContainers)
+            {
+                var playerModel = playerContainer.PlayerModel;
+                var opponentModel = _storage.OpponentContainerByPlayer[playerContainer].PlayerModel;
 
-            _storage.PlayerModels[0].OnPlayerAttacked -= OnPlayerAttacked;
-            _storage.PlayerModels[1].OnPlayerAttacked -= OnPlayerAttacked;
+                playerModel.OnPlayerAttacked -= OnPlayerAttacked;
+                playerModel.OnLose -= opponentModel.ScoreWin;
+            }
 
-            _storage.PlayerModels[0].OnLose -= _storage.PlayerModels[1].ScoreWin;
-            _storage.PlayerModels[1].OnLose -= _storage.PlayerModels[0].ScoreWin;
+            _fightSceneModel.OnPlayerSideCheck -= SetPlayerFaceOpponent;
         }
 
-        private void SetPlayerFaceToFace(PlayerModel playerModel)
+        private void InitializePlayers()
         {
-            var playerTransform = _storage.PlayerViewsByModel[playerModel].transform;
+            SetOpponentsForPlayers();
 
-            var opponentModel = _storage.PlayerModels.First(p => !p.Equals(playerModel));
+            foreach (var playerContainer in _storage.PlayerContainers)
+            {
+                var playerModel = playerContainer.PlayerModel;
+                var opponentModel = _storage.OpponentContainerByPlayer[playerContainer].PlayerModel;
 
-            var opponentTransform = _storage.PlayerViewsByModel[opponentModel].transform;
-            SetPlayerFaceOpponent(playerModel, playerTransform, opponentTransform);
+                SetPlayerFaceOpponent(playerModel);
+
+                playerModel.OnPlayerAttacked += OnPlayerAttacked;
+                playerModel.OnLose += opponentModel.ScoreWin;
+            }
+
+            _fightSceneModel.OnPlayerSideCheck += SetPlayerFaceOpponent;
         }
 
-        private void SetPlayerFaceOpponent(PlayerModel playerModel, Transform playerTransform,
-            Transform opponentTransform)
+        private void SetOpponentsForPlayers()
         {
+            foreach (var playerContainer in _storage.PlayerContainers)
+            {
+                var opponentContainer = _storage.PlayerContainers.First(c => c != playerContainer);
+
+                _storage.OpponentContainerByPlayer.Add(playerContainer, opponentContainer);
+            }
+        }
+
+        private void SetPlayerFaceOpponent(PlayerModel playerModel)
+        {
+            var playerContainer = _storage.PlayerContainers.First(p => p.PlayerModel == playerModel);
+
+            var playerTransform = playerContainer.PlayerView.transform;
+
+            var opponentTransform = _storage.OpponentContainerByPlayer[playerContainer].PlayerView.transform;
+
             if (playerModel.AtLeftSide && playerTransform.position.x > opponentTransform.position.x)
             {
                 playerModel.TurnPlayer();
