@@ -1,6 +1,7 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 using MVC.Configs;
+using MVC.Gameplay.Models.Player;
 using MVC.Views;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ public class PlayerModel
     public int MaxHealthPoints { get; }
     public int MaxEnergyPoints { get; }
     public float MaxMovementSpeed { get; }
-    public float JumpForce {  get; }
+    public float JumpForce { get; }
     public float MovementSpeed { set; get; }
     public int HealthPoints { private set; get; }
     public int EnergyPoints { private set; get; }
@@ -36,6 +37,7 @@ public class PlayerModel
 
     public int CurrentJumpCount { set; get; }
 
+    public SidePlacementType CurrentSidePlacement { get; private set; } = SidePlacementType.AtLeftSide;
     public bool AtLeftSide { set; get; } = true;
 
     public int Turn { get; set; }
@@ -96,6 +98,16 @@ public class PlayerModel
 
     public void TurnPlayer()
     {
+        switch (CurrentSidePlacement)
+        {
+            case SidePlacementType.AtLeftSide:
+                CurrentSidePlacement = SidePlacementType.AtRightSide;
+                break;
+            case SidePlacementType.AtRightSide:
+                CurrentSidePlacement = SidePlacementType.AtLeftSide;
+                break;
+        }
+
         OnPlayerTurned?.Invoke();
     }
 

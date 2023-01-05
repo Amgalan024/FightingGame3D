@@ -60,6 +60,13 @@ namespace MVC.Views
             return (int) transform.localScale.z;
         }
 
+        public void TurnPlayer(int direction)
+        {
+            var scale = transform.localScale;
+            scale.z = direction;
+            transform.localScale = scale;
+        }
+
         public async UniTask IdleToMoveAnimationAsync(int moveHash, CancellationToken token)
         {
             await UniTask.WaitUntil(() => !MoveToIdleTween.IsActive(), cancellationToken: token);

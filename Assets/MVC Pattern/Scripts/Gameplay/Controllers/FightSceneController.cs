@@ -7,6 +7,7 @@ using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Services;
 using MVC.Utils.Disposable;
 using MVC.Views;
+using UnityEngine;
 using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
@@ -56,7 +57,7 @@ namespace MVC.Gameplay.Controllers
                 playerModel.OnLose -= opponentModel.ScoreWin;
             }
 
-            _fightSceneModel.OnPlayerSideCheck -= SetPlayerFaceOpponent;
+            _fightSceneModel.OnPlayerSideCheck -= TurnPlayers;
         }
 
         private void InitializePlayers()
@@ -68,13 +69,13 @@ namespace MVC.Gameplay.Controllers
                 var playerModel = playerContainer.Model;
                 var opponentModel = playerContainer.OpponentContainer.Model;
 
-                SetPlayerFaceOpponent(playerContainer);
+                TurnPlayers(playerContainer);
 
                 playerModel.OnPlayerAttacked += OnPlayerAttacked;
                 playerModel.OnLose += opponentModel.ScoreWin;
             }
 
-            _fightSceneModel.OnPlayerSideCheck += SetPlayerFaceOpponent;
+            _fightSceneModel.OnPlayerSideCheck += TurnPlayers;
         }
 
         private void SetOpponentForPlayer(PlayerContainer playerContainer)
@@ -84,32 +85,26 @@ namespace MVC.Gameplay.Controllers
             playerContainer.SetOpponent(opponentContainer);
         }
 
-        private void SetPlayerFaceOpponent(PlayerContainer playerContainer)
+        private void TurnPlayers(PlayerContainer playerContainer)
         {
-            var playerModel = playerContainer.Model;
-
             var playerTransform = playerContainer.View.transform;
 
             var opponentTransform = playerContainer.OpponentContainer.View.transform;
 
-            if (playerModel.AtLeftSide && playerTransform.position.x > opponentTransform.position.x)
+            var checkValue = playerTransform.position.x > opponentTransform.position.x;
+
+            TurnPlayer(playerContainer, SidePlacementType.AtLeftSide, checkValue);
+            TurnPlayer(playerContainer, SidePlacementType.AtLeftSide, !checkValue);
+        }
+
+        private void TurnPlayer(PlayerContainer playerContainer, SidePlacementType sidePlacementType, bool checkValue)
+        {
+            var playerModel = playerContainer.Model;
+
+            if (playerModel.CurrentSidePlacement == sidePlacementType && checkValue)
             {
                 playerModel.TurnPlayer();
-                playerModel.AtLeftSide = false;
-
-                var localScale = playerTransform.localScale;
-                localScale.z = -1;
-                playerTransform.localScale = localScale;
-            }
-
-            if (!playerModel.AtLeftSide && playerTransform.position.x < opponentTransform.position.x)
-            {
-                playerModel.TurnPlayer();
-                playerModel.AtLeftSide = true;
-
-                var localScale = playerTransform.localScale;
-                localScale.z = 1;
-                playerTransform.localScale = localScale;
+                playerContainer.View.TurnPlayer((int) playerModel.CurrentSidePlacement);
             }
         }
 
