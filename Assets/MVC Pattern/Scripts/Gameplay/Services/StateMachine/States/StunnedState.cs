@@ -11,12 +11,11 @@ namespace MVC.StateMachine.States
     public class StunnedState : DisposableWithCts, IPlayerState
     {
         public PlayerContainer PlayerContainer { get; }
-        public IStateMachineProxy StateMachineProxy { get; }
+        public IStateMachine StateMachine { get; set; }
 
-        public StunnedState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
+        public StunnedState(PlayerContainer playerContainer)
         {
             PlayerContainer = playerContainer;
-            StateMachineProxy = stateMachineProxy;
         }
 
         public void Enter()
@@ -27,7 +26,6 @@ namespace MVC.StateMachine.States
 
         public void Exit()
         {
-            throw new NotImplementedException();
         }
 
         private async UniTask PlayStunAnimationAsync(CancellationToken token)
@@ -36,7 +34,7 @@ namespace MVC.StateMachine.States
 
             await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: token);
 
-            StateMachineProxy.ChangeState<IdleState>();
+            StateMachine.ChangeState<IdleState>();
         }
     }
 }

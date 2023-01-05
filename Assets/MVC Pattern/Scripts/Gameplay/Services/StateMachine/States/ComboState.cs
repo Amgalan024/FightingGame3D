@@ -8,8 +8,7 @@ namespace MVC.StateMachine.States
     {
         private readonly ComboStateModel _comboStateModel;
 
-        public ComboState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
-            ComboStateModel comboStateModel) : base(playerContainer, stateMachineProxy)
+        public ComboState(PlayerContainer playerContainer, ComboStateModel comboStateModel) : base(playerContainer)
         {
             _comboStateModel = comboStateModel;
         }

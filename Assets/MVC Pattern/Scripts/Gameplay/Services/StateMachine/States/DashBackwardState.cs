@@ -6,17 +6,16 @@ namespace MVC.StateMachine.States
     public class DashBackwardState : IPlayerState
     {
         public PlayerContainer PlayerContainer { get; }
-        public IStateMachineProxy StateMachineProxy { get; }
+        public IStateMachine StateMachine { get; set; }
 
-        public DashBackwardState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
+        public DashBackwardState(PlayerContainer playerContainer)
         {
             PlayerContainer = playerContainer;
-            StateMachineProxy = stateMachineProxy;
         }
 
         public void Enter()
         {
-            StateMachineProxy.ChangeState<IdleState>();
+            StateMachine.ChangeState<IdleState>();
         }
 
         public void Exit()

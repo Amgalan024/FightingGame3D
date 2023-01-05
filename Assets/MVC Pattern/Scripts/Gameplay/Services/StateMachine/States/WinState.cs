@@ -6,12 +6,11 @@ namespace MVC.StateMachine.States
     public class WinState : IPlayerState
     {
         public PlayerContainer PlayerContainer { get; }
-        public IStateMachineProxy StateMachineProxy { get; }
+        public IStateMachine StateMachine { get; set; }
 
-        public WinState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
+        public WinState(PlayerContainer playerContainer)
         {
             PlayerContainer = playerContainer;
-            StateMachineProxy = stateMachineProxy;
         }
 
         public void Enter()

@@ -8,14 +8,18 @@ namespace MVC.StateMachine.States.CommonStates
     public class AttackState : IPlayerState
     {
         public PlayerContainer PlayerContainer { get; }
-        public IStateMachineProxy StateMachineProxy { get; }
+        public IStateMachine StateMachine { get; set; }
 
         private IDisposable _exitStateSubscription;
 
-        public AttackState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
+        public AttackState(PlayerContainer playerContainer)
         {
             PlayerContainer = playerContainer;
-            StateMachineProxy = stateMachineProxy;
+        }
+
+        public void Initialize(IStateMachine stateMachine)
+        {
+            StateMachine = stateMachine;
         }
 
         public virtual void Enter()
@@ -33,7 +37,7 @@ namespace MVC.StateMachine.States.CommonStates
         {
             if (!isAttacking)
             {
-                StateMachineProxy.ChangeState<IdleState>();
+                StateMachine.ChangeState<IdleState>();
             }
         }
     }

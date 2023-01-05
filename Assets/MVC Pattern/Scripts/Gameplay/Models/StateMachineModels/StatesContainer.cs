@@ -7,21 +7,16 @@ namespace MVC.Models
 {
     public class StatesContainer
     {
-        private readonly IEnumerable<IState> _states;
+        public IEnumerable<IState> States { get; }
 
         public StatesContainer(IEnumerable<IState> states)
         {
-            _states = states;
-        }
-
-        public IState GetStateByType(Type type)
-        {
-            return _states.FirstOrDefault(s => s.GetType() == type);
+            States = states;
         }
 
         public IState GetStateByType<T>() where T : IState
         {
-            return _states.FirstOrDefault(s => s.GetType() == typeof(T));
+            return States.FirstOrDefault(s => s.GetType() == typeof(T));
         }
     }
 }

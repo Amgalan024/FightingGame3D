@@ -13,18 +13,16 @@ namespace MVC.StateMachine.States
     public class RunState : DisposableWithCts, IPlayerState, IFixedTickState
     {
         public PlayerContainer PlayerContainer { get; }
-        public IStateMachineProxy StateMachineProxy { get; }
+        public IStateMachine StateMachine { get; set; }
 
         private readonly RunStateModel _runStateModel;
         private readonly JumpStateModel _jumpStateModel;
 
         private CancellationTokenSource _dashCts;
 
-        public RunState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
-            RunStateModel runStateModel, JumpStateModel jumpStateModel)
+        public RunState(PlayerContainer playerContainer, RunStateModel runStateModel, JumpStateModel jumpStateModel)
         {
             PlayerContainer = playerContainer;
-            StateMachineProxy = stateMachineProxy;
             _runStateModel = runStateModel;
             _jumpStateModel = jumpStateModel;
         }
@@ -88,10 +86,10 @@ namespace MVC.StateMachine.States
                         switch (_runStateModel.MovementType)
                         {
                             case MovementType.Forward:
-                                StateMachineProxy.ChangeState<DashForwardState>();
+                                StateMachine.ChangeState<DashForwardState>();
                                 break;
                             case MovementType.Backward:
-                                StateMachineProxy.ChangeState<DashBackwardState>();
+                                StateMachine.ChangeState<DashBackwardState>();
                                 break;
                         }
                     }
@@ -107,7 +105,7 @@ namespace MVC.StateMachine.States
             {
                 playerView.Rigidbody.velocity = Vector3.zero;
 
-                StateMachineProxy.ChangeState<IdleState>();
+                StateMachine.ChangeState<IdleState>();
             }
             else
             {

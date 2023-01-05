@@ -1,7 +1,6 @@
 ﻿using MVC.Controllers;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
-using MVC.Gameplay.Models.StateMachineModels;
 using MVC.Models;
 using MVC.StateMachine.States;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
@@ -28,7 +27,6 @@ namespace MVC.Gameplay.Services
                 builder.Register<StatesContainer>(Lifetime.Scoped);
                 builder.Register<StateMachineModel>(Lifetime.Scoped);
 
-                builder.Register<StateMachineProxy>(Lifetime.Scoped).AsImplementedInterfaces();
                 builder.Register<StateMachine.StateMachine>(Lifetime.Scoped).AsImplementedInterfaces();
 
                 builder.RegisterEntryPoint<StateMachineController>(Lifetime.Scoped);

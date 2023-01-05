@@ -8,16 +8,14 @@ namespace MVC.StateMachine.States
     public class IdleState : IPlayerState
     {
         public PlayerContainer PlayerContainer { get; }
-        public IStateMachineProxy StateMachineProxy { get; }
+        public IStateMachine StateMachine { get; set; }
 
         private readonly JumpStateModel _jumpStateModel;
         private readonly FallStateModel _fallStateModel;
 
-        public IdleState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
-            JumpStateModel jumpStateModel, FallStateModel fallStateModel)
+        public IdleState(PlayerContainer playerContainer, JumpStateModel jumpStateModel, FallStateModel fallStateModel)
         {
             PlayerContainer = playerContainer;
-            StateMachineProxy = stateMachineProxy;
             _jumpStateModel = jumpStateModel;
             _fallStateModel = fallStateModel;
         }

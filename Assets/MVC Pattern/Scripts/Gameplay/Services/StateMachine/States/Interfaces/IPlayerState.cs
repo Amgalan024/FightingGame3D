@@ -6,6 +6,5 @@ namespace MVC.StateMachine.States
     public interface IPlayerState : IState
     {
         PlayerContainer PlayerContainer { get; }
-        IStateMachineProxy StateMachineProxy { get; }
     }
 }

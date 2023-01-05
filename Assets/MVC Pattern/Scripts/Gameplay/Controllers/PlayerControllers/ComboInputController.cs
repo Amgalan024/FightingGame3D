@@ -10,7 +10,7 @@ namespace MVC.Controllers
 {
     public class ComboInputController : IFixedTickable
     {
-        private readonly IStateMachineProxy _stateMachineProxy;
+        private readonly IStateMachine _stateMachine;
 
         private readonly ComboStateModel _comboStateModel;
 
@@ -20,12 +20,12 @@ namespace MVC.Controllers
 
         private float _comboTimer;
 
-        public ComboInputController(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
+        public ComboInputController(PlayerContainer playerContainer, IStateMachine stateMachine,
             ComboStateModel comboStateModel)
         {
             _playerModel = playerContainer.Model;
             _comboModelsContainer = playerContainer.ComboModelsContainer;
-            _stateMachineProxy = stateMachineProxy;
+            _stateMachine = stateMachine;
             _comboStateModel = comboStateModel;
         }
 
@@ -71,7 +71,7 @@ namespace MVC.Controllers
 
                 _comboStateModel.SetData(comboModel.Name, comboModel.Damage);
 
-                _stateMachineProxy.ChangeState<ComboState>();
+                _stateMachine.ChangeState<ComboState>();
             }
         }
 

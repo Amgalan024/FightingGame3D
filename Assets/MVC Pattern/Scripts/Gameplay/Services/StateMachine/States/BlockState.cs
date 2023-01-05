@@ -9,12 +9,12 @@ namespace MVC.StateMachine.States
     public class BlockState : IPlayerState, ITriggerExitState
     {
         public PlayerContainer PlayerContainer { get; }
-        public IStateMachineProxy StateMachineProxy { get; }
+        public IStateMachine StateMachine { get; set; }
 
-        public BlockState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
+        public BlockState(PlayerContainer playerContainer, IStateMachine stateMachine)
         {
             PlayerContainer = playerContainer;
-            StateMachineProxy = stateMachineProxy;
+            StateMachine = stateMachine;
         }
 
         public void Enter()
@@ -38,11 +38,11 @@ namespace MVC.StateMachine.States
             {
                 if (PlayerContainer.View.Animator.GetBool(PlayerAnimatorData.IsCrouching))
                 {
-                    StateMachineProxy.ChangeState<CrouchState>();
+                    StateMachine.ChangeState<CrouchState>();
                 }
                 else
                 {
-                    StateMachineProxy.ChangeState<IdleState>();
+                    StateMachine.ChangeState<IdleState>();
                 }
             }
         }

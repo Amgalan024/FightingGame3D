@@ -1,6 +1,7 @@
 ﻿using System;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
+using MVC.Models;
 using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
@@ -11,18 +12,18 @@ namespace MVC.Controllers
     public class StateMachineController : IInitializable, IFixedTickable, IDisposable
     {
         private readonly IStateMachine _stateMachine;
-        private readonly IStateMachineProxy _stateMachineProxy;
+        private readonly StatesContainer _statesContainer;
         private readonly StateMachineModel _stateMachineModel;
 
         private readonly PlayerView _playerView;
 
         public StateMachineController(PlayerContainer playerContainer, StateMachineModel stateMachineModel,
-            IStateMachine stateMachine, IStateMachineProxy stateMachineProxy)
+            IStateMachine stateMachine, StatesContainer statesContainer)
         {
             _playerView = playerContainer.View;
             _stateMachineModel = stateMachineModel;
             _stateMachine = stateMachine;
-            _stateMachineProxy = stateMachineProxy;
+            _statesContainer = statesContainer;
         }
 
         void IInitializable.Initialize()
@@ -30,7 +31,10 @@ namespace MVC.Controllers
             _playerView.MainTriggerDetector.OnTriggerEntered += OnTriggerEntered;
             _playerView.MainTriggerDetector.OnTriggerExited += OnTriggerExited;
 
-            _stateMachineProxy.SetStateMachine(_stateMachine);
+            foreach (var state in _statesContainer.States)
+            {
+                state.StateMachine = _stateMachine;
+            }
         }
 
         void IFixedTickable.FixedTick()

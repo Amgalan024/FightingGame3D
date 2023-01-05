@@ -7,12 +7,11 @@ namespace MVC.StateMachine.States
     public class CrouchState : IPlayerState, IFixedTickState
     {
         public PlayerContainer PlayerContainer { get; }
-        public IStateMachineProxy StateMachineProxy { get; }
+        public IStateMachine StateMachine { get; set; }
 
-        public CrouchState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
+        public CrouchState(PlayerContainer playerContainer)
         {
             PlayerContainer = playerContainer;
-            StateMachineProxy = stateMachineProxy;
         }
 
         public void Enter()
@@ -44,7 +43,7 @@ namespace MVC.StateMachine.States
         {
             if (!Input.GetKey(PlayerContainer.InputModelsContainer.Crouch.Key))
             {
-                StateMachineProxy.ChangeState<IdleState>();
+                StateMachine.ChangeState<IdleState>();
             }
         }
     }

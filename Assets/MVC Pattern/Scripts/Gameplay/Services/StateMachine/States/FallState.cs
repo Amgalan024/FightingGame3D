@@ -15,7 +15,7 @@ namespace MVC.StateMachine.States
     public class FallState : DisposableWithCts, IPlayerState, ITriggerEnterState
     {
         public PlayerContainer PlayerContainer { get; }
-        public IStateMachineProxy StateMachineProxy { get; }
+        public IStateMachine StateMachine { get; set; }
 
         private readonly FallStateModel _fallStateModel;
 
@@ -23,11 +23,9 @@ namespace MVC.StateMachine.States
 
         private CancellationTokenSource _fallCts;
 
-        public FallState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
-            FallStateModel fallStateModel)
+        public FallState(PlayerContainer playerContainer, FallStateModel fallStateModel)
         {
             PlayerContainer = playerContainer;
-            StateMachineProxy = stateMachineProxy;
             _fallStateModel = fallStateModel;
         }
 
@@ -83,7 +81,7 @@ namespace MVC.StateMachine.States
             {
                 PlayerContainer.Model.CurrentJumpCount = 0;
 
-                StateMachineProxy.ChangeState<IdleState>();
+                StateMachine.ChangeState<IdleState>();
             }
         }
     }

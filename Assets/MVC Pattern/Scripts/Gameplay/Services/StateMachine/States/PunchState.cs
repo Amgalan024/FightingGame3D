@@ -6,8 +6,7 @@ namespace MVC.StateMachine.States
 {
     public class PunchState : CommonStates.AttackState
     {
-        public PunchState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy) : base(playerContainer,
-            stateMachineProxy)
+        public PunchState(PlayerContainer playerContainer) : base(playerContainer)
         {
         }
 

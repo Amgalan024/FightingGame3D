@@ -11,15 +11,13 @@ namespace MVC.StateMachine.States
     public class DashForwardState : DisposableWithCts, IPlayerState, IFixedTickState
     {
         public PlayerContainer PlayerContainer { get; }
-        public IStateMachineProxy StateMachineProxy { get; }
+        public IStateMachine StateMachine { get; set; }
 
         private readonly RunStateModel _runStateModel;
 
-        public DashForwardState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
-            RunStateModel runStateModel)
+        public DashForwardState(PlayerContainer playerContainer, RunStateModel runStateModel)
         {
             PlayerContainer = playerContainer;
-            StateMachineProxy = stateMachineProxy;
             _runStateModel = runStateModel;
         }
 
@@ -54,7 +52,7 @@ namespace MVC.StateMachine.States
             {
                 PlayerContainer.View.Rigidbody.velocity = Vector3.zero;
 
-                StateMachineProxy.ChangeState<IdleState>();
+                StateMachine.ChangeState<IdleState>();
             }
             else
             {

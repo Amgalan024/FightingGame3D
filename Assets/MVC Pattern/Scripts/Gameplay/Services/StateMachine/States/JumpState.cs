@@ -12,7 +12,7 @@ namespace MVC.StateMachine.States
     public class JumpState : IPlayerState, ITriggerEnterState
     {
         public PlayerContainer PlayerContainer { get; }
-        public IStateMachineProxy StateMachineProxy { get; }
+        public IStateMachine StateMachine { get; set; }
 
         private readonly StateMachineModel _stateMachineModel;
 
@@ -21,10 +21,9 @@ namespace MVC.StateMachine.States
 
         private CancellationTokenSource _jumpCts;
 
-        public JumpState(IStateMachineProxy stateMachineProxy, PlayerContainer playerContainer,
-            JumpStateModel jumpStateModel, StateMachineModel stateMachineModel, FallStateModel fallStateModel)
+        public JumpState(PlayerContainer playerContainer, JumpStateModel jumpStateModel,
+            StateMachineModel stateMachineModel, FallStateModel fallStateModel)
         {
-            StateMachineProxy = stateMachineProxy;
             PlayerContainer = playerContainer;
             _jumpStateModel = jumpStateModel;
             _stateMachineModel = stateMachineModel;
@@ -110,7 +109,7 @@ namespace MVC.StateMachine.States
 
                 _jumpStateModel.OnJumpInterrupted -= OnJumpInterrupted;
 
-                StateMachineProxy.ChangeState<FallState>();
+                StateMachine.ChangeState<FallState>();
             }
         }
     }
