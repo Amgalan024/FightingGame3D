@@ -60,9 +60,8 @@ namespace MVC.StateMachine.States
             {
                 PlayerContainer.Model.CurrentJumpCount++;
 
-                await PlayerContainer.OpponentContainer.View.JumpAnimationAsync(
-                    _jumpStateModel.JumpTweenConfig, _jumpStateModel.Direction,
-                    token);
+                await PlayerContainer.View.JumpAnimationAsync(_jumpStateModel.JumpTweenConfig,
+                    _jumpStateModel.Direction, token);
 
                 StateMachineProxy.ChangeState<FallState>();
             }
