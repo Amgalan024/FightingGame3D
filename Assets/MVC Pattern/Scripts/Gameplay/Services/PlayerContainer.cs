@@ -15,7 +15,7 @@ namespace MVC.Gameplay.Models.Player
         public InputActionModelsContainer InputActionModelsContainer { get; }
         public ComboModelsContainer ComboModelsContainer { get; }
 
-        public PlayerContainer OpponentContainer { private set; get; }
+        public PlayerContainer OpponentContainer { get; private set; }
 
         public PlayerContainer(PlayerModel model, PlayerView view, PlayerAttackModel attackModel,
             TriggerDetectorView attackHitBox, PlayerAnimationData animationData,

@@ -1,25 +1,26 @@
 ﻿using MVC.Gameplay.Models.Player;
+using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 
 namespace MVC.StateMachine.States
 {
     public class ComboState : CommonStates.AttackState
     {
-        public string Name { set; get; }
-        public int Damage { set; get; }
+        private readonly ComboStateModel _comboStateModel;
 
-        public ComboState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy) : base(playerContainer,
-            stateMachineProxy)
+        public ComboState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy,
+            ComboStateModel comboStateModel) : base(playerContainer, stateMachineProxy)
         {
+            _comboStateModel = comboStateModel;
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            PlayerContainer.View.Animator.Play(Name);
-            PlayerContainer.View.Animator.SetBool(Name, true);
-            PlayerContainer.AttackModel.Damage = Damage;
+            PlayerContainer.View.Animator.Play(_comboStateModel.Name);
+            PlayerContainer.View.Animator.SetBool(_comboStateModel.Name, true);
+            PlayerContainer.AttackModel.Damage = _comboStateModel.Damage;
             PlayerContainer.Model.IsDoingCombo.Value = true;
         }
 
@@ -27,7 +28,7 @@ namespace MVC.StateMachine.States
         {
             base.Exit();
 
-            PlayerContainer.View.Animator.SetBool(Name, false);
+            PlayerContainer.View.Animator.SetBool(_comboStateModel.Name, false);
             PlayerContainer.Model.IsDoingCombo.Value = false;
         }
     }

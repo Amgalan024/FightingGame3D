@@ -16,7 +16,6 @@ namespace MVC.Gameplay.Services
         private readonly PlayerInputConfig[] _inputConfigs;
 
         private readonly Transform _parent;
-        private LifetimeScope _lifetimeScope;
 
         public FightSceneFactory(FightSceneStorage storage, GameplayVisualConfig visualConfig,
             SelectedCharactersContainer charactersContainer, LifetimeScope lifetimeScope,
@@ -55,6 +54,7 @@ namespace MVC.Gameplay.Services
                 var playerAttackModel = new PlayerAttackModel();
 
                 var animationData = _charactersContainer.PlayerConfigs[i].PlayerAnimationData;
+
                 var playerContainer = new PlayerContainer(playerModel, playerView, playerAttackModel,
                     playerView.AttackHitBoxView, animationData, inputModelsContainer, inputActionModelsContainer,
                     comboModelsContainer);

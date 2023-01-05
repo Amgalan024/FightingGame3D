@@ -66,6 +66,7 @@ namespace MVC.Gameplay.Services
             builder.Register<FallStateModel>(Lifetime.Scoped);
             builder.Register<JumpStateModel>(Lifetime.Scoped);
             builder.Register<RunStateModel>(Lifetime.Scoped);
+            builder.Register<ComboStateModel>(Lifetime.Scoped);
         }
     }
 }
