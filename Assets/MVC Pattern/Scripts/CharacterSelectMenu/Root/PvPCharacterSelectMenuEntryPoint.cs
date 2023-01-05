@@ -9,7 +9,7 @@ using VContainer.Unity;
 
 namespace MVC.Root
 {
-    public class CharacterSelectMenuEntryPoint : LifetimeScope
+    public class PvPCharacterSelectMenuEntryPoint : LifetimeScope
     {
         [SerializeField] private CharacterSelectMenuGameplayConfig _menuGameplayConfig;
         [SerializeField] private CharacterSelectMenuVisualConfig _menuVisualConfig;

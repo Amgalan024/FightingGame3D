@@ -8,11 +8,17 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
 {
     public class PvPCharacterSelectionStrategy : ICharacterSelectionStrategy
     {
+        private const int PlayersCount = 2;
+
+        private const int PlayerIndex1 = 0;
+        private const int PlayerIndex2 = 1;
+
         public event Action<SelectedCharactersContainer> OnCharactersSelected;
 
         private readonly CharacterSelectMenuStorage _menuStorage;
         private readonly SelectedCharactersContainer _selectedCharactersContainer;
         private readonly CharacterSelectMenuInputConfig[] _inputConfigs;
+
         private List<int> _playerButtonIndexes;
 
         public PvPCharacterSelectionStrategy(CharacterSelectMenuStorage menuStorage,
@@ -25,13 +31,14 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
 
         void ICharacterSelectionStrategy.Initialize()
         {
-            _playerButtonIndexes = new List<int>(2);
+            _playerButtonIndexes = new List<int>(PlayersCount)
+            {
+                0,
+                _menuStorage.MenuView.GridLayoutGroup.constraintCount - 1
+            };
 
-            _playerButtonIndexes.Add(0);
-            _playerButtonIndexes.Add(_menuStorage.MenuView.GridLayoutGroup.constraintCount - 1);
-
-            _menuStorage.CharacterButtonViews[_playerButtonIndexes[0]].SelectButton(0);
-            _menuStorage.CharacterButtonViews[_playerButtonIndexes[1]].SelectButton(1);
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[PlayerIndex1]].SelectButton(PlayerIndex1);
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[PlayerIndex2]].SelectButton(PlayerIndex2);
         }
 
         void ICharacterSelectionStrategy.HandlePlayerSelection()
@@ -72,7 +79,7 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
                 var selectedButton = _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]];
                 _selectedCharactersContainer.PlayerConfigs.Add(_menuStorage.CharacterConfigsByButtons[selectedButton]);
 
-                if (_selectedCharactersContainer.PlayerConfigs.Count >= 2)
+                if (_selectedCharactersContainer.PlayerConfigs.Count >= PlayersCount)
                 {
                     OnCharactersSelected?.Invoke(_selectedCharactersContainer);
                 }
