@@ -23,18 +23,10 @@ namespace MVC.Gameplay.Services
         {
             var scope = _gameplayLifeTimeScope.CreateChild(builder =>
             {
-                builder.RegisterInstance(playerContainer.Model);
-                builder.RegisterInstance(playerContainer.View);
-                builder.RegisterInstance(playerContainer.AttackModel);
-
                 builder.RegisterInstance(playerContainer);
 
                 builder.Register<StatesContainer>(Lifetime.Scoped);
                 builder.Register<StateMachineModel>(Lifetime.Scoped);
-
-                builder.Register<InputModelsContainer>(Lifetime.Scoped);
-                builder.Register<InputActionModelsContainer>(Lifetime.Scoped);
-                builder.Register<ComboModelsContainer>(Lifetime.Scoped);
 
                 builder.Register<StateMachineProxy>(Lifetime.Scoped).AsImplementedInterfaces();
                 builder.Register<StateMachine.StateMachine>(Lifetime.Scoped).AsImplementedInterfaces();

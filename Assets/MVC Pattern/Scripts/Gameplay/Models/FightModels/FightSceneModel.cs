@@ -10,9 +10,9 @@ namespace MVC.Gameplay.Models
         public event Action<PlayerContainer> OnPlayerSideCheck;
         public List<LifetimeScope> PlayerLifetimeScopes { get; } = new List<LifetimeScope>(2);
 
-        public void InvokePlayerSideCheck(PlayerContainer playerModel)
+        public void InvokePlayerSideCheck(PlayerContainer playerContainer)
         {
-            OnPlayerSideCheck?.Invoke(playerModel);
+            OnPlayerSideCheck?.Invoke(playerContainer);
         }
     }
 }

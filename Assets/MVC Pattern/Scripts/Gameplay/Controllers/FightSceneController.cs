@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Services;
 using MVC.Utils.Disposable;
 using MVC.Views;
-using UnityEngine;
 using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class FightSceneController : DisposableWithCts, IAsyncStartable, IDisposable
+    public class FightSceneController : DisposableWithCts, IStartable, IDisposable
     {
         private readonly FightSceneFactory _factory;
         private readonly FightSceneStorage _storage;
@@ -29,10 +26,12 @@ namespace MVC.Gameplay.Controllers
             _fightSceneModel = fightSceneModel;
         }
 
-        async UniTask IAsyncStartable.StartAsync(CancellationToken token)
+        void IStartable.Start()
         {
             _factory.CreateFightLocation();
             _factory.CreatePlayers();
+
+            InitializePlayers();
 
             foreach (var playerContainer in _storage.PlayerContainers)
             {
@@ -40,10 +39,6 @@ namespace MVC.Gameplay.Controllers
 
                 _fightSceneModel.PlayerLifetimeScopes.Add(playerLifetimeScope);
             }
-
-            await UniTask.DelayFrame(1, cancellationToken: token);
-
-            InitializePlayers();
         }
 
         void IDisposable.Dispose()
@@ -69,8 +64,6 @@ namespace MVC.Gameplay.Controllers
                 var playerModel = playerContainer.Model;
                 var opponentModel = playerContainer.OpponentContainer.Model;
 
-                TurnPlayers(playerContainer);
-
                 playerModel.OnPlayerAttacked += OnPlayerAttacked;
                 playerModel.OnLose += opponentModel.ScoreWin;
             }
@@ -94,7 +87,7 @@ namespace MVC.Gameplay.Controllers
             var checkValue = playerTransform.position.x > opponentTransform.position.x;
 
             TurnPlayer(playerContainer, SidePlacementType.AtLeftSide, checkValue);
-            TurnPlayer(playerContainer, SidePlacementType.AtLeftSide, !checkValue);
+            TurnPlayer(playerContainer, SidePlacementType.AtRightSide, !checkValue);
         }
 
         private void TurnPlayer(PlayerContainer playerContainer, SidePlacementType sidePlacementType, bool checkValue)

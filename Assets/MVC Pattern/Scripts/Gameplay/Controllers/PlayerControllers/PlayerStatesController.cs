@@ -15,7 +15,7 @@ using VContainer.Unity;
 
 namespace MVC.Controllers
 {
-    public class PlayerStatesController : IInitializable, IDisposable
+    public class PlayerStatesController : IStartable, IDisposable
     {
         private readonly IStateMachineProxy _stateMachineProxy;
         private readonly InputActionModelsContainer _inputActionModelsContainer;
@@ -47,8 +47,10 @@ namespace MVC.Controllers
             _parent = lifetimeScope.transform;
         }
 
-        void IInitializable.Initialize()
+        void IStartable.Start()
         {
+            _fightSceneModel.InvokePlayerSideCheck(_playerContainer);
+
             _playerView.SetParent(_parent);
 
             _stateMachineProxy.ChangeState<IdleState>();
@@ -134,25 +136,9 @@ namespace MVC.Controllers
             }
         }
 
-        private void InvokePlayerSideCheck(Collider collider)
-        {
-            if (collider.GetComponent<CollisionDetectorView>())
-            {
-                _fightSceneModel.InvokePlayerSideCheck(_playerContainer);
-            }
-        }
-
         private void OnAttackAnimationEnded()
         {
             _playerModel.IsAttacking.Value = false;
-        }
-
-        private void OnCollisionExit(Collision collision)
-        {
-            if (collision.gameObject.GetComponent<PlatformView>())
-            {
-                _playerModel.IsGrounded.Value = false;
-            }
         }
 
         private void HandleBlock(Collider collider)
@@ -169,6 +155,22 @@ namespace MVC.Controllers
                     _playerModel.InvokePlayerAttacked(attackHitBox);
                     _stateMachineProxy.ChangeState<StunnedState>();
                 }
+            }
+        }
+
+        private void InvokePlayerSideCheck(Collider collider)
+        {
+            if (collider.GetComponent<CollisionDetectorView>())
+            {
+                _fightSceneModel.InvokePlayerSideCheck(_playerContainer);
+            }
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            if (collision.gameObject.GetComponent<PlatformView>())
+            {
+                _playerModel.IsGrounded.Value = false;
             }
         }
 
