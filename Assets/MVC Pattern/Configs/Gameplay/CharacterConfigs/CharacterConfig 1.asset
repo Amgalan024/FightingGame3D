@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a40d6598ef47f9b4d52b41f5283f41, type: 3}
   m_Name: CharacterConfig 1
   m_EditorClassIdentifier: 
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 71463377b80acd34aa0349e16962debd, type: 3}
   _maxHealthPoints: 100
   _maxEnergyPoints: 100
   _movementSpeed: 3
@@ -23,17 +23,17 @@ MonoBehaviour:
   _playerAnimationData:
     _jumpTweenData:
     - _directionType: -1
-      _tweenVectorData: {fileID: 11400000, guid: 50d6c5b1c639b1540bafca609e291e23, type: 2}
+      _tweenConfig: {fileID: 11400000, guid: 50d6c5b1c639b1540bafca609e291e23, type: 2}
     - _directionType: 1
-      _tweenVectorData: {fileID: 11400000, guid: 79302b7d3cdae8040bc5f915fa3022b2, type: 2}
+      _tweenConfig: {fileID: 11400000, guid: 79302b7d3cdae8040bc5f915fa3022b2, type: 2}
     - _directionType: 0
-      _tweenVectorData: {fileID: 11400000, guid: e73c6b50732edd0468c87b48337f2d08, type: 2}
+      _tweenConfig: {fileID: 11400000, guid: e73c6b50732edd0468c87b48337f2d08, type: 2}
     _fallTweenData:
     - _directionType: -1
-      _tweenVectorData: {fileID: 11400000, guid: b2149e13d5245ac48bff93384f809d17, type: 2}
+      _tweenConfig: {fileID: 11400000, guid: b2149e13d5245ac48bff93384f809d17, type: 2}
     - _directionType: 1
-      _tweenVectorData: {fileID: 11400000, guid: 4c6b69d004dca534e92b55ddb32da612, type: 2}
+      _tweenConfig: {fileID: 11400000, guid: 4c6b69d004dca534e92b55ddb32da612, type: 2}
     - _directionType: 0
-      _tweenVectorData: {fileID: 11400000, guid: 0fd8078cff61be04aafea64da99a4246, type: 2}
+      _tweenConfig: {fileID: 11400000, guid: 0fd8078cff61be04aafea64da99a4246, type: 2}
   _comboConfig: {fileID: 11400000, guid: ecfbb378e4f292045a0a27b63cb11858, type: 2}
   _phaseAttacksConfig: {fileID: 0}
