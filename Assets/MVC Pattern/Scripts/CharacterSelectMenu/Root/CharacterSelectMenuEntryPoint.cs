@@ -2,6 +2,7 @@
 using MVC.Menu.Controllers;
 using MVC.Menu.Models;
 using MVC.Menu.Services;
+using MVC.Menu.Services.CharacterSelectionStrategy;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -26,6 +27,8 @@ namespace MVC.Root
             builder.Register<SelectedCharactersContainer>(Lifetime.Singleton).AsSelf();
             builder.Register<CharacterSelectMenuFactory>(Lifetime.Singleton).AsSelf();
             builder.Register<CharacterSelectMenuStorage>(Lifetime.Singleton).AsSelf();
+
+            builder.Register<PvPCharacterSelectionStrategy>(Lifetime.Singleton).AsImplementedInterfaces();
 
             builder.RegisterEntryPoint<CharacterSelectController>();
         }
