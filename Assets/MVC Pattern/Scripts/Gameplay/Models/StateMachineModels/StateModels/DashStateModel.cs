@@ -4,6 +4,6 @@ namespace MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels
 {
     public class DashStateModel
     {
-        public DirectionType DirectionType { get; set; }
+        public MovementType MovementType { get; set; }
     }
 }

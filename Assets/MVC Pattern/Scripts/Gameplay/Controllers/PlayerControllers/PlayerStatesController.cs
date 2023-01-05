@@ -160,7 +160,7 @@ namespace MVC.Controllers
 
         private void InvokePlayerSideCheck(Collider collider)
         {
-            if (collider.GetComponent<CollisionDetectorView>())
+            if (collider.GetComponent<PlayerView>())
             {
                 _fightSceneModel.InvokePlayerSideCheck(_playerContainer);
             }
@@ -184,7 +184,7 @@ namespace MVC.Controllers
 
         private void OnMoveForwardInput()
         {
-            _runStateModel.SetData(_inputModelsContainer.MoveForward.Key, DirectionType.Forward,
+            _runStateModel.SetData(_inputModelsContainer.MoveForward.Key, MovementType.Forward,
                 PlayerAnimatorData.Forward);
 
             _stateMachineProxy.ChangeState<RunState>();
@@ -192,7 +192,7 @@ namespace MVC.Controllers
 
         private void OnMoveBackwardInput()
         {
-            _runStateModel.SetData(_inputModelsContainer.MoveBackward.Key, DirectionType.Backward,
+            _runStateModel.SetData(_inputModelsContainer.MoveBackward.Key, MovementType.Backward,
                 PlayerAnimatorData.Backward);
 
             _stateMachineProxy.ChangeState<RunState>();

@@ -19,10 +19,7 @@ namespace MVC.StateMachine.States
         {
             PlayerContainer.Model.IsCrouching.Value = true;
 
-            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(false);
-
-            PlayerContainer.InputActionModelsContainer.SetAttackInputActionsFilter(true);
-            PlayerContainer.InputActionModelsContainer.SetBlockInputActionsFilter(true);
+            ConfigureInputActionFilters();
         }
 
         public void Exit()
@@ -32,10 +29,18 @@ namespace MVC.StateMachine.States
 
         void IFixedTickState.OnFixedTick()
         {
-            StopCrouch();
+            HandleCrouchInput();
         }
 
-        private void StopCrouch()
+        private void ConfigureInputActionFilters()
+        {
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModelFilters(false);
+
+            PlayerContainer.InputActionModelsContainer.SetAttackInputActionFilters(true);
+            PlayerContainer.InputActionModelsContainer.SetBlockInputActionFilters(true);
+        }
+
+        private void HandleCrouchInput()
         {
             if (!Input.GetKey(PlayerContainer.InputModelsContainer.Crouch.Key))
             {

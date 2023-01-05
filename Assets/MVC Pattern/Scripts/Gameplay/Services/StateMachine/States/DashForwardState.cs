@@ -25,20 +25,30 @@ namespace MVC.StateMachine.States
 
         public void Enter()
         {
-            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(false);
+            ConfigureInputActionsFilters();
 
-            PlayerContainer.InputActionModelsContainer.SetAttackInputActionsFilter(true);
-            PlayerContainer.InputActionModelsContainer.SetJumpInputActionsFilter(true);
-
-            PlayerContainer.View.IdleToMoveAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
+            PlayerContainer.View.PlayIdleToMoveAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
         }
 
         public void Exit()
         {
-            PlayerContainer.View.MoveToIdleAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
+            PlayerContainer.View.PlayMoveToIdleAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
         }
 
         void IFixedTickState.OnFixedTick()
+        {
+            HandleDashKeyInput();
+        }
+
+        private void ConfigureInputActionsFilters()
+        {
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModelFilters(false);
+
+            PlayerContainer.InputActionModelsContainer.SetAttackInputActionFilters(true);
+            PlayerContainer.InputActionModelsContainer.SetJumpInputActionFilter(true);
+        }
+
+        private void HandleDashKeyInput()
         {
             if (!Input.GetKey(_runStateModel.InputKey))
             {

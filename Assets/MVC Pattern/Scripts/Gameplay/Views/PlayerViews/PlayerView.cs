@@ -47,11 +47,11 @@ namespace MVC.Views
             transform.SetParent(parent);
         }
 
-        public async UniTask DashForward()
+        public async UniTask PlayDashForwardAnimationAsync()
         {
         }
 
-        public async UniTask DashBackward()
+        public async UniTask PlayDashBackwardAnimationAsync()
         {
         }
 
@@ -67,7 +67,7 @@ namespace MVC.Views
             transform.localScale = scale;
         }
 
-        public async UniTask IdleToMoveAnimationAsync(int moveHash, CancellationToken token)
+        public async UniTask PlayIdleToMoveAnimationAsync(int moveHash, CancellationToken token)
         {
             await UniTask.WaitUntil(() => !MoveToIdleTween.IsActive(), cancellationToken: token);
 
@@ -78,7 +78,7 @@ namespace MVC.Views
             await IdleToMoveTween.AwaitForComplete(cancellationToken: token);
         }
 
-        public async UniTask MoveToIdleAnimationAsync(int moveHash, CancellationToken token)
+        public async UniTask PlayMoveToIdleAnimationAsync(int moveHash, CancellationToken token)
         {
             MoveToIdleTween = DOTween.To(() => _animator.GetFloat(moveHash),
                 newFloat => _animator.SetFloat(moveHash, newFloat), 0, _toMoveDuration);
@@ -86,7 +86,7 @@ namespace MVC.Views
             await MoveToIdleTween.AwaitForComplete(cancellationToken: token);
         }
 
-        public async UniTask JumpAnimationAsync(TweenConfig tweenConfig, int direction,
+        public async UniTask PlayJumpAnimationAsync(TweenConfig tweenConfig, int direction,
             CancellationToken token)
         {
             if (JumpSequence.IsActive())
@@ -110,7 +110,7 @@ namespace MVC.Views
             await JumpSequence.AwaitForComplete(cancellationToken: token);
         }
 
-        public async UniTaskVoid FallAnimationAsync(TweenConfig tweenConfig, int direction,
+        public async UniTaskVoid PlayFallAnimationAsync(TweenConfig tweenConfig, int direction,
             CancellationToken token)
         {
             FallSequence = DOTween.Sequence();

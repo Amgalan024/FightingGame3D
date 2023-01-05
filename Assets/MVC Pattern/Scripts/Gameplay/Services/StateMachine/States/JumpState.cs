@@ -14,57 +14,36 @@ namespace MVC.StateMachine.States
         public PlayerContainer PlayerContainer { get; }
         public IStateMachineProxy StateMachineProxy { get; }
 
-        private readonly JumpStateModel _jumpStateModel;
         private readonly StateMachineModel _stateMachineModel;
+
+        private readonly JumpStateModel _jumpStateModel;
+        private readonly FallStateModel _fallStateModel;
 
         private CancellationTokenSource _jumpCts;
 
         public JumpState(IStateMachineProxy stateMachineProxy, PlayerContainer playerContainer,
-            JumpStateModel jumpStateModel, StateMachineModel stateMachineModel)
+            JumpStateModel jumpStateModel, StateMachineModel stateMachineModel, FallStateModel fallStateModel)
         {
             StateMachineProxy = stateMachineProxy;
             PlayerContainer = playerContainer;
             _jumpStateModel = jumpStateModel;
             _stateMachineModel = stateMachineModel;
+            _fallStateModel = fallStateModel;
         }
 
         public void Enter()
         {
             _jumpStateModel.OnJumpInterrupted += OnJumpInterrupted;
 
-            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(false);
+            ConfigureFallModel();
 
-            PlayerContainer.InputActionModelsContainer.SetBlockInputActionsFilter(true);
-            PlayerContainer.InputActionModelsContainer.SetAttackInputActionsFilter(true);
+            ConfigureInputActionFilters();
 
-            _jumpCts?.Cancel();
-            _jumpCts?.Dispose();
-
-            _jumpCts = new CancellationTokenSource();
-
-            AwaitJumpAnimationAsync(_jumpCts.Token).Forget();
+            PlayJumpAnimation();
         }
 
         public void Exit()
         {
-        }
-
-        private async UniTask AwaitJumpAnimationAsync(CancellationToken token)
-        {
-            if (PlayerContainer.Model.CurrentJumpCount < 1)
-            {
-                PlayerContainer.InputActionModelsContainer.SetJumpInputActionsFilter(true);
-            }
-
-            if (!_stateMachineModel.CheckPreviousStateType<CommonStates.AttackState>())
-            {
-                PlayerContainer.Model.CurrentJumpCount++;
-
-                await PlayerContainer.View.JumpAnimationAsync(_jumpStateModel.JumpTweenConfig,
-                    _jumpStateModel.Direction, token);
-
-                StateMachineProxy.ChangeState<FallState>();
-            }
         }
 
         void ITriggerEnterState.OnTriggerEnter(Collider collider)
@@ -87,6 +66,52 @@ namespace MVC.StateMachine.States
         {
             _jumpCts?.Cancel();
             _jumpStateModel.OnJumpInterrupted -= OnJumpInterrupted;
+        }
+
+        private void ConfigureFallModel()
+        {
+            var animationData = PlayerContainer.AnimationData;
+            _fallStateModel.Direction = PlayerContainer.View.GetPlayerDirection();
+            _fallStateModel.FallTweenConfig =
+                animationData.GetTweenDataByMovementType(animationData.FallTweenData, _jumpStateModel.MovementType);
+        }
+
+        private void ConfigureInputActionFilters()
+        {
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModelFilters(false);
+
+            PlayerContainer.InputActionModelsContainer.SetBlockInputActionFilters(true);
+            PlayerContainer.InputActionModelsContainer.SetAttackInputActionFilters(true);
+        }
+
+        private void PlayJumpAnimation()
+        {
+            _jumpCts?.Cancel();
+            _jumpCts?.Dispose();
+
+            _jumpCts = new CancellationTokenSource();
+
+            PlayJumpAnimationAsync(_jumpCts.Token).Forget();
+        }
+
+        private async UniTask PlayJumpAnimationAsync(CancellationToken token)
+        {
+            if (PlayerContainer.Model.CurrentJumpCount < 1)
+            {
+                PlayerContainer.InputActionModelsContainer.SetJumpInputActionFilter(true);
+            }
+
+            if (!_stateMachineModel.CheckPreviousStateType<CommonStates.AttackState>())
+            {
+                PlayerContainer.Model.CurrentJumpCount++;
+
+                await PlayerContainer.View.PlayJumpAnimationAsync(_jumpStateModel.JumpTweenConfig,
+                    _jumpStateModel.Direction, token);
+
+                _jumpStateModel.OnJumpInterrupted -= OnJumpInterrupted;
+
+                StateMachineProxy.ChangeState<FallState>();
+            }
         }
     }
 }

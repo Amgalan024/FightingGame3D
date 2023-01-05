@@ -37,14 +37,13 @@ namespace MVC.StateMachine.States
 
             _fallCts = new CancellationTokenSource();
 
-            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(false);
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModelFilters(false);
 
-            PlayerContainer.InputActionModelsContainer.SetBlockInputActionsFilter(true);
+            PlayerContainer.InputActionModelsContainer.SetBlockInputActionFilters(true);
 
             _fallSubscription = PlayerContainer.Model.IsGrounded.Subscribe(OnPlayerFell);
 
-            PlayerContainer.View.FallAnimationAsync(_fallStateModel.FallTweenConfig,
-                _fallStateModel.Direction,
+            PlayerContainer.View.PlayFallAnimationAsync(_fallStateModel.FallTweenConfig, _fallStateModel.Direction,
                 _fallCts.Token).Forget();
         }
 

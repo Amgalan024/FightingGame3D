@@ -15,10 +15,10 @@ namespace MVC.Configs.Animation
         public List<TweenWithDirectionConfig> JumpTweenData => _jumpTweenData;
         public List<TweenWithDirectionConfig> FallTweenData => _fallTweenData;
 
-        public TweenConfig GetTweenDataByDirection(IEnumerable<TweenWithDirectionConfig> list,
-            DirectionType directionType)
+        public TweenConfig GetTweenDataByMovementType(IEnumerable<TweenWithDirectionConfig> list,
+            MovementType movementType)
         {
-            return list.FirstOrDefault(d => d.DirectionType == directionType)?.TweenConfig;
+            return list.FirstOrDefault(d => d.MovementType == movementType)?.TweenConfig;
         }
     }
 }

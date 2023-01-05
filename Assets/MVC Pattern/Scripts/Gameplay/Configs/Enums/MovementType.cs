@@ -1,6 +1,6 @@
 ﻿namespace MVC.Configs.Enums
 {
-    public enum DirectionType
+    public enum MovementType
     {
         Forward = 1,
         Backward = -1,

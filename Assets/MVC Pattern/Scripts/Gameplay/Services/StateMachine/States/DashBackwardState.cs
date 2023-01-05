@@ -8,6 +8,12 @@ namespace MVC.StateMachine.States
         public PlayerContainer PlayerContainer { get; }
         public IStateMachineProxy StateMachineProxy { get; }
 
+        public DashBackwardState(PlayerContainer playerContainer, IStateMachineProxy stateMachineProxy)
+        {
+            PlayerContainer = playerContainer;
+            StateMachineProxy = stateMachineProxy;
+        }
+
         public void Enter()
         {
             StateMachineProxy.ChangeState<IdleState>();

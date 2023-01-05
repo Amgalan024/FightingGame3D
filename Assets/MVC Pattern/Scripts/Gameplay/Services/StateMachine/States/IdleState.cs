@@ -24,14 +24,14 @@ namespace MVC.StateMachine.States
 
         public void Enter()
         {
-            PlayerContainer.InputActionModelsContainer.SetAllInputActionModels(true);
+            PlayerContainer.InputActionModelsContainer.SetAllInputActionModelFilters(true);
 
             var animationData = PlayerContainer.AnimationData;
 
             _jumpStateModel.JumpTweenConfig =
-                animationData.GetTweenDataByDirection(animationData.JumpTweenData, DirectionType.Standing);
+                animationData.GetTweenDataByMovementType(animationData.JumpTweenData, MovementType.Standing);
             _fallStateModel.FallTweenConfig =
-                animationData.GetTweenDataByDirection(animationData.FallTweenData, DirectionType.Standing);
+                animationData.GetTweenDataByMovementType(animationData.FallTweenData, MovementType.Standing);
         }
 
         public void Exit()

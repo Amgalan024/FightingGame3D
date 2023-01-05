@@ -12,7 +12,7 @@
         public readonly InputActionModel StartBlockAction = new InputActionModel();
         public readonly InputActionModel StopBlockAction = new InputActionModel();
 
-        public void SetAllInputActionModels(bool value)
+        public void SetAllInputActionModelFilters(bool value)
         {
             MoveForwardAction.Filter = value;
             MoveBackwardAction.Filter = value;
@@ -23,25 +23,25 @@
             StartBlockAction.Filter = value;
         }
 
-        public void SetAttackInputActionsFilter(bool value)
+        public void SetAttackInputActionFilters(bool value)
         {
             PunchAction.Filter = value;
             KickAction.Filter = value;
         }
 
-        public void SetMovementInputActionsFilter(bool value)
+        public void SetMovementInputActionFilters(bool value)
         {
             MoveForwardAction.Filter = value;
             MoveBackwardAction.Filter = value;
             CrouchAction.Filter = value;
         }
 
-        public void SetJumpInputActionsFilter(bool value)
+        public void SetJumpInputActionFilter(bool value)
         {
             JumpAction.Filter = value;
         }
 
-        public void SetBlockInputActionsFilter(bool value)
+        public void SetBlockInputActionFilters(bool value)
         {
             StartBlockAction.Filter = value;
             StopBlockAction.Filter = value;

@@ -34,8 +34,7 @@ namespace MVC.StateMachine.States
 
         private void ExitBlockState(Collider collider)
         {
-            if (collider.GetComponent<TriggerDetectorView>() ==
-                PlayerContainer.OpponentContainer.AttackHitBox)
+            if (collider.GetComponent<TriggerDetectorView>() == PlayerContainer.OpponentContainer.AttackHitBox)
             {
                 if (PlayerContainer.View.Animator.GetBool(PlayerAnimatorData.IsCrouching))
                 {
