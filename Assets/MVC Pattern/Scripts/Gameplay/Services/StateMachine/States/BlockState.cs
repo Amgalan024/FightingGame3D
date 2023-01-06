@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class BlockState : IPlayerState, ITriggerExitState
+    public class BlockState : IPlayerState
     {
         public PlayerContainer PlayerContainer { get; }
         public IStateMachine StateMachine { get; set; }
@@ -19,17 +19,16 @@ namespace MVC.StateMachine.States
 
         public void Enter()
         {
+            PlayerContainer.View.MainTriggerDetector.OnTriggerExited += ExitBlockState;
+
             PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsBlocking, true);
         }
 
         public void Exit()
         {
-            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsBlocking, false);
-        }
+            PlayerContainer.View.MainTriggerDetector.OnTriggerExited -= ExitBlockState;
 
-        void ITriggerExitState.OnTriggerExit(Collider collider)
-        {
-            ExitBlockState(collider);
+            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsBlocking, false);
         }
 
         private void ExitBlockState(Collider collider)

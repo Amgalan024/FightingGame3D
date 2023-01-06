@@ -3,13 +3,14 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
+using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class JumpState : IPlayerState, ITriggerEnterState
+    public class JumpState : IPlayerState
     {
         public PlayerContainer PlayerContainer { get; }
         public IStateMachine StateMachine { get; set; }
@@ -32,6 +33,7 @@ namespace MVC.StateMachine.States
 
         public void Enter()
         {
+            PlayerContainer.View.MainTriggerDetector.OnTriggerEntered += OnTriggerEnter;
             _jumpStateModel.OnJumpInterrupted += OnJumpInterrupted;
 
             ConfigureFallModel();
@@ -43,9 +45,10 @@ namespace MVC.StateMachine.States
 
         public void Exit()
         {
+            PlayerContainer.View.MainTriggerDetector.OnTriggerEntered -= OnTriggerEnter;
         }
 
-        void ITriggerEnterState.OnTriggerEnter(Collider collider)
+        private void OnTriggerEnter(Collider collider)
         {
             var opponentView = PlayerContainer.OpponentContainer.View;
             var playerView = PlayerContainer.View;

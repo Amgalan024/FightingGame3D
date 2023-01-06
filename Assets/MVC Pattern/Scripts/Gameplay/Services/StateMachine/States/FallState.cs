@@ -6,13 +6,14 @@ using Cysharp.Threading.Tasks.Linq;
 using DG.Tweening;
 using MVC.Gameplay.Models.Player;
 using MVC.Utils.Disposable;
+using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class FallState : DisposableWithCts, IPlayerState, ITriggerEnterState
+    public class FallState : DisposableWithCts, IPlayerState
     {
         public PlayerContainer PlayerContainer { get; }
         public IStateMachine StateMachine { get; set; }
@@ -31,6 +32,8 @@ namespace MVC.StateMachine.States
 
         public void Enter()
         {
+            PlayerContainer.View.MainTriggerDetector.OnTriggerEntered += OnTriggerEnter;
+
             _fallCts?.Dispose();
 
             _fallCts = new CancellationTokenSource();
@@ -47,6 +50,8 @@ namespace MVC.StateMachine.States
 
         public void Exit()
         {
+            PlayerContainer.View.MainTriggerDetector.OnTriggerEntered -= OnTriggerEnter;
+
             var opponentPlayerView = PlayerContainer.OpponentContainer.View;
 
             Physics.IgnoreCollision(PlayerContainer.View.CollisionDetector.Collider,
@@ -58,7 +63,7 @@ namespace MVC.StateMachine.States
             _fallSubscription?.Dispose();
         }
 
-        void ITriggerEnterState.OnTriggerEnter(Collider collider)
+        private void OnTriggerEnter(Collider collider)
         {
             var opponentPlayerView = PlayerContainer.OpponentContainer.View;
 

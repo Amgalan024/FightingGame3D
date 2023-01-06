@@ -8,7 +8,7 @@ using VContainer.Unity;
 
 namespace MVC.Controllers
 {
-    public class ComboInputController : IFixedTickable
+    public class PlayerComboInputController : IFixedTickable
     {
         private readonly IStateMachine _stateMachine;
 
@@ -20,7 +20,7 @@ namespace MVC.Controllers
 
         private float _comboTimer;
 
-        public ComboInputController(PlayerContainer playerContainer, IStateMachine stateMachine,
+        public PlayerComboInputController(PlayerContainer playerContainer, IStateMachine stateMachine,
             ComboStateModel comboStateModel)
         {
             _playerModel = playerContainer.Model;

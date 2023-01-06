@@ -31,8 +31,8 @@ namespace MVC.Gameplay.Services
 
                 builder.RegisterEntryPoint<StateMachineController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerStatesController>(Lifetime.Scoped);
-                builder.RegisterEntryPoint<InputController>(Lifetime.Scoped);
-                builder.RegisterEntryPoint<ComboInputController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerInputController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerComboInputController>(Lifetime.Scoped);
 
                 BuildStates(builder);
 
