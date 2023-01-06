@@ -11,10 +11,9 @@ namespace MVC.StateMachine.States
         public PlayerContainer PlayerContainer { get; }
         public IStateMachine StateMachine { get; set; }
 
-        public BlockState(PlayerContainer playerContainer, IStateMachine stateMachine)
+        public BlockState(PlayerContainer playerContainer)
         {
             PlayerContainer = playerContainer;
-            StateMachine = stateMachine;
         }
 
         public void Enter()
