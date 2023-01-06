@@ -9,8 +9,9 @@ public class PlayerModel
 {
     public const int PLAYER1_NUMBER = 1;
     public const int PLAYER2_NUMBER = 2;
-    public event Action<PlayerModel, TriggerDetectorView> OnPlayerAttacked;
-    public event Action OnPlayerTurned;
+    public event Action<PlayerModel, TriggerDetectorView> OnDamaged;
+    public event Action<PlayerModel> OnTurnCheckInvoked;
+    public event Action OnTurned;
     public event Action OnLose;
     public event Action OnPlayerRefreshed;
     public event Action<int> OnHPChanged;
@@ -37,7 +38,7 @@ public class PlayerModel
 
     public int CurrentJumpCount { set; get; }
 
-    public SidePlacementType CurrentSidePlacement { get; private set; } = SidePlacementType.AtLeftSide;
+    public TurnType CurrentTurn { get; private set; } = TurnType.TurnedRight;
     public bool AtLeftSide { set; get; } = true;
 
     public int Turn { get; set; }
@@ -96,23 +97,28 @@ public class PlayerModel
         OnWin?.Invoke();
     }
 
+    public void InvokeTurnCheck()
+    {
+        OnTurnCheckInvoked?.Invoke(this);
+    }
+
     public void TurnPlayer()
     {
-        switch (CurrentSidePlacement)
+        switch (CurrentTurn)
         {
-            case SidePlacementType.AtLeftSide:
-                CurrentSidePlacement = SidePlacementType.AtRightSide;
+            case TurnType.TurnedRight:
+                CurrentTurn = TurnType.TurnedLeft;
                 break;
-            case SidePlacementType.AtRightSide:
-                CurrentSidePlacement = SidePlacementType.AtLeftSide;
+            case TurnType.TurnedLeft:
+                CurrentTurn = TurnType.TurnedRight;
                 break;
         }
 
-        OnPlayerTurned?.Invoke();
+        OnTurned?.Invoke();
     }
 
     public void InvokePlayerAttacked(TriggerDetectorView playerAttackHitBoxView)
     {
-        OnPlayerAttacked?.Invoke(this, playerAttackHitBoxView);
+        OnDamaged?.Invoke(this, playerAttackHitBoxView);
     }
 }

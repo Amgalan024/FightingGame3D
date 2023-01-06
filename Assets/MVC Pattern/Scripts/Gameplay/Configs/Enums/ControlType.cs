@@ -1,6 +1,6 @@
 ﻿namespace MVC.Configs.Enums
 {
-    public enum ControlNames
+    public enum ControlType
     {
         MoveForward,
         MoveBackward,
@@ -8,5 +8,6 @@
         Crouch,
         Punch,
         Kick,
+        Block
     }
 }

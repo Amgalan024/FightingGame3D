@@ -22,7 +22,7 @@ namespace MVC.StateMachine.States
 
         public void Enter()
         {
-            PlayerContainer.InputActionModelsContainer.SetAllInputActionModelFilters(true);
+            PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(true);
 
             var animationData = PlayerContainer.AnimationData;
 

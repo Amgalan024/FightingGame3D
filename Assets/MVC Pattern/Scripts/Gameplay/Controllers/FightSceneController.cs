@@ -48,11 +48,9 @@ namespace MVC.Gameplay.Controllers
                 var playerModel = playerContainer.Model;
                 var opponentModel = playerContainer.OpponentContainer.Model;
 
-                playerModel.OnPlayerAttacked -= OnPlayerAttacked;
+                playerModel.OnDamaged -= Damaged;
                 playerModel.OnLose -= opponentModel.ScoreWin;
             }
-
-            _fightSceneModel.OnPlayerSideCheck -= TurnPlayers;
         }
 
         private void InitializePlayers()
@@ -64,11 +62,10 @@ namespace MVC.Gameplay.Controllers
                 var playerModel = playerContainer.Model;
                 var opponentModel = playerContainer.OpponentContainer.Model;
 
-                playerModel.OnPlayerAttacked += OnPlayerAttacked;
+                playerModel.OnTurnCheckInvoked += TurnCheck;
+                playerModel.OnDamaged += Damaged;
                 playerModel.OnLose += opponentModel.ScoreWin;
             }
-
-            _fightSceneModel.OnPlayerSideCheck += TurnPlayers;
         }
 
         private void SetOpponentForPlayer(PlayerContainer playerContainer)
@@ -78,30 +75,32 @@ namespace MVC.Gameplay.Controllers
             playerContainer.SetOpponent(opponentContainer);
         }
 
-        private void TurnPlayers(PlayerContainer playerContainer)
+        private void TurnCheck(PlayerModel playerModel)
         {
+            var playerContainer = _storage.GetContainerByModel(playerModel);
+
             var playerTransform = playerContainer.View.transform;
 
             var opponentTransform = playerContainer.OpponentContainer.View.transform;
 
-            var checkValue = playerTransform.position.x > opponentTransform.position.x;
+            var onRightSide = playerTransform.position.x > opponentTransform.position.x;
 
-            TurnPlayer(playerContainer, SidePlacementType.AtLeftSide, checkValue);
-            TurnPlayer(playerContainer, SidePlacementType.AtRightSide, !checkValue);
+            TurnPlayer(playerContainer, TurnType.TurnedRight, onRightSide);
+            TurnPlayer(playerContainer, TurnType.TurnedLeft, !onRightSide);
         }
 
-        private void TurnPlayer(PlayerContainer playerContainer, SidePlacementType sidePlacementType, bool checkValue)
+        private void TurnPlayer(PlayerContainer playerContainer, TurnType turnType, bool checkValue)
         {
             var playerModel = playerContainer.Model;
 
-            if (playerModel.CurrentSidePlacement == sidePlacementType && checkValue)
+            if (playerModel.CurrentTurn == turnType && checkValue)
             {
                 playerModel.TurnPlayer();
-                playerContainer.View.TurnPlayer((int) playerModel.CurrentSidePlacement);
+                playerContainer.View.TurnPlayer((int) playerModel.CurrentTurn);
             }
         }
 
-        private void OnPlayerAttacked(PlayerModel playerModel, TriggerDetectorView attackHitBoxView)
+        private void Damaged(PlayerModel playerModel, TriggerDetectorView attackHitBoxView)
         {
             playerModel.TakeDamage(_storage.AttackModelsByView[attackHitBoxView].Damage);
         }

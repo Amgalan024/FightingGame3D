@@ -7,12 +7,6 @@ namespace MVC.Gameplay.Models
 {
     public class FightSceneModel
     {
-        public event Action<PlayerContainer> OnPlayerSideCheck;
         public List<LifetimeScope> PlayerLifetimeScopes { get; } = new List<LifetimeScope>(2);
-
-        public void InvokePlayerSideCheck(PlayerContainer playerContainer)
-        {
-            OnPlayerSideCheck?.Invoke(playerContainer);
-        }
     }
 }

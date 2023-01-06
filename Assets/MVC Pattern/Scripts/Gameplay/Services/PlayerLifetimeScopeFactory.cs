@@ -29,10 +29,11 @@ namespace MVC.Gameplay.Services
 
                 builder.Register<StateMachine.StateMachine>(Lifetime.Scoped).AsImplementedInterfaces();
 
-                builder.RegisterEntryPoint<StateMachineController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerStatesController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerInputController>(Lifetime.Scoped);
-                builder.RegisterEntryPoint<PlayerComboInputController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerComboController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerAnimatorController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerInteractionsController>(Lifetime.Scoped);
 
                 BuildStates(builder);
 

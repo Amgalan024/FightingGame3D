@@ -8,8 +8,8 @@ namespace MVC.Configs
         menuName = "Configs/Gameplay/" + nameof(PlayerInputConfig))]
     public class PlayerInputConfig : ScriptableObject
     {
-        [SerializeField] private List<InputModel> _inputModels;
+        [SerializeField] private List<InputData> _inputModels;
 
-        public List<InputModel> InputModels => _inputModels;
+        public List<InputData> InputModels => _inputModels;
     }
 }

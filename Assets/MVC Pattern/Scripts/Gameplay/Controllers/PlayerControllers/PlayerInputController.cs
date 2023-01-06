@@ -1,28 +1,35 @@
 ﻿using System;
+using MVC.Configs.Enums;
+using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models.Player;
 using MVC.Models;
-using UnityEngine;
+using MVC.StateMachine.States;
+using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using VContainer.Unity;
 
 namespace MVC.Controllers
 {
     public class PlayerInputController : IInitializable, ITickable, IDisposable
     {
+        private readonly IStateMachine _stateMachine;
+        private readonly RunStateModel _runStateModel;
+
         private readonly PlayerModel _playerModel;
-
         private readonly InputModelsContainer _inputModelsContainer;
-        private readonly InputActionModelsContainer _inputActionModelsContainer;
 
-        public PlayerInputController(PlayerContainer playerContainer)
+        public PlayerInputController(PlayerContainer playerContainer, IStateMachine stateMachine,
+            RunStateModel runStateModel)
         {
+            _stateMachine = stateMachine;
+            _runStateModel = runStateModel;
             _playerModel = playerContainer.Model;
             _inputModelsContainer = playerContainer.InputModelsContainer;
-            _inputActionModelsContainer = playerContainer.InputActionModelsContainer;
         }
 
         void IInitializable.Initialize()
         {
-            _playerModel.OnPlayerTurned += _inputModelsContainer.SwitchMovementControllers;
+            _playerModel.OnTurned += _inputModelsContainer.SwitchMovementControllers;
         }
 
         void ITickable.Tick()
@@ -35,63 +42,57 @@ namespace MVC.Controllers
 
         void IDisposable.Dispose()
         {
-            _playerModel.OnPlayerTurned -= _inputModelsContainer.SwitchMovementControllers;
+            _playerModel.OnTurned -= _inputModelsContainer.SwitchMovementControllers;
         }
 
         private void HandleAttackInput()
         {
-            if (Input.GetKeyDown(_inputModelsContainer.Punch.Key))
+            if (_inputModelsContainer.InputModelsByName[ControlType.Punch].GetInputDown())
             {
-                _inputActionModelsContainer.PunchAction.InvokeInput();
+                _stateMachine.ChangeState<PunchState>();
             }
 
-            if (Input.GetKeyDown(_inputModelsContainer.Kick.Key))
+            if (_inputModelsContainer.InputModelsByName[ControlType.Kick].GetInputDown())
             {
-                _inputActionModelsContainer.KickAction.InvokeInput();
+                _stateMachine.ChangeState<KickState>();
             }
         }
 
         private void HandleJumpInput()
         {
-            if (Input.GetKeyDown(_inputModelsContainer.Jump.Key))
+            if (_inputModelsContainer.InputModelsByName[ControlType.Jump].GetInputDown())
             {
-                _inputActionModelsContainer.JumpAction.InvokeInput();
+                _stateMachine.ChangeState<JumpState>();
             }
         }
 
         private void HandleMovementInput()
         {
-            if (Input.GetKey(_inputModelsContainer.MoveForward.Key))
+            if (_inputModelsContainer.InputModelsByName[ControlType.MoveForward].GetInput())
             {
-                _inputActionModelsContainer.MoveForwardAction.InvokeInput();
+                _runStateModel.SetData(_inputModelsContainer.InputModelsByName[ControlType.MoveForward].Key,
+                    MovementType.Forward, PlayerAnimatorData.Forward);
+
+                _stateMachine.ChangeState<RunState>();
             }
 
-            if (Input.GetKey(_inputModelsContainer.MoveBackward.Key))
+            if (_inputModelsContainer.InputModelsByName[ControlType.MoveBackward].GetInput())
             {
-                _inputActionModelsContainer.MoveBackwardAction.InvokeInput();
+                _runStateModel.SetData(_inputModelsContainer.InputModelsByName[ControlType.MoveBackward].Key,
+                    MovementType.Backward, PlayerAnimatorData.Backward);
+
+                _stateMachine.ChangeState<RunState>();
             }
 
-            if (Input.GetKey(_inputModelsContainer.Crouch.Key))
+            if (_inputModelsContainer.InputModelsByName[ControlType.Crouch].GetInput())
             {
-                _inputActionModelsContainer.CrouchAction.InvokeInput();
+                _stateMachine.ChangeState<CrouchState>();
             }
         }
 
         private void HandleBlockInput()
         {
-            if (Input.GetKey(_inputModelsContainer.MoveBackward.Key))
-            {
-                _inputActionModelsContainer.StartBlockAction.InvokeInput();
-
-                if (!_inputActionModelsContainer.StartBlockAction.Filter)
-                {
-                    _inputActionModelsContainer.StopBlockAction.InvokeInput();
-                }
-            }
-            else
-            {
-                _inputActionModelsContainer.StopBlockAction.InvokeInput();
-            }
+            _playerModel.IsBlocking.Value = _inputModelsContainer.InputModelsByName[ControlType.Block].GetInput();
         }
     }
 }

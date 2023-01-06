@@ -46,8 +46,6 @@ namespace MVC.Gameplay.Services
 
                 var inputModelsContainer = new InputModelsContainer(_inputConfigs[i].InputModels);
 
-                var inputActionModelsContainer = new InputActionModelsContainer();
-
                 var comboList = _charactersContainer.PlayerConfigs[i].ComboConfig.ComboList;
                 var comboModelsContainer = new ComboModelsContainer(comboList, inputModelsContainer);
 
@@ -56,8 +54,7 @@ namespace MVC.Gameplay.Services
                 var animationData = _charactersContainer.PlayerConfigs[i].PlayerAnimationData;
 
                 var playerContainer = new PlayerContainer(playerModel, playerView, playerAttackModel,
-                    playerView.AttackHitBoxView, animationData, inputModelsContainer, inputActionModelsContainer,
-                    comboModelsContainer);
+                    playerView.AttackHitBoxView, animationData, inputModelsContainer, comboModelsContainer);
 
                 _storage.PlayerContainers.Add(playerContainer);
 

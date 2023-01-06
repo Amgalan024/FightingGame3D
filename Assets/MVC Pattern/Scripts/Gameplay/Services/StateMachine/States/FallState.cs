@@ -38,9 +38,9 @@ namespace MVC.StateMachine.States
 
             _fallCts = new CancellationTokenSource();
 
-            PlayerContainer.InputActionModelsContainer.SetAllInputActionModelFilters(false);
+            PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(false);
 
-            PlayerContainer.InputActionModelsContainer.SetBlockInputActionFilters(true);
+            PlayerContainer.InputModelsContainer.SetBlockInputActionFilters(true);
 
             _fallSubscription = PlayerContainer.Model.IsGrounded.Subscribe(OnPlayerFell);
 

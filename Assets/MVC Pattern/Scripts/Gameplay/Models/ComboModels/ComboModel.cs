@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using MVC.Configs.SODataModels;
+﻿using MVC.Configs.SODataModels;
 
 namespace MVC.Models
 {
@@ -19,8 +18,7 @@ namespace MVC.Models
 
             for (int i = 0; i < InputModels.Length; i++)
             {
-                InputModels[i] = inputModelsContainer.InputModels
-                    .First(x => x.Name == comboData.ControlNames[i]);
+                InputModels[i] = inputModelsContainer.InputModelsByName[comboData.ControlNames[i]];
             }
         }
     }

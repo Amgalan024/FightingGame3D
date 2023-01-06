@@ -1,48 +1,65 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using MVC.Configs.Enums;
 
 namespace MVC.Models
 {
     public class InputModelsContainer
     {
-        public List<InputModel> InputModels { get; }
-        public InputModel MoveForward { get; }
-        public InputModel MoveBackward { get; }
-        public InputModel Jump { get; }
-        public InputModel Crouch { get; }
-        public InputModel Punch { get; }
-        public InputModel Kick { get; }
+        public Dictionary<ControlType, InputModel> InputModelsByName { get; }
 
-        public InputModelsContainer(List<InputModel> inputModels)
+        public InputModelsContainer(List<InputData> inputDataConfig)
         {
-            InputModels = new List<InputModel>(inputModels.Count);
+            InputModelsByName = new Dictionary<ControlType, InputModel>(inputDataConfig.Count);
 
-            foreach (var inputModel in inputModels)
+            foreach (var inputData in inputDataConfig)
             {
-                InputModels.Add(inputModel.GetCopy());
+                var inputModel = new InputModel(inputData.Type, inputData.Key);
+                InputModelsByName.Add(inputData.Type, inputModel);
             }
 
-            MoveForward = GetControlModel(ControlNames.MoveForward);
-            MoveBackward = GetControlModel(ControlNames.MoveBackward);
-            Jump = GetControlModel(ControlNames.Jump);
-            Crouch = GetControlModel(ControlNames.Crouch);
-            Punch = GetControlModel(ControlNames.Punch);
-            Kick = GetControlModel(ControlNames.Kick);
+            var moveBackwardInputModel = InputModelsByName[ControlType.MoveBackward];
+
+            InputModelsByName.Add(ControlType.Block, moveBackwardInputModel);
         }
 
         public void SwitchMovementControllers()
         {
-            var forwardKey = MoveForward.Key;
-            var backwardKey = MoveBackward.Key;
+            var forwardKey = InputModelsByName[ControlType.MoveForward].Key;
+            var backwardKey = InputModelsByName[ControlType.MoveBackward].Key;
 
-            MoveForward.Key = backwardKey;
-            MoveBackward.Key = forwardKey;
+            InputModelsByName[ControlType.MoveForward].Key = backwardKey;
+            InputModelsByName[ControlType.MoveBackward].Key = forwardKey;
         }
 
-        private InputModel GetControlModel(ControlNames controlName)
+        public void SetAllInputActionModelFilters(bool value)
         {
-            return InputModels.First(x => x.Name == controlName);
+            foreach (var inputModel in InputModelsByName.Values)
+            {
+                inputModel.Filter = value;
+            }
+        }
+
+        public void SetAttackInputActionFilters(bool value)
+        {
+            InputModelsByName[ControlType.Punch].Filter = value;
+            InputModelsByName[ControlType.Kick].Filter = value;
+        }
+
+        public void SetMovementInputActionFilters(bool value)
+        {
+            InputModelsByName[ControlType.MoveForward].Filter = value;
+            InputModelsByName[ControlType.MoveBackward].Filter = value;
+            InputModelsByName[ControlType.Crouch].Filter = value;
+        }
+
+        public void SetJumpInputActionFilter(bool value)
+        {
+            InputModelsByName[ControlType.Jump].Filter = value;
+        }
+
+        public void SetBlockInputActionFilters(bool value)
+        {
+            InputModelsByName[ControlType.Block].Filter = value;
         }
     }
 }

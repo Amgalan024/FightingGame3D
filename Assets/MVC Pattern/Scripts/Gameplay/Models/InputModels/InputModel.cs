@@ -1,24 +1,34 @@
-﻿using System;
-using MVC.Configs.Enums;
+﻿using MVC.Configs.Enums;
 using UnityEngine;
 
 namespace MVC.Models
 {
-    [Serializable]
     public class InputModel
     {
-        [field: SerializeField] public KeyCode Key { get; set; }
-        [field: SerializeField] public ControlNames Name { get; set; }
+        public ControlType ControlType { get; }
+        public KeyCode Key { get; set; }
 
-        public InputModel GetCopy()
+        public bool Filter { get; set; }
+
+        public InputModel(ControlType controlType, KeyCode key)
         {
-            var copy = new InputModel
-            {
-                Key = this.Key,
-                Name = this.Name
-            };
+            ControlType = controlType;
+            Key = key;
+        }
 
-            return copy;
+        public bool GetInputDown()
+        {
+            return Filter && Input.GetKeyDown(Key);
+        }
+
+        public bool GetInputUp()
+        {
+            return Filter && Input.GetKeyUp(Key);
+        }
+
+        public bool GetInput()
+        {
+            return Filter && Input.GetKey(Key);
         }
     }
 }

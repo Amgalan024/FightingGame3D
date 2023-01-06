@@ -1,4 +1,5 @@
-﻿using MVC.Gameplay.Models.Player;
+﻿using MVC.Configs.Enums;
+using MVC.Gameplay.Models.Player;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 
@@ -33,15 +34,15 @@ namespace MVC.StateMachine.States
 
         private void ConfigureInputActionFilters()
         {
-            PlayerContainer.InputActionModelsContainer.SetAllInputActionModelFilters(false);
+            PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(false);
 
-            PlayerContainer.InputActionModelsContainer.SetAttackInputActionFilters(true);
-            PlayerContainer.InputActionModelsContainer.SetBlockInputActionFilters(true);
+            PlayerContainer.InputModelsContainer.SetAttackInputActionFilters(true);
+            PlayerContainer.InputModelsContainer.SetBlockInputActionFilters(true);
         }
 
         private void HandleCrouchInput()
         {
-            if (!Input.GetKey(PlayerContainer.InputModelsContainer.Crouch.Key))
+            if (!Input.GetKey(PlayerContainer.InputModelsContainer.InputModelsByName[ControlType.Crouch].Key))
             {
                 StateMachine.ChangeState<IdleState>();
             }

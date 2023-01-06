@@ -40,10 +40,10 @@ namespace MVC.StateMachine.States
 
         private void ConfigureInputActionsFilters()
         {
-            PlayerContainer.InputActionModelsContainer.SetAllInputActionModelFilters(false);
+            PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(false);
 
-            PlayerContainer.InputActionModelsContainer.SetAttackInputActionFilters(true);
-            PlayerContainer.InputActionModelsContainer.SetJumpInputActionFilter(true);
+            PlayerContainer.InputModelsContainer.SetAttackInputActionFilters(true);
+            PlayerContainer.InputModelsContainer.SetJumpInputActionFilter(true);
         }
 
         private void HandleDashKeyInput()

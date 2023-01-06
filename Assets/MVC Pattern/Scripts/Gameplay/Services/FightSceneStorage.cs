@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Views;
 using MVC.Views;
@@ -16,5 +17,10 @@ namespace MVC.Gameplay.Services
         /// </summary>
         public Dictionary<TriggerDetectorView, PlayerAttackModel> AttackModelsByView { get; } =
             new Dictionary<TriggerDetectorView, PlayerAttackModel>(2);
+
+        public PlayerContainer GetContainerByModel(PlayerModel playerModel)
+        {
+            return PlayerContainers.First(c => c.Model == playerModel);
+        }
     }
 }

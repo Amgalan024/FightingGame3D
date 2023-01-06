@@ -8,23 +8,19 @@ using VContainer.Unity;
 
 namespace MVC.Controllers
 {
-    public class PlayerComboInputController : IFixedTickable
+    public class PlayerComboController : IFixedTickable
     {
         private readonly IStateMachine _stateMachine;
-
         private readonly ComboStateModel _comboStateModel;
 
-        private readonly PlayerModel _playerModel;
-
-        private readonly ComboModelsContainer _comboModelsContainer;
+        private readonly PlayerContainer _playerContainer;
 
         private float _comboTimer;
 
-        public PlayerComboInputController(PlayerContainer playerContainer, IStateMachine stateMachine,
+        public PlayerComboController(PlayerContainer playerContainer, IStateMachine stateMachine,
             ComboStateModel comboStateModel)
         {
-            _playerModel = playerContainer.Model;
-            _comboModelsContainer = playerContainer.ComboModelsContainer;
+            _playerContainer = playerContainer;
             _stateMachine = stateMachine;
             _comboStateModel = comboStateModel;
         }
@@ -33,9 +29,9 @@ namespace MVC.Controllers
         {
             CountComboTimer();
 
-            if (!_playerModel.IsDoingCombo)
+            if (!_playerContainer.Model.IsDoingCombo)
             {
-                foreach (var comboModel in _comboModelsContainer.ComboModels)
+                foreach (var comboModel in _playerContainer.ComboModelsContainer.ComboModels)
                 {
                     HandleComboInput(comboModel);
                 }
@@ -44,7 +40,7 @@ namespace MVC.Controllers
 
         private void HandleComboInput(ComboModel comboModel)
         {
-            if (Input.GetKeyDown(comboModel.InputModels[comboModel.ComboCount].Key))
+            if (comboModel.InputModels[comboModel.ComboCount].GetInputDown())
             {
                 if (comboModel.ComboCount == 0)
                 {
@@ -85,7 +81,7 @@ namespace MVC.Controllers
 
         private void ResetComboCounts()
         {
-            foreach (var comboModel in _comboModelsContainer.ComboModels)
+            foreach (var comboModel in _playerContainer.ComboModelsContainer.ComboModels)
             {
                 comboModel.ComboCount = 0;
             }

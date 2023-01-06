@@ -5,13 +5,13 @@ using UnityEngine;
 namespace MVC.Configs.SODataModels
 {
     [Serializable]
-    public class ComboData
+    public struct ComboData
     {
         [SerializeField] private string _name;
         [SerializeField] private int _damage;
-        [SerializeField] private ControlNames[] _controlNames;
+        [SerializeField] private ControlType[] _controlNames;
         public string Name => _name;
         public int Damage => _damage;
-        public ControlNames[] ControlNames => _controlNames;
+        public ControlType[] ControlNames => _controlNames;
     }
 }
