@@ -9,7 +9,7 @@ using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class FightSceneController : DisposableWithCts, IStartable, IDisposable
+    public class FightSceneController : DisposableWithCts, IStartable
     {
         private readonly FightSceneFactory _factory;
         private readonly FightSceneStorage _storage;
@@ -41,8 +41,10 @@ namespace MVC.Gameplay.Controllers
             }
         }
 
-        void IDisposable.Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
+
             foreach (var playerContainer in _storage.PlayerContainers)
             {
                 var playerModel = playerContainer.Model;

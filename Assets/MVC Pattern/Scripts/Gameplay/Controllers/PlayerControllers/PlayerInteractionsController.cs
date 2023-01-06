@@ -1,5 +1,4 @@
 ﻿using System;
-using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
 using MVC.StateMachine.States;
 using MVC.Views;
@@ -16,13 +15,9 @@ namespace MVC.Controllers
         private readonly PlayerModel _playerModel;
         private readonly PlayerContainer _opponentContainer;
 
-        private readonly Transform _parent;
-
-        public PlayerInteractionsController(PlayerContainer playerContainer, IStateMachine stateMachine,
-            LifetimeScope lifetimeScope)
+        public PlayerInteractionsController(PlayerContainer playerContainer, IStateMachine stateMachine)
         {
             _stateMachine = stateMachine;
-            _parent = lifetimeScope.transform;
 
             _playerView = playerContainer.View;
             _playerModel = playerContainer.Model;
