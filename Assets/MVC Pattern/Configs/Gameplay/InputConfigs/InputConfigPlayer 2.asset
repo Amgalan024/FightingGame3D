@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputModels:
   - <Key>k__BackingField: 275
-    <Name>k__BackingField: 0
+    <Type>k__BackingField: 0
   - <Key>k__BackingField: 276
-    <Name>k__BackingField: 1
+    <Type>k__BackingField: 1
   - <Key>k__BackingField: 273
-    <Name>k__BackingField: 2
+    <Type>k__BackingField: 2
   - <Key>k__BackingField: 274
-    <Name>k__BackingField: 3
+    <Type>k__BackingField: 3
   - <Key>k__BackingField: 260
-    <Name>k__BackingField: 4
+    <Type>k__BackingField: 4
   - <Key>k__BackingField: 261
-    <Name>k__BackingField: 5
+    <Type>k__BackingField: 5
