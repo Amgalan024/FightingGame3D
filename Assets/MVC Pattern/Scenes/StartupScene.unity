@@ -156,7 +156,7 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _startupConfig: {fileID: 0}
+  _startupConfig: {fileID: 11400000, guid: 00a61824c84101242ae56ef394b8333d, type: 2}
 --- !u!4 &17637579
 Transform:
   m_ObjectHideFlags: 0

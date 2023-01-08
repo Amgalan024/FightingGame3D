@@ -9,14 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1aa9d2cff8f4b39aebf44b1b594e93d, type: 3}
-  m_Name: StartupConfig
+  m_Script: {fileID: 11500000, guid: 74bc8a6e2a5a44829050b2647e2fb36d, type: 3}
+  m_Name: MainMenuConfig
   m_EditorClassIdentifier: 
-  _servicesScene:
-    m_AssetGUID: afb32578a75ddd14fb5a050037cbd00a
-    m_SubObjectName: 
-    m_SubObjectType: 
-  _mainMenuScene:
-    m_AssetGUID: 7f084f7c8eda24742b447452338f1c60
+  _playerVsPlayerScene:
+    m_AssetGUID: 5653835d05061664c83d8c1b7c13cc51
     m_SubObjectName: 
     m_SubObjectType: 
