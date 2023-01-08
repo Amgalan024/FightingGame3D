@@ -6,7 +6,7 @@ namespace MVC_Pattern.Scripts.Utils.LoadingScreen.Services
 {
     public interface ILoadingScreenService
     {
-        UniTask ShowAsync(BaseLoadingScreenView loadingScreenView, CancellationToken token);
-        UniTask HideAsync(BaseLoadingScreenView loadingScreenType, CancellationToken token);
+        UniTask ShowAsync<T>(CancellationToken token) where T : BaseLoadingScreenView;
+        UniTask HideAsync<T>(CancellationToken token) where T : BaseLoadingScreenView;
     }
 }
