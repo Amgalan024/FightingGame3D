@@ -1,22 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1aa9d2cff8f4b39aebf44b1b594e93d, type: 3}
-  m_Name: StartupConfig
-  m_EditorClassIdentifier: 
-  _servicesScene:
-    m_AssetGUID: afb32578a75ddd14fb5a050037cbd00a
-    m_SubObjectName: 
-    m_SubObjectType: 
-  _mainMenuScene:
-    m_AssetGUID: 7f084f7c8eda24742b447452338f1c60
-    m_SubObjectName: 
-    m_SubObjectType: 
+version https://git-lfs.github.com/spec/v1
+oid sha256:ac377093d4a582169865ffff871849e847128a5e338b31498a891a541865acca
+size 626

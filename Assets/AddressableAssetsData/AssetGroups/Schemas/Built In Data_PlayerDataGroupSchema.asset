@@ -1,17 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1487f5d688e4f94f828f879d599dbdc, type: 3}
-  m_Name: Built In Data_PlayerDataGroupSchema
-  m_EditorClassIdentifier: 
-  m_Group: {fileID: 11400000, guid: 8096fe0cf637b83438b1475605d02a1c, type: 2}
-  m_IncludeResourcesFolders: 1
-  m_IncludeBuildSettingsScenes: 1
+version https://git-lfs.github.com/spec/v1
+oid sha256:449f47e2000699962abae302ae9e41b50f64b9d64b4f4b2c90f35d36be6ba0e8
+size 568
