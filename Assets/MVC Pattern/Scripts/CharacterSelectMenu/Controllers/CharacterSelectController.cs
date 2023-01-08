@@ -2,6 +2,7 @@
 using MVC.Menu.Models;
 using MVC.Menu.Services;
 using MVC.Menu.Services.CharacterSelectionStrategy;
+using MVC_Pattern.Scripts.Utils.LoadingScreen.Services;
 using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
@@ -15,7 +16,7 @@ namespace MVC.Menu.Controllers
         private readonly ICharacterSelectionStrategy _characterSelectionStrategy;
 
         public CharacterSelectController(CharacterSelectMenuFactory menuFactory,
-            ICharacterSelectionStrategy characterSelectionStrategy)
+            ICharacterSelectionStrategy characterSelectionStrategy, ILoadingScreenService screenService)
         {
             _menuFactory = menuFactory;
             _characterSelectionStrategy = characterSelectionStrategy;

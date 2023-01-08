@@ -6,9 +6,9 @@ namespace MVC_Pattern.Scripts.Utils.LoadingScreen.Services
 {
     public class LoadingScreensContainer
     {
-        private readonly List<BaseLoadingScreenView> _loadingScreenViews;
+        private readonly BaseLoadingScreenView[] _loadingScreenViews;
 
-        public LoadingScreensContainer(List<BaseLoadingScreenView> loadingScreenViews)
+        public LoadingScreensContainer(BaseLoadingScreenView[] loadingScreenViews)
         {
             _loadingScreenViews = loadingScreenViews;
         }

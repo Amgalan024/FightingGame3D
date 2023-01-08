@@ -2,9 +2,11 @@
 using MVC.Menu.Configs;
 using MVC.Utils.Disposable;
 using MVC_Pattern.Scripts.MainMenu.Views;
+using MVC_Pattern.Scripts.Startup;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Services;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Views;
 using UnityEngine.AddressableAssets;
+using UnityEngine.SceneManagement;
 using VContainer.Unity;
 
 namespace MVC_Pattern.Scripts.MainMenu.Controllers
@@ -14,10 +16,10 @@ namespace MVC_Pattern.Scripts.MainMenu.Controllers
         private readonly MainMenuView _mainMenuView;
         private readonly MainMenuConfig _mainMenuConfig;
 
-        private readonly LoadingScreenService _screenService;
+        private readonly ILoadingScreenService _screenService;
 
         public MainMenuController(MainMenuView mainMenuView, MainMenuConfig mainMenuConfig,
-            LoadingScreenService screenService)
+            ILoadingScreenService screenService)
         {
             _mainMenuView = mainMenuView;
             _mainMenuConfig = mainMenuConfig;
@@ -38,11 +40,11 @@ namespace MVC_Pattern.Scripts.MainMenu.Controllers
 
         private async UniTaskVoid LoadPvPCharacterSelectScene()
         {
-            await _screenService.ShowAsync<MenuLoadingScreenView>(Cts.Token);
+            await _screenService.ShowAsync<MainMenuLoadingScreenView>();
 
-            await Addressables.LoadSceneAsync(_mainMenuConfig.PlayerVsPlayerScene);
+            await Addressables.LoadSceneAsync(_mainMenuConfig.PlayerVsPlayerScene, LoadSceneMode.Additive);
 
-            await _screenService.HideAsync<MenuLoadingScreenView>(Cts.Token);
+            await _screenService.HideAsync<MainMenuLoadingScreenView>();
         }
     }
 }

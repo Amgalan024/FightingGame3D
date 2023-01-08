@@ -1,27 +1,21 @@
-﻿using System.Collections.Generic;
-using MVC_Pattern.Scripts.Utils.LoadingScreen.Services;
-using MVC_Pattern.Scripts.Utils.LoadingScreen.Views;
-using UnityEngine;
+﻿using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace MVC_Pattern.Scripts.Services
+namespace MVC_Pattern.Scripts.Services.Root
 {
     public class ServicesEntryPoint : LifetimeScope
     {
-        [SerializeField] private List<BaseLoadingScreenView> _loadingScreenViews;
+        [SerializeField] private BaseServiceBuilder[] _baseServiceBuilders;
 
         protected override void Configure(IContainerBuilder builder)
         {
             base.Configure(builder);
-            ConfigureLoadingScreen(builder);
-        }
 
-        private void ConfigureLoadingScreen(IContainerBuilder builder)
-        {
-            builder.RegisterInstance(_loadingScreenViews);
-            builder.Register<LoadingScreensContainer>(Lifetime.Singleton);
-            builder.Register<LoadingScreenService>(Lifetime.Singleton).AsImplementedInterfaces();
+            foreach (var serviceBuilder in _baseServiceBuilders)
+            {
+                serviceBuilder.Build(builder);
+            }
         }
     }
 }

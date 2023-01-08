@@ -1,10 +1,10 @@
-﻿using System.Threading;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
+using MVC.Utils.Disposable;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Views;
 
 namespace MVC_Pattern.Scripts.Utils.LoadingScreen.Services
 {
-    public class LoadingScreenService : ILoadingScreenService
+    public class LoadingScreenService : DisposableWithCts, ILoadingScreenService
     {
         private readonly LoadingScreensContainer _container;
 
@@ -13,14 +13,14 @@ namespace MVC_Pattern.Scripts.Utils.LoadingScreen.Services
             _container = container;
         }
 
-        public async UniTask ShowAsync<T>(CancellationToken token) where T : BaseLoadingScreenView
+        public async UniTask ShowAsync<T>() where T : BaseLoadingScreenView
         {
-            await _container.GetLoadingScreenView<T>().ShowAsync(token);
+            await _container.GetLoadingScreenView<T>().ShowAsync(Cts.Token);
         }
 
-        public async UniTask HideAsync<T>(CancellationToken token) where T : BaseLoadingScreenView
+        public async UniTask HideAsync<T>() where T : BaseLoadingScreenView
         {
-            await _container.GetLoadingScreenView<T>().HideAsync(token);
+            await _container.GetLoadingScreenView<T>().HideAsync(Cts.Token);
         }
     }
 }
