@@ -2,6 +2,7 @@
 using MVC.Models;
 using MVC.StateMachine.States;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
+using UnityEngine;
 
 namespace MVC.StateMachine
 {
@@ -26,11 +27,12 @@ namespace MVC.StateMachine
         private void ChangeState(IState newState)
         {
             _stateMachineModel.PreviousState = _stateMachineModel.CurrentState;
-
+            Debug.Log($" Exited {_stateMachineModel.CurrentState?.GetType()}");
             _stateMachineModel.CurrentState?.Exit();
             _stateMachineModel.SetCurrentState(newState);
 
             newState.Enter();
+            Debug.Log($" Entered {_stateMachineModel.CurrentState.GetType()}");
         }
     }
 }

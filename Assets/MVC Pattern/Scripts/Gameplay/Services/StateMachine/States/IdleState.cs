@@ -25,9 +25,11 @@ namespace MVC.StateMachine.States
             PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(true);
 
             var animationData = PlayerContainer.AnimationData;
-
+            
+            _jumpStateModel.MovementType = MovementType.Standing;
             _jumpStateModel.JumpTweenConfig =
                 animationData.GetTweenDataByMovementType(animationData.JumpTweenData, MovementType.Standing);
+            
             _fallStateModel.FallTweenConfig =
                 animationData.GetTweenDataByMovementType(animationData.FallTweenData, MovementType.Standing);
         }
