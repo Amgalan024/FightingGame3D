@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: 
+    TypeName: MVC_Pattern.Scripts.Services.Root.ServicesEntryPoint
   autoRun: 1
   autoInjectGameObjects: []
   _menuGameplayConfig: {fileID: 11400000, guid: ec6e20e639df32a44afe729af9f0f970, type: 2}

@@ -23,37 +23,17 @@ namespace MVC_Pattern.Scripts.Startup
         {
             var startupScene = SceneManager.GetActiveScene();
 
-            var servicesSceneLoadOperation = Addressables.LoadSceneAsync(_config.ServicesScene, LoadSceneMode.Additive);
-
-            await servicesSceneLoadOperation;
+            await Addressables.LoadSceneAsync(_config.ServicesScene, LoadSceneMode.Additive);
 
             await SceneManager.UnloadSceneAsync(startupScene);
 
-            var servicesScene = servicesSceneLoadOperation.Result.Scene;
+            var mainMenuLoadingOperation = Addressables.LoadSceneAsync(_config.MainMenuScene, LoadSceneMode.Additive);
 
-            var servicesSceneRootObjects = servicesScene.GetRootGameObjects();
+            await mainMenuLoadingOperation;
 
-            LifetimeScope servicesLifetimeScope = null;
+            var mainMenuScene = mainMenuLoadingOperation.Result.Scene;
 
-            foreach (var rootObject in servicesSceneRootObjects)
-            {
-                if (rootObject.TryGetComponent(out servicesLifetimeScope))
-                {
-                    break;
-                }
-            }
-
-            using (LifetimeScope.EnqueueParent(servicesLifetimeScope))
-            {
-                var mainMenuLoadingOperation =
-                    Addressables.LoadSceneAsync(_config.MainMenuScene, LoadSceneMode.Additive);
-
-                await mainMenuLoadingOperation;
-
-                var mainMenuScene = mainMenuLoadingOperation.Result.Scene;
-
-                SceneManager.SetActiveScene(mainMenuScene);
-            }
+            SceneManager.SetActiveScene(mainMenuScene);
         }
     }
 }
