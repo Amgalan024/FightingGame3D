@@ -11,7 +11,7 @@ namespace MVC.Root
 {
     public class PvPCharacterSelectMenuEntryPoint : LifetimeScope
     {
-        [SerializeField] private CharacterSelectMenuGameplayConfig _menuGameplayConfig;
+        [SerializeField] private CharacterSelectMenuConfig _menuConfig;
         [SerializeField] private CharacterSelectMenuVisualConfig _menuVisualConfig;
 
         [SerializeField] private CharacterSelectMenuInputConfig[] _menuInputConfigs;
@@ -20,7 +20,7 @@ namespace MVC.Root
         {
             base.Configure(builder);
 
-            builder.RegisterInstance(_menuGameplayConfig);
+            builder.RegisterInstance(_menuConfig);
             builder.RegisterInstance(_menuVisualConfig);
             builder.RegisterInstance(_menuInputConfigs);
 
