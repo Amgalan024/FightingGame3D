@@ -156,7 +156,7 @@ MonoBehaviour:
     TypeName: MVC_Pattern.Scripts.Services.Root.ServicesEntryPoint
   autoRun: 1
   autoInjectGameObjects: []
-  _menuGameplayConfig: {fileID: 11400000, guid: ec6e20e639df32a44afe729af9f0f970, type: 2}
+  _menuConfig: {fileID: 11400000, guid: ec6e20e639df32a44afe729af9f0f970, type: 2}
   _menuVisualConfig: {fileID: 11400000, guid: bbe99988cc27e8f44988f6c90dcd1a4d, type: 2}
   _menuInputConfigs:
   - {fileID: 11400000, guid: 2587d8eeee326c14e8b3bb7c04e501b8, type: 2}

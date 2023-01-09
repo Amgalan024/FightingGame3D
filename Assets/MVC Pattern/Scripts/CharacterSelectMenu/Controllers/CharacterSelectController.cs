@@ -6,6 +6,7 @@ using MVC.Menu.Services.CharacterSelectionStrategy;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Services;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Views;
 using UnityEngine.AddressableAssets;
+using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 
@@ -55,7 +56,14 @@ namespace MVC.Menu.Controllers
             {
                 await _loadingScreenService.ShowAsync<MainMenuLoadingScreenView>();
 
-                await Addressables.LoadSceneAsync(_characterSelectMenuConfig.FightScene);
+                await SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+
+                var fightSceneLoadOperation =
+                    Addressables.LoadSceneAsync(_characterSelectMenuConfig.FightScene, LoadSceneMode.Additive);
+
+                await fightSceneLoadOperation;
+
+                SceneManager.SetActiveScene(fightSceneLoadOperation.Result.Scene);
 
                 await _loadingScreenService.HideAsync<MainMenuLoadingScreenView>();
             }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using MVC_Pattern.Scripts.Utils.LoadingScreen.Services;
+﻿using MVC_Pattern.Scripts.Utils.LoadingScreen.Services;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Views;
 using UnityEngine;
 using VContainer;

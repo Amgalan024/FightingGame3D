@@ -6,8 +6,8 @@ namespace MVC.Menu.Configs
     [CreateAssetMenu(fileName = nameof(MainMenuConfig), menuName = "Configs/MainMenu/" + nameof(MainMenuConfig))]
     public class MainMenuConfig : ScriptableObject
     {
-        [SerializeField] private AssetReference _playerVsPlayerScene;
+        [SerializeField] private AssetReference _characterSelectScene;
 
-        public AssetReference PlayerVsPlayerScene => _playerVsPlayerScene;
+        public AssetReference CharacterSelectScene => _characterSelectScene;
     }
 }

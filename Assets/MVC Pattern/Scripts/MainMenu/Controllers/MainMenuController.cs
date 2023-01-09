@@ -42,7 +42,14 @@ namespace MVC_Pattern.Scripts.MainMenu.Controllers
         {
             await _screenService.ShowAsync<MainMenuLoadingScreenView>();
 
-            await Addressables.LoadSceneAsync(_mainMenuConfig.PlayerVsPlayerScene);
+            await SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+
+            var characterSelectLoadOperation =
+                Addressables.LoadSceneAsync(_mainMenuConfig.CharacterSelectScene, LoadSceneMode.Additive);
+
+            await characterSelectLoadOperation;
+
+            SceneManager.SetActiveScene(characterSelectLoadOperation.Result.Scene);
 
             await _screenService.HideAsync<MainMenuLoadingScreenView>();
         }
