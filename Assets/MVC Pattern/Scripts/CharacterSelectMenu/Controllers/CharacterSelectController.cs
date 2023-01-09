@@ -3,10 +3,9 @@ using MVC.Configs;
 using MVC.Menu.Models;
 using MVC.Menu.Services;
 using MVC.Menu.Services.CharacterSelectionStrategy;
+using MVC_Pattern.Scripts.Services.SceneLoader;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Services;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Views;
-using UnityEngine.AddressableAssets;
-using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 
@@ -19,15 +18,17 @@ namespace MVC.Menu.Controllers
 
         private readonly ICharacterSelectionStrategy _characterSelectionStrategy;
         private readonly ILoadingScreenService _loadingScreenService;
+        private readonly ISceneLoadService _sceneLoadService;
 
         public CharacterSelectController(CharacterSelectMenuFactory menuFactory,
             ICharacterSelectionStrategy characterSelectionStrategy, ILoadingScreenService loadingScreenService,
-            CharacterSelectMenuConfig characterSelectMenuConfig)
+            CharacterSelectMenuConfig characterSelectMenuConfig, ISceneLoadService sceneLoadService)
         {
             _menuFactory = menuFactory;
             _characterSelectionStrategy = characterSelectionStrategy;
             _loadingScreenService = loadingScreenService;
             _characterSelectMenuConfig = characterSelectMenuConfig;
+            _sceneLoadService = sceneLoadService;
         }
 
         void IInitializable.Initialize()
@@ -56,14 +57,7 @@ namespace MVC.Menu.Controllers
             {
                 await _loadingScreenService.ShowAsync<MainMenuLoadingScreenView>();
 
-                await SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-
-                var fightSceneLoadOperation =
-                    Addressables.LoadSceneAsync(_characterSelectMenuConfig.FightScene, LoadSceneMode.Additive);
-
-                await fightSceneLoadOperation;
-
-                SceneManager.SetActiveScene(fightSceneLoadOperation.Result.Scene);
+                _sceneLoadService.LoadSceneAsync(_characterSelectMenuConfig.FightScene);
 
                 await _loadingScreenService.HideAsync<MainMenuLoadingScreenView>();
             }

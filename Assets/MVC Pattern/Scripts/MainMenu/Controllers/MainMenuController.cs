@@ -2,11 +2,9 @@
 using MVC.Menu.Configs;
 using MVC.Utils.Disposable;
 using MVC_Pattern.Scripts.MainMenu.Views;
-using MVC_Pattern.Scripts.Startup;
+using MVC_Pattern.Scripts.Services.SceneLoader;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Services;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Views;
-using UnityEngine.AddressableAssets;
-using UnityEngine.SceneManagement;
 using VContainer.Unity;
 
 namespace MVC_Pattern.Scripts.MainMenu.Controllers
@@ -17,13 +15,15 @@ namespace MVC_Pattern.Scripts.MainMenu.Controllers
         private readonly MainMenuConfig _mainMenuConfig;
 
         private readonly ILoadingScreenService _screenService;
+        private readonly ISceneLoadService _sceneLoadService;
 
         public MainMenuController(MainMenuView mainMenuView, MainMenuConfig mainMenuConfig,
-            ILoadingScreenService screenService)
+            ILoadingScreenService screenService, ISceneLoadService sceneLoadService)
         {
             _mainMenuView = mainMenuView;
             _mainMenuConfig = mainMenuConfig;
             _screenService = screenService;
+            _sceneLoadService = sceneLoadService;
         }
 
         void IInitializable.Initialize()
@@ -42,14 +42,7 @@ namespace MVC_Pattern.Scripts.MainMenu.Controllers
         {
             await _screenService.ShowAsync<MainMenuLoadingScreenView>();
 
-            await SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-
-            var characterSelectLoadOperation =
-                Addressables.LoadSceneAsync(_mainMenuConfig.CharacterSelectScene, LoadSceneMode.Additive);
-
-            await characterSelectLoadOperation;
-
-            SceneManager.SetActiveScene(characterSelectLoadOperation.Result.Scene);
+            _sceneLoadService.LoadSceneAsync(_mainMenuConfig.CharacterSelectScene);
 
             await _screenService.HideAsync<MainMenuLoadingScreenView>();
         }
