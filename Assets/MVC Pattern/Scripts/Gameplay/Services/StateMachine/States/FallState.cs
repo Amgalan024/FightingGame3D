@@ -6,7 +6,6 @@ using Cysharp.Threading.Tasks.Linq;
 using DG.Tweening;
 using MVC.Gameplay.Models.Player;
 using MVC.Utils.Disposable;
-using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;

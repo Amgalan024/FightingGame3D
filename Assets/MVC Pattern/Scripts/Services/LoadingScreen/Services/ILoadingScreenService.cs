@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Views;
 
 namespace MVC_Pattern.Scripts.Utils.LoadingScreen.Services

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using MVC_Pattern.Scripts.Utils.LoadingScreen.Views;
 
 namespace MVC_Pattern.Scripts.Utils.LoadingScreen.Services

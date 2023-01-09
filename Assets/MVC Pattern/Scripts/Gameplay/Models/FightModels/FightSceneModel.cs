@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MVC.Gameplay.Models.Player;
+﻿using System.Collections.Generic;
 using VContainer.Unity;
 
 namespace MVC.Gameplay.Models

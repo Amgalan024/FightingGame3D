@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
 using MVC.Gameplay.Services;
