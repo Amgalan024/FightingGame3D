@@ -16,6 +16,7 @@ namespace MVC.StateMachine.States
 
         public void Enter()
         {
+            PlayerContainer.InputFilterModelsContainer.SetAllInputActionModelFilters(false);
             Debug.Log("Lost", PlayerContainer.View);
         }
 
