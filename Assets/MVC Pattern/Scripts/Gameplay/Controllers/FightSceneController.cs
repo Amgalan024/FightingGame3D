@@ -13,14 +13,17 @@ namespace MVC.Gameplay.Controllers
         private readonly PlayerLifetimeScopeFactory _playerLifetimeScopeFactory;
 
         private readonly FightSceneModel _fightSceneModel;
+        private readonly PlayerStatsPanelView[] _playersStatsPanels;
 
         public FightSceneController(FightSceneFactory factory, FightSceneStorage storage,
-            PlayerLifetimeScopeFactory playerLifetimeScopeFactory, FightSceneModel fightSceneModel)
+            PlayerLifetimeScopeFactory playerLifetimeScopeFactory, FightSceneModel fightSceneModel,
+            PlayerStatsPanelView[] playersStatsPanels)
         {
             _factory = factory;
             _storage = storage;
             _playerLifetimeScopeFactory = playerLifetimeScopeFactory;
             _fightSceneModel = fightSceneModel;
+            _playersStatsPanels = playersStatsPanels;
         }
 
         void IStartable.Start()
@@ -46,7 +49,11 @@ namespace MVC.Gameplay.Controllers
         {
             foreach (var playerContainer in _storage.PlayerContainers)
             {
-                var playerLifetimeScope = _playerLifetimeScopeFactory.CreatePlayerLifetimeScope(playerContainer);
+                var playerIndex = _storage.PlayerContainers.IndexOf(playerContainer);
+                var playersStatsPanel = _playersStatsPanels[playerIndex];
+
+                var playerLifetimeScope =
+                    _playerLifetimeScopeFactory.CreatePlayerLifetimeScope(playerContainer, playersStatsPanel);
 
                 _fightSceneModel.PlayerLifetimeScopes.Add(playerLifetimeScope);
             }

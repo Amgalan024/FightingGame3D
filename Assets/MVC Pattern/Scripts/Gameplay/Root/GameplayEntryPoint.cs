@@ -12,6 +12,8 @@ namespace MVC.Root
     {
         [SerializeField] private GameplayVisualConfig _visualConfig;
         [SerializeField] private PlayerInputConfig[] _playerInputConfigs;
+        [SerializeField] private PlayerStatsPanelView[] _statsPanelViews;
+        [SerializeField] private Camera _camera;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -19,6 +21,8 @@ namespace MVC.Root
 
             builder.RegisterInstance(_visualConfig);
             builder.RegisterInstance(_playerInputConfigs);
+            builder.RegisterInstance(_statsPanelViews);
+            builder.RegisterInstance(_camera);
 
             builder.Register<PlayerLifetimeScopeFactory>(Lifetime.Singleton);
 

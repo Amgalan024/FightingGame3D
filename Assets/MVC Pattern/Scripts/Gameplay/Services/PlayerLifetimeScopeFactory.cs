@@ -1,4 +1,5 @@
 ﻿using MVC.Controllers;
+using MVC.Gameplay.Controllers;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
 using MVC.Models;
@@ -18,11 +19,13 @@ namespace MVC.Gameplay.Services
             _gameplayLifeTimeScope = gameplayLifeTimeScope;
         }
 
-        public LifetimeScope CreatePlayerLifetimeScope(PlayerContainer playerContainer)
+        public LifetimeScope CreatePlayerLifetimeScope(PlayerContainer playerContainer,
+            PlayerStatsPanelView playerStatsPanel)
         {
             var scope = _gameplayLifeTimeScope.CreateChild(builder =>
             {
                 builder.RegisterInstance(playerContainer);
+                builder.RegisterInstance(playerStatsPanel);
 
                 builder.Register<StatesContainer>(Lifetime.Scoped);
                 builder.Register<StateMachineModel>(Lifetime.Scoped);
@@ -34,6 +37,8 @@ namespace MVC.Gameplay.Services
                 builder.RegisterEntryPoint<PlayerComboController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerAnimatorController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerInteractionsController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerMainController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerStatsPanelController>(Lifetime.Scoped);
 
                 BuildStates(builder);
 

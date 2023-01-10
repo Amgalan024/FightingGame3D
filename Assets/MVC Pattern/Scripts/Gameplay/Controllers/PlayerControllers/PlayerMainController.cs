@@ -2,6 +2,7 @@
 using MVC.Gameplay.Models.Player;
 using MVC.StateMachine.States;
 using MVC.Views;
+using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -12,11 +13,11 @@ namespace MVC.Controllers
         private readonly PlayerModel _playerModel;
         private readonly PlayerView _playerView;
         private readonly PlayerContainer _opponentContainer;
-        private readonly StateMachine.StateMachine _stateMachine;
+        private readonly IStateMachine _stateMachine;
 
         private readonly Transform _parent;
 
-        public PlayerMainController(PlayerContainer playerContainer, StateMachine.StateMachine stateMachine,
+        public PlayerMainController(PlayerContainer playerContainer, IStateMachine stateMachine,
             LifetimeScope lifetimeScope)
         {
             _stateMachine = stateMachine;
