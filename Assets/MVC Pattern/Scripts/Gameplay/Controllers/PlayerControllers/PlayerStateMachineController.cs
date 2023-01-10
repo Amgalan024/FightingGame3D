@@ -6,14 +6,14 @@ using VContainer.Unity;
 
 namespace MVC.Controllers
 {
-    public class StateMachineController : IInitializable, IStartable, IFixedTickable
+    public class PlayerStateMachineController : IInitializable, IStartable, IFixedTickable
     {
         private readonly IStateMachine _stateMachine;
 
         private readonly StatesContainer _statesContainer;
         private readonly StateMachineModel _stateMachineModel;
 
-        public StateMachineController(IStateMachine stateMachine, StatesContainer statesContainer,
+        public PlayerStateMachineController(IStateMachine stateMachine, StatesContainer statesContainer,
             StateMachineModel stateMachineModel)
         {
             _stateMachine = stateMachine;
