@@ -17,9 +17,12 @@ namespace MVC.Models
                 InputFilterModelsByType.Add(inputData.Type, inputModel);
             }
 
-            var moveBackwardInputModel = InputFilterModelsByType[ControlType.MoveBackward];
+            var moveBackwardInputFilter = InputFilterModelsByType[ControlType.MoveBackward];
 
-            InputFilterModelsByType.Add(ControlType.Block, moveBackwardInputModel);
+            var blockInputFilter =
+                new InputFilterModel(moveBackwardInputFilter.ControlType, moveBackwardInputFilter.Key);
+
+            InputFilterModelsByType.Add(ControlType.Block, blockInputFilter);
         }
 
         public void SwitchMovementControllers()
