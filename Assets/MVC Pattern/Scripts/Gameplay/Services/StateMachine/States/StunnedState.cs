@@ -34,6 +34,8 @@ namespace MVC.StateMachine.States
 
             await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: token);
 
+            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsStunned, false);
+
             StateMachine.ChangeState<IdleState>();
         }
     }
