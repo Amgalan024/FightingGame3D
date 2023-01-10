@@ -20,7 +20,7 @@ namespace MVC.StateMachine.States
 
         public void Enter()
         {
-            PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(false);
+            PlayerContainer.InputFilterModelsContainer.SetAllInputActionModelFilters(false);
             PlayStunAnimationAsync(Cts.Token).Forget();
         }
 

@@ -17,6 +17,7 @@ namespace MVC.Menu.Controllers
         private readonly CharacterSelectMenuFactory _menuFactory;
 
         private readonly ICharacterSelectionStrategy _characterSelectionStrategy;
+
         private readonly ILoadingScreenService _loadingScreenService;
         private readonly ISceneLoadService _sceneLoadService;
 

@@ -79,10 +79,10 @@ namespace MVC.StateMachine.States
 
         private void ConfigureInputActionFilters()
         {
-            PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(false);
+            PlayerContainer.InputFilterModelsContainer.SetAllInputActionModelFilters(false);
 
-            PlayerContainer.InputModelsContainer.SetBlockInputActionFilters(true);
-            PlayerContainer.InputModelsContainer.SetAttackInputActionFilters(true);
+            PlayerContainer.InputFilterModelsContainer.SetBlockInputActionFilters(true);
+            PlayerContainer.InputFilterModelsContainer.SetAttackInputActionFilters(true);
         }
 
         private void PlayJumpAnimation()
@@ -99,7 +99,7 @@ namespace MVC.StateMachine.States
         {
             if (PlayerContainer.Model.CurrentJumpCount < 1)
             {
-                PlayerContainer.InputModelsContainer.SetJumpInputActionFilter(true);
+                PlayerContainer.InputFilterModelsContainer.SetJumpInputActionFilter(true);
             }
 
             if (!_stateMachineModel.CheckPreviousStateType<CommonStates.AttackState>())

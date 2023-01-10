@@ -52,13 +52,13 @@ namespace MVC.StateMachine.States
         {
             if (_runStateModel.MovementType == MovementType.Backward)
             {
-                PlayerContainer.InputModelsContainer.SetBlockInputActionFilters(true);
+                PlayerContainer.InputFilterModelsContainer.SetBlockInputActionFilters(true);
             }
 
-            PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(false);
+            PlayerContainer.InputFilterModelsContainer.SetAllInputActionModelFilters(false);
 
-            PlayerContainer.InputModelsContainer.SetAttackInputActionFilters(true);
-            PlayerContainer.InputModelsContainer.SetJumpInputActionFilter(true);
+            PlayerContainer.InputFilterModelsContainer.SetAttackInputActionFilters(true);
+            PlayerContainer.InputFilterModelsContainer.SetJumpInputActionFilter(true);
         }
 
         private void ConfigureJumpModel()

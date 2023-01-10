@@ -12,46 +12,52 @@ namespace MVC.Gameplay.Services
     {
         private readonly GameplayVisualConfig _visualConfig;
         private readonly FightSceneStorage _storage;
-        private readonly SelectedCharactersContainer _charactersContainer;
+        private readonly SelectedCharactersContainer _selectedCharactersContainer;
         private readonly PlayerInputConfig[] _inputConfigs;
 
         private readonly Transform _parent;
 
         public FightSceneFactory(FightSceneStorage storage, GameplayVisualConfig visualConfig,
-            SelectedCharactersContainer charactersContainer, LifetimeScope lifetimeScope,
+            SelectedCharactersContainer selectedCharactersContainer, LifetimeScope lifetimeScope,
             PlayerInputConfig[] inputConfigs)
         {
             _storage = storage;
             _visualConfig = visualConfig;
-            _charactersContainer = charactersContainer;
+            _selectedCharactersContainer = selectedCharactersContainer;
             _inputConfigs = inputConfigs;
             _parent = lifetimeScope.transform;
         }
 
-        public void CreateFightLocation()
+        public void CreateFightScene()
+        {
+            CreateFightLocation();
+            CreatePlayers();
+        }
+
+        private void CreateFightLocation()
         {
             var fightLocation = Object.Instantiate(_visualConfig.FightLocationView, _parent);
 
             _storage.FightLocationView = fightLocation;
         }
 
-        public void CreatePlayers()
+        private void CreatePlayers()
         {
-            for (int i = 0; i < _charactersContainer.PlayerConfigs.Count; i++)
+            for (int i = 0; i < _selectedCharactersContainer.PlayerConfigs.Count; i++)
             {
-                var playerModel = new PlayerModel(i, _charactersContainer.PlayerConfigs[i]);
+                var playerModel = new PlayerModel(i, _selectedCharactersContainer.PlayerConfigs[i]);
 
-                var playerView = CreatePlayerView(_charactersContainer.PlayerConfigs[i],
+                var playerView = CreatePlayerView(_selectedCharactersContainer.PlayerConfigs[i],
                     _storage.FightLocationView.PlayerSpawnPoints[i]);
 
-                var inputModelsContainer = new InputModelsContainer(_inputConfigs[i].InputModels);
+                var inputModelsContainer = new InputFilterModelsContainer(_inputConfigs[i].InputModels);
 
-                var comboList = _charactersContainer.PlayerConfigs[i].ComboConfig.ComboList;
+                var comboList = _selectedCharactersContainer.PlayerConfigs[i].ComboConfig.ComboList;
                 var comboModelsContainer = new ComboModelsContainer(comboList, inputModelsContainer);
 
                 var playerAttackModel = new PlayerAttackModel();
 
-                var animationData = _charactersContainer.PlayerConfigs[i].PlayerAnimationData;
+                var animationData = _selectedCharactersContainer.PlayerConfigs[i].PlayerAnimationData;
 
                 var playerContainer = new PlayerContainer(playerModel, playerView, playerAttackModel,
                     playerView.AttackHitBoxView, animationData, inputModelsContainer, comboModelsContainer);

@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace MVC.Models
 {
-    public class InputModel
+    public class InputFilterModel
     {
         public ControlType ControlType { get; }
         public KeyCode Key { get; set; }
 
         public bool Filter { get; set; }
 
-        public InputModel(ControlType controlType, KeyCode key)
+        public InputFilterModel(ControlType controlType, KeyCode key)
         {
             ControlType = controlType;
             Key = key;

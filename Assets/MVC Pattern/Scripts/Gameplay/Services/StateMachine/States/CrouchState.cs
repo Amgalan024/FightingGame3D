@@ -34,15 +34,15 @@ namespace MVC.StateMachine.States
 
         private void ConfigureInputActionFilters()
         {
-            PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(false);
+            PlayerContainer.InputFilterModelsContainer.SetAllInputActionModelFilters(false);
 
-            PlayerContainer.InputModelsContainer.SetAttackInputActionFilters(true);
-            PlayerContainer.InputModelsContainer.SetBlockInputActionFilters(true);
+            PlayerContainer.InputFilterModelsContainer.SetAttackInputActionFilters(true);
+            PlayerContainer.InputFilterModelsContainer.SetBlockInputActionFilters(true);
         }
 
         private void HandleCrouchInput()
         {
-            if (!Input.GetKey(PlayerContainer.InputModelsContainer.InputModelsByName[ControlType.Crouch].Key))
+            if (!Input.GetKey(PlayerContainer.InputFilterModelsContainer.InputFilterModelsByType[ControlType.Crouch].Key))
             {
                 StateMachine.ChangeState<IdleState>();
             }
