@@ -8,11 +8,7 @@ namespace MVC.Views
         public event Action<Collider> OnTriggerEntered;
         public event Action<Collider> OnTriggerExited;
 
-        [SerializeField] private BoxCollider _bottomCollider;
-        [SerializeField] private BoxCollider _topCollider;
 
-        public BoxCollider BottomCollider => _bottomCollider;
-        public BoxCollider TopCollider => _topCollider;
 
         public void OnTriggerEnter(Collider other)
         {

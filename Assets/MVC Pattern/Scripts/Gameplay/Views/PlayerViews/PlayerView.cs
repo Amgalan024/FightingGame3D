@@ -18,6 +18,8 @@ namespace MVC.Views
         [SerializeField] private CollisionDetectorView _collisionDetector;
         [SerializeField] private Animator _animator;
         [SerializeField] private Rigidbody _rigidbody;
+        [SerializeField] private BoxCollider _bottomCollider;
+        [SerializeField] private BoxCollider _topCollider;
         [SerializeField] private float _toMoveFloat;
         [SerializeField] private float _toMoveDuration;
         [SerializeField] private float _knockBackOnFall;
@@ -29,6 +31,8 @@ namespace MVC.Views
         public CollisionDetectorView CollisionDetector => _collisionDetector;
         public Animator Animator => _animator;
         public Rigidbody Rigidbody => _rigidbody;
+        public BoxCollider BottomCollider => _bottomCollider;
+        public BoxCollider TopCollider => _topCollider;
 
         public Tween IdleToMoveTween { get; private set; }
         public Tween MoveToIdleTween { get; private set; }
