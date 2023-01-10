@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerStatsPanelView : MonoBehaviour
+public class PlayerHUDView : MonoBehaviour
 {
     [SerializeField] private Canvas _canvas;
     [SerializeField] private Image _icon;

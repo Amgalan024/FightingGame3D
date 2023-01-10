@@ -5,23 +5,23 @@ using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class PlayerStatsPanelController : IInitializable, IDisposable
+    public class PlayerHUDController : IInitializable, IDisposable
     {
-        private readonly PlayerStatsPanelView _statsPanelView;
+        private readonly PlayerHUDView _hudView;
         private readonly PlayerModel _playerModel;
 
-        public PlayerStatsPanelController(PlayerStatsPanelView statsPanelView, PlayerContainer playerContainer)
+        public PlayerHUDController(PlayerHUDView hudView, PlayerContainer playerContainer)
         {
-            _statsPanelView = statsPanelView;
+            _hudView = hudView;
             _playerModel = playerContainer.Model;
         }
 
         void IInitializable.Initialize()
         {
-            _statsPanelView.SetIcon(_playerModel.Icon);
+            _hudView.SetIcon(_playerModel.Icon);
 
-            InitializeSlider(_statsPanelView.HealthBar, _playerModel.MaxHealthPoints, _playerModel.HealthPoints);
-            InitializeSlider(_statsPanelView.EnergyBar, _playerModel.MaxEnergyPoints, _playerModel.EnergyPoints);
+            InitializeSlider(_hudView.HealthBar, _playerModel.MaxHealthPoints, _playerModel.HealthPoints);
+            InitializeSlider(_hudView.EnergyBar, _playerModel.MaxEnergyPoints, _playerModel.EnergyPoints);
 
             _playerModel.OnHPChanged += OnHPChanged;
         }
@@ -33,7 +33,7 @@ namespace MVC.Gameplay.Controllers
 
         private void OnHPChanged(int currentHealthPoints)
         {
-            _statsPanelView.HealthBar.value = currentHealthPoints;
+            _hudView.HealthBar.value = currentHealthPoints;
         }
 
         private void InitializeSlider(Slider slider, int maxValue, int startValue)

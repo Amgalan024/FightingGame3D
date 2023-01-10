@@ -20,12 +20,12 @@ namespace MVC.Gameplay.Services
         }
 
         public LifetimeScope CreatePlayerLifetimeScope(PlayerContainer playerContainer,
-            PlayerStatsPanelView playerStatsPanel)
+            PlayerHUDView playerHUD)
         {
             var scope = _gameplayLifeTimeScope.CreateChild(builder =>
             {
                 builder.RegisterInstance(playerContainer);
-                builder.RegisterInstance(playerStatsPanel);
+                builder.RegisterInstance(playerHUD);
 
                 builder.Register<StatesContainer>(Lifetime.Scoped);
                 builder.Register<StateMachineModel>(Lifetime.Scoped);
@@ -38,7 +38,7 @@ namespace MVC.Gameplay.Services
                 builder.RegisterEntryPoint<PlayerAnimatorController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerInteractionsController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerMainController>(Lifetime.Scoped);
-                builder.RegisterEntryPoint<PlayerStatsPanelController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerHUDController>(Lifetime.Scoped);
 
                 BuildStates(builder);
 

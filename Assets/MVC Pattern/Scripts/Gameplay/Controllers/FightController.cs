@@ -13,11 +13,11 @@ namespace MVC.Gameplay.Controllers
         private readonly PlayerLifetimeScopeFactory _playerLifetimeScopeFactory;
 
         private readonly FightSceneModel _fightSceneModel;
-        private readonly PlayerStatsPanelView[] _playersStatsPanels;
+        private readonly PlayerHUDView[] _playersStatsPanels;
 
         public FightController(FightSceneFactory factory, FightSceneStorage storage,
             PlayerLifetimeScopeFactory playerLifetimeScopeFactory, FightSceneModel fightSceneModel,
-            PlayerStatsPanelView[] playersStatsPanels)
+            PlayerHUDView[] playersStatsPanels)
         {
             _factory = factory;
             _storage = storage;

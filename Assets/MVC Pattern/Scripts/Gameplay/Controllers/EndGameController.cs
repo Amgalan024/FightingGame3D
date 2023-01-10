@@ -10,7 +10,7 @@ using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class EndGamePanelController : IInitializable, IDisposable
+    public class EndGameController : IInitializable, IDisposable
     {
         private readonly EndGamePanelView _endGamePanelView;
         private readonly FightSceneModel _fightSceneModel;
@@ -18,7 +18,7 @@ namespace MVC.Gameplay.Controllers
         private readonly ISceneLoadService _sceneLoadService;
         private readonly EndGameConfig _endGameConfig;
 
-        public EndGamePanelController(EndGamePanelView endGamePanelView, FightSceneModel fightSceneModel,
+        public EndGameController(EndGamePanelView endGamePanelView, FightSceneModel fightSceneModel,
             ISceneLoadService sceneLoadService, ILoadingScreenService loadingScreenService, EndGameConfig endGameConfig)
         {
             _endGamePanelView = endGamePanelView;

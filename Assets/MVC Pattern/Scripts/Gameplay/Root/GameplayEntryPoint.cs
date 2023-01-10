@@ -15,7 +15,7 @@ namespace MVC.Root
         [SerializeField] private GameplayVisualConfig _visualConfig;
         [SerializeField] private EndGameConfig _endGameConfig;
         [SerializeField] private PlayerInputConfig[] _playerInputConfigs;
-        [SerializeField] private PlayerStatsPanelView[] _statsPanelViews;
+        [SerializeField] private PlayerHUDView[] _statsPanelViews;
         [SerializeField] private EndGamePanelView _endGamePanelView;
         [SerializeField] private Camera _camera;
 
@@ -37,7 +37,7 @@ namespace MVC.Root
             builder.Register<FightSceneModel>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<FightController>();
-            builder.RegisterEntryPoint<EndGamePanelController>();
+            builder.RegisterEntryPoint<EndGameController>();
         }
     }
 }
