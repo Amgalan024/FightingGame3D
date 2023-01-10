@@ -28,20 +28,14 @@ namespace MVC.Gameplay.Services
             _parent = lifetimeScope.transform;
         }
 
-        public void CreateFightScene()
-        {
-            CreateFightLocation();
-            CreatePlayers();
-        }
-
-        private void CreateFightLocation()
+        public void CreateFightLocation()
         {
             var fightLocation = Object.Instantiate(_visualConfig.FightLocationView, _parent);
 
             _storage.FightLocationView = fightLocation;
         }
 
-        private void CreatePlayers()
+        public void CreatePlayers()
         {
             for (int i = 0; i < _selectedCharactersContainer.PlayerConfigs.Count; i++)
             {

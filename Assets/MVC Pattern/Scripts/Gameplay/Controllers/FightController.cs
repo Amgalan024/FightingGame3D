@@ -6,7 +6,7 @@ using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class FightSceneController : DisposableWithCts, IStartable
+    public class FightController : DisposableWithCts, IStartable
     {
         private readonly FightSceneFactory _factory;
         private readonly FightSceneStorage _storage;
@@ -15,7 +15,7 @@ namespace MVC.Gameplay.Controllers
         private readonly FightSceneModel _fightSceneModel;
         private readonly PlayerStatsPanelView[] _playersStatsPanels;
 
-        public FightSceneController(FightSceneFactory factory, FightSceneStorage storage,
+        public FightController(FightSceneFactory factory, FightSceneStorage storage,
             PlayerLifetimeScopeFactory playerLifetimeScopeFactory, FightSceneModel fightSceneModel,
             PlayerStatsPanelView[] playersStatsPanels)
         {
@@ -28,7 +28,28 @@ namespace MVC.Gameplay.Controllers
 
         void IStartable.Start()
         {
-            _factory.CreateFightScene();
+            _fightSceneModel.OnRoundEnded += RestartFight;
+
+            _factory.CreateFightLocation();
+            _factory.CreatePlayers();
+
+            InitializeOpponentsForPlayers();
+
+            CreatePlayerLifetimeScopes();
+        }
+
+        private void RestartFight()
+        {
+            foreach (var playerLifetimeScope in _fightSceneModel.PlayerLifetimeScopes)
+            {
+                playerLifetimeScope.Dispose();
+            }
+
+            _fightSceneModel.PlayerLifetimeScopes.Clear();
+            _storage.PlayerContainers.Clear();
+            _storage.AttackModelsByView.Clear();
+
+            _factory.CreatePlayers();
 
             InitializeOpponentsForPlayers();
 

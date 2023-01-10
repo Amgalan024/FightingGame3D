@@ -54,6 +54,7 @@ namespace MVC.Gameplay.Services
             builder.Register<ComboState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<CrouchState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<LoseState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<WinState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<FallState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<IdleState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<JumpState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
