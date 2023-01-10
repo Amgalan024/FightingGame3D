@@ -4,7 +4,7 @@ using UnityEngine;
 public class FightSceneInit : MonoBehaviour
 {
     [SerializeField] private CameraMovement cameraMovement;
-    [SerializeField] private FightSceneStatsPanel fightSceneStatsPanel;
+    [SerializeField] private PlayerHUDView _playerHUDView;
     [SerializeField] private Transform player1SpawnPoint;
     [SerializeField] private Transform player2SpawnPoint;
     private PlayerBuilder player1Builder;
@@ -39,7 +39,6 @@ public class FightSceneInit : MonoBehaviour
         player2Builder.BuildPlayer(PlayerModel.PLAYER2_NUMBER);
         player1Builder.InitializeEnemyForPlayer(player2Builder.transform);
         player2Builder.InitializeEnemyForPlayer(player1Builder.transform);
-        fightSceneStatsPanel.InitializeStatPanel(player1Builder.PlayerModel, player2Builder.PlayerModel);
         cameraMovement.InitializeCameraMovement(player1Builder.gameObject, player2Builder.gameObject);
     }
 

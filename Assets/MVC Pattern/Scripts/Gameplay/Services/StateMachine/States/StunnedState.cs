@@ -20,7 +20,7 @@ namespace MVC.StateMachine.States
 
         public void Enter()
         {
-            PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(false);
+            PlayerContainer.InputFilterModelsContainer.SetAllInputActionModelFilters(false);
             PlayStunAnimationAsync(Cts.Token).Forget();
         }
 
@@ -33,6 +33,8 @@ namespace MVC.StateMachine.States
             PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsStunned, true);
 
             await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: token);
+
+            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsStunned, false);
 
             StateMachine.ChangeState<IdleState>();
         }

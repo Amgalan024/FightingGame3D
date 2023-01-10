@@ -3,7 +3,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
-using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
@@ -53,9 +52,9 @@ namespace MVC.StateMachine.States
             var opponentView = PlayerContainer.OpponentContainer.View;
             var playerView = PlayerContainer.View;
 
-            var overlappedColliders = Physics.OverlapBox(playerView.MainTriggerDetector.TopCollider.center,
-                    playerView.MainTriggerDetector.TopCollider.size)
-                .FirstOrDefault(c => c == opponentView.MainTriggerDetector.BottomCollider);
+            var overlappedColliders = Physics.OverlapBox(playerView.TopCollider.center,
+                    playerView.TopCollider.size)
+                .FirstOrDefault(c => c == opponentView.BottomCollider);
 
             if (overlappedColliders != null)
             {
@@ -80,10 +79,10 @@ namespace MVC.StateMachine.States
 
         private void ConfigureInputActionFilters()
         {
-            PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(false);
+            PlayerContainer.InputFilterModelsContainer.SetAllInputActionModelFilters(false);
 
-            PlayerContainer.InputModelsContainer.SetBlockInputActionFilters(true);
-            PlayerContainer.InputModelsContainer.SetAttackInputActionFilters(true);
+            PlayerContainer.InputFilterModelsContainer.SetBlockInputActionFilters(true);
+            PlayerContainer.InputFilterModelsContainer.SetAttackInputActionFilters(true);
         }
 
         private void PlayJumpAnimation()
@@ -100,7 +99,7 @@ namespace MVC.StateMachine.States
         {
             if (PlayerContainer.Model.CurrentJumpCount < 1)
             {
-                PlayerContainer.InputModelsContainer.SetJumpInputActionFilter(true);
+                PlayerContainer.InputFilterModelsContainer.SetJumpInputActionFilter(true);
             }
 
             if (!_stateMachineModel.CheckPreviousStateType<CommonStates.AttackState>())

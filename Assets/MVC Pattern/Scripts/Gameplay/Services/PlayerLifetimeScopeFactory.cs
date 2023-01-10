@@ -1,4 +1,5 @@
 ﻿using MVC.Controllers;
+using MVC.Gameplay.Controllers;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
 using MVC.Models;
@@ -18,22 +19,26 @@ namespace MVC.Gameplay.Services
             _gameplayLifeTimeScope = gameplayLifeTimeScope;
         }
 
-        public LifetimeScope CreatePlayerLifetimeScope(PlayerContainer playerContainer)
+        public LifetimeScope CreatePlayerLifetimeScope(PlayerContainer playerContainer,
+            PlayerHUDView playerHUD)
         {
             var scope = _gameplayLifeTimeScope.CreateChild(builder =>
             {
                 builder.RegisterInstance(playerContainer);
+                builder.RegisterInstance(playerHUD);
 
                 builder.Register<StatesContainer>(Lifetime.Scoped);
                 builder.Register<StateMachineModel>(Lifetime.Scoped);
 
                 builder.Register<StateMachine.StateMachine>(Lifetime.Scoped).AsImplementedInterfaces();
 
-                builder.RegisterEntryPoint<PlayerStatesController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerStateMachineController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerInputController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerComboController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerAnimatorController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerInteractionsController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerMainController>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerHUDController>(Lifetime.Scoped);
 
                 BuildStates(builder);
 
@@ -49,6 +54,7 @@ namespace MVC.Gameplay.Services
             builder.Register<ComboState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<CrouchState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<LoseState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<WinState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<FallState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<IdleState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<JumpState>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();

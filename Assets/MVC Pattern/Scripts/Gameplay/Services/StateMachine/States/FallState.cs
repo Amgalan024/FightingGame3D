@@ -6,7 +6,6 @@ using Cysharp.Threading.Tasks.Linq;
 using DG.Tweening;
 using MVC.Gameplay.Models.Player;
 using MVC.Utils.Disposable;
-using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
@@ -38,9 +37,9 @@ namespace MVC.StateMachine.States
 
             _fallCts = new CancellationTokenSource();
 
-            PlayerContainer.InputModelsContainer.SetAllInputActionModelFilters(false);
+            PlayerContainer.InputFilterModelsContainer.SetAllInputActionModelFilters(false);
 
-            PlayerContainer.InputModelsContainer.SetBlockInputActionFilters(true);
+            PlayerContainer.InputFilterModelsContainer.SetBlockInputActionFilters(true);
 
             _fallSubscription = PlayerContainer.Model.IsGrounded.Subscribe(OnPlayerFell);
 
@@ -68,11 +67,11 @@ namespace MVC.StateMachine.States
             var opponentPlayerView = PlayerContainer.OpponentContainer.View;
 
             var overlappedColliders = Physics.OverlapBox(
-                PlayerContainer.View.MainTriggerDetector.BottomCollider.transform.position,
-                PlayerContainer.View.MainTriggerDetector.BottomCollider.size);
+                PlayerContainer.View.BottomCollider.transform.position,
+                PlayerContainer.View.BottomCollider.size);
 
             var topCollider =
-                overlappedColliders.FirstOrDefault(c => c == opponentPlayerView.MainTriggerDetector.TopCollider);
+                overlappedColliders.FirstOrDefault(c => c == opponentPlayerView.TopCollider);
 
             if (topCollider != null && !opponentPlayerView.KnockBackTween.IsActive())
             {

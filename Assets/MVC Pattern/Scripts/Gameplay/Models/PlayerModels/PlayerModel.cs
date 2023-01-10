@@ -9,8 +9,6 @@ public class PlayerModel
 {
     public const int PLAYER1_NUMBER = 1;
     public const int PLAYER2_NUMBER = 2;
-    public event Action<PlayerModel, TriggerDetectorView> OnDamaged;
-    public event Action<PlayerModel> OnTurnCheckInvoked;
     public event Action OnTurned;
     public event Action OnLose;
     public event Action OnPlayerRefreshed;
@@ -97,11 +95,6 @@ public class PlayerModel
         OnWin?.Invoke();
     }
 
-    public void InvokeTurnCheck()
-    {
-        OnTurnCheckInvoked?.Invoke(this);
-    }
-
     public void TurnPlayer()
     {
         switch (CurrentTurn)
@@ -115,10 +108,5 @@ public class PlayerModel
         }
 
         OnTurned?.Invoke();
-    }
-
-    public void InvokePlayerAttacked(TriggerDetectorView playerAttackHitBoxView)
-    {
-        OnDamaged?.Invoke(this, playerAttackHitBoxView);
     }
 }

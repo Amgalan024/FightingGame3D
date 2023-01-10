@@ -16,7 +16,7 @@ namespace MVC.Controllers
         private readonly RunStateModel _runStateModel;
 
         private readonly PlayerModel _playerModel;
-        private readonly InputModelsContainer _inputModelsContainer;
+        private readonly InputFilterModelsContainer _inputFilterModelsContainer;
 
         public PlayerInputController(PlayerContainer playerContainer, IStateMachine stateMachine,
             RunStateModel runStateModel)
@@ -24,12 +24,12 @@ namespace MVC.Controllers
             _stateMachine = stateMachine;
             _runStateModel = runStateModel;
             _playerModel = playerContainer.Model;
-            _inputModelsContainer = playerContainer.InputModelsContainer;
+            _inputFilterModelsContainer = playerContainer.InputFilterModelsContainer;
         }
 
         void IInitializable.Initialize()
         {
-            _playerModel.OnTurned += _inputModelsContainer.SwitchMovementControllers;
+            _playerModel.OnTurned += _inputFilterModelsContainer.SwitchMovementControllers;
         }
 
         void ITickable.Tick()
@@ -42,17 +42,17 @@ namespace MVC.Controllers
 
         void IDisposable.Dispose()
         {
-            _playerModel.OnTurned -= _inputModelsContainer.SwitchMovementControllers;
+            _playerModel.OnTurned -= _inputFilterModelsContainer.SwitchMovementControllers;
         }
 
         private void HandleAttackInput()
         {
-            if (_inputModelsContainer.InputModelsByName[ControlType.Punch].GetInputDown())
+            if (_inputFilterModelsContainer.InputFilterModelsByType[ControlType.Punch].GetInputDown())
             {
                 _stateMachine.ChangeState<PunchState>();
             }
 
-            if (_inputModelsContainer.InputModelsByName[ControlType.Kick].GetInputDown())
+            if (_inputFilterModelsContainer.InputFilterModelsByType[ControlType.Kick].GetInputDown())
             {
                 _stateMachine.ChangeState<KickState>();
             }
@@ -60,7 +60,7 @@ namespace MVC.Controllers
 
         private void HandleJumpInput()
         {
-            if (_inputModelsContainer.InputModelsByName[ControlType.Jump].GetInputDown())
+            if (_inputFilterModelsContainer.InputFilterModelsByType[ControlType.Jump].GetInputDown())
             {
                 _stateMachine.ChangeState<JumpState>();
             }
@@ -68,23 +68,23 @@ namespace MVC.Controllers
 
         private void HandleMovementInput()
         {
-            if (_inputModelsContainer.InputModelsByName[ControlType.MoveForward].GetInput())
+            if (_inputFilterModelsContainer.InputFilterModelsByType[ControlType.MoveForward].GetInput())
             {
-                _runStateModel.SetData(_inputModelsContainer.InputModelsByName[ControlType.MoveForward].Key,
+                _runStateModel.SetData(_inputFilterModelsContainer.InputFilterModelsByType[ControlType.MoveForward].Key,
                     MovementType.Forward, PlayerAnimatorData.Forward);
 
                 _stateMachine.ChangeState<RunState>();
             }
 
-            if (_inputModelsContainer.InputModelsByName[ControlType.MoveBackward].GetInput())
+            if (_inputFilterModelsContainer.InputFilterModelsByType[ControlType.MoveBackward].GetInput())
             {
-                _runStateModel.SetData(_inputModelsContainer.InputModelsByName[ControlType.MoveBackward].Key,
+                _runStateModel.SetData(_inputFilterModelsContainer.InputFilterModelsByType[ControlType.MoveBackward].Key,
                     MovementType.Backward, PlayerAnimatorData.Backward);
 
                 _stateMachine.ChangeState<RunState>();
             }
 
-            if (_inputModelsContainer.InputModelsByName[ControlType.Crouch].GetInput())
+            if (_inputFilterModelsContainer.InputFilterModelsByType[ControlType.Crouch].GetInput())
             {
                 _stateMachine.ChangeState<CrouchState>();
             }
@@ -92,7 +92,7 @@ namespace MVC.Controllers
 
         private void HandleBlockInput()
         {
-            _playerModel.IsBlocking.Value = _inputModelsContainer.InputModelsByName[ControlType.Block].GetInput();
+            _playerModel.IsBlocking.Value = _inputFilterModelsContainer.InputFilterModelsByType[ControlType.Block].GetInput();
         }
     }
 }

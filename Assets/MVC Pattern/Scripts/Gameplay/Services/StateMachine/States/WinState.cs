@@ -1,5 +1,6 @@
 ﻿using MVC.Gameplay.Models.Player;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
+using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
@@ -15,6 +16,8 @@ namespace MVC.StateMachine.States
 
         public void Enter()
         {
+            PlayerContainer.InputFilterModelsContainer.SetAllInputActionModelFilters(false);
+            Debug.Log("Won", PlayerContainer.View);
         }
 
         public void Exit()
