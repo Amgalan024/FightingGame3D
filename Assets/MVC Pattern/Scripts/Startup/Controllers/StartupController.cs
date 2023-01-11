@@ -24,7 +24,7 @@ namespace MVC_Pattern.Scripts.Startup
 
         private async UniTask LoadStartScenes()
         {
-            _startupLoadingView.ShowLogo();
+            //_startupLoadingView.ShowLogo();
 
             var startupScene = SceneManager.GetActiveScene();
 
@@ -37,8 +37,6 @@ namespace MVC_Pattern.Scripts.Startup
             var mainMenuScene = mainMenuLoadingOperation.Result.Scene;
 
             SceneManager.SetActiveScene(mainMenuScene);
-
-            await UniTask.Delay(TimeSpan.FromSeconds(2));
 
             await _startupLoadingView.HideLogoAsync();
 
