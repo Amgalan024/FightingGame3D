@@ -61,7 +61,7 @@ namespace MVC.Gameplay.Controllers
                 _cameraView.DecreaseSizeAsync().Forget();
             }
         }
-фыва
+
         private void HandleCameraMovement()
         {
             var distanceBetweenPlayers = Mathf.Abs(_playerTransforms[0].position.x - _playerTransforms[1].position.x);
