@@ -5,21 +5,37 @@ using MVC.Gameplay.Models.Player;
 using MVC.Models;
 using MVC.StateMachine.States;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
+using MVC_Pattern.Scripts.Gameplay.Services;
 using VContainer;
 using VContainer.Unity;
 
 namespace MVC.Gameplay.Services
 {
-    public class PlayerLifetimeScopeFactory
+    public class FightScopesFactory
     {
         private readonly LifetimeScope _gameplayLifeTimeScope;
 
-        public PlayerLifetimeScopeFactory(LifetimeScope gameplayLifeTimeScope)
+        private readonly FightScopesStorage _storage;
+
+        public FightScopesFactory(LifetimeScope gameplayLifeTimeScope, FightScopesStorage storage)
         {
             _gameplayLifeTimeScope = gameplayLifeTimeScope;
+            _storage = storage;
         }
 
-        public LifetimeScope CreatePlayerLifetimeScope(PlayerContainer playerContainer,
+        public void CreateCameraScope()
+        {
+            var scope = _gameplayLifeTimeScope.CreateChild(builder =>
+            {
+                builder.RegisterEntryPoint<CameraController>();
+            });
+
+            scope.name = "CameraControllerScope";
+
+            _storage.CameraControllerScope = scope;
+        }
+
+        public void CreatePlayerScope(PlayerContainer playerContainer,
             PlayerHUDView playerHUD)
         {
             var scope = _gameplayLifeTimeScope.CreateChild(builder =>
@@ -45,7 +61,9 @@ namespace MVC.Gameplay.Services
                 BuildStateModels(builder);
             });
 
-            return scope;
+            scope.name = "PlayerScope";
+
+            _storage.PlayerLifetimeScopes.Add(scope);
         }
 
         private void BuildStates(IContainerBuilder builder)

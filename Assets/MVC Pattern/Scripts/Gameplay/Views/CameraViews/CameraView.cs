@@ -9,15 +9,16 @@ namespace MVC.Gameplay.Views
     public class CameraView : MonoBehaviour
     {
         [SerializeField] private CinemachineVirtualCamera _camera;
-        [SerializeField] private TriggerDetectorView[] _smallSizeBorders;
-        [SerializeField] private TriggerDetectorView[] _bigSizeBorders;
+        [SerializeField] private TriggerDetectorView[] _increaseSizeBorders;
+        [SerializeField] private TriggerDetectorView[] _decreaseSizeBorders;
+        
         [SerializeField] private float _cameraMoveSpeed;
         [SerializeField] private float _increasedSize;
         [SerializeField] private float _decreasedSize;
         [SerializeField] private float _sizeChangeDuration;
 
-        public TriggerDetectorView[] SmallSizeBorders => _smallSizeBorders;
-        public TriggerDetectorView[] BigSizeBorders => _bigSizeBorders;
+        public TriggerDetectorView[] IncreaseSizeBorders => _increaseSizeBorders;
+        public TriggerDetectorView[] DecreaseSizeBorders => _decreaseSizeBorders;
 
         public void SetBordersActive(bool isActive, params TriggerDetectorView[] cameraBorderViews)
         {

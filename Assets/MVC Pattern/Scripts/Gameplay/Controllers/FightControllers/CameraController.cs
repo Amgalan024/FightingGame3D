@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using MVC.Gameplay.Services;
 using MVC.Gameplay.Views;
 using MVC.Utils.Disposable;
@@ -9,7 +10,7 @@ using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class CameraController : DisposableWithCts, IInitializable, ITickable
+    public class CameraController : DisposableWithCts, IInitializable, IFixedTickable
     {
         private readonly CameraView _cameraView;
 
@@ -23,41 +24,41 @@ namespace MVC.Gameplay.Controllers
 
         void IInitializable.Initialize()
         {
-            foreach (var cameraBorderView in _cameraView.SmallSizeBorders)
+            foreach (var cameraBorderView in _cameraView.IncreaseSizeBorders)
             {
-                cameraBorderView.OnTriggerEntered += OnSmallBorderTriggerEntered;
+                cameraBorderView.OnTriggerEntered += IncreaseCameraSize;
             }
 
-            foreach (var cameraBorderView in _cameraView.BigSizeBorders)
+            foreach (var cameraBorderView in _cameraView.DecreaseSizeBorders)
             {
-                cameraBorderView.OnTriggerEntered += OnBigBorderTriggerEntered;
+                cameraBorderView.OnTriggerEntered += DecreaseCameraSize;
             }
         }
 
-        void ITickable.Tick()
+        void IFixedTickable.FixedTick()
         {
             HandleCameraMovement();
         }
 
-        private void OnSmallBorderTriggerEntered(Collider collider)
+        private void IncreaseCameraSize(Collider collider)
         {
             if (collider.GetComponent<PlayerView>())
             {
-                _cameraView.SetBordersActive(false, _cameraView.SmallSizeBorders);
-                _cameraView.SetBordersActive(true, _cameraView.BigSizeBorders);
+                _cameraView.SetBordersActive(false, _cameraView.IncreaseSizeBorders);
+                _cameraView.SetBordersActive(true, _cameraView.DecreaseSizeBorders);
 
-                _cameraView.IncreaseSizeAsync();
+                _cameraView.IncreaseSizeAsync().Forget();
             }
         }
 
-        private void OnBigBorderTriggerEntered(Collider collider)
+        private void DecreaseCameraSize(Collider collider)
         {
             if (collider.GetComponent<PlayerView>())
             {
-                _cameraView.SetBordersActive(true, _cameraView.SmallSizeBorders);
-                _cameraView.SetBordersActive(false, _cameraView.BigSizeBorders);
+                _cameraView.SetBordersActive(true, _cameraView.IncreaseSizeBorders);
+                _cameraView.SetBordersActive(false, _cameraView.DecreaseSizeBorders);
 
-                _cameraView.DecreaseSizeAsync();
+                _cameraView.DecreaseSizeAsync().Forget();
             }
         }
 
@@ -76,7 +77,7 @@ namespace MVC.Gameplay.Controllers
                 cameraPositionX = _playerTransforms[0].position.x + distanceBetweenPlayers / 2;
             }
 
-            _cameraView.MoveToPositionXAsync(cameraPositionX);
+            _cameraView.MoveToPositionXAsync(cameraPositionX).Forget();
         }
     }
 }

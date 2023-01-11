@@ -1,11 +1,13 @@
 ﻿using MVC.Configs.Enums;
 using MVC.Gameplay.Models.Player;
+using MVC.Views;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
+using UnityEngine;
 
 namespace MVC.StateMachine.States
 {
-    public class IdleState : IPlayerState
+    public class IdleState : IPlayerState, IFixedTickState
     {
         public PlayerContainer PlayerContainer { get; }
         public IStateMachine StateMachine { get; set; }
@@ -36,6 +38,11 @@ namespace MVC.StateMachine.States
 
         public void Exit()
         {
+        }
+
+        void IFixedTickState.OnFixedTick()
+        {
+            PlayerContainer.View.Rigidbody.velocity = Vector3.zero;
         }
     }
 }
