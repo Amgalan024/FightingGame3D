@@ -2,86 +2,93 @@
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
 using MVC.Utils.Disposable;
+using MVC_Pattern.Scripts.Gameplay.Services;
 using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
     public class FightController : DisposableWithCts, IStartable
     {
-        private readonly FightSceneFactory _factory;
-        private readonly FightSceneStorage _storage;
-        private readonly LifetimeScopeFactory _lifetimeScopeFactory;
+        private readonly FightSceneFactory _fightSceneFactory;
+        private readonly FightSceneStorage _fightSceneStorage;
+
+        private readonly FightScopesFactory _fightScopesFactory;
+        private readonly FightScopesStorage _fightScopesStorage;
 
         private readonly FightSceneModel _fightSceneModel;
-        private readonly PlayerHUDView[] _playersStatsPanels;
+        private readonly PlayerHUDView[] _playerHUDs;
 
-        public FightController(FightSceneFactory factory, FightSceneStorage storage,
-            LifetimeScopeFactory lifetimeScopeFactory, FightSceneModel fightSceneModel,
-            PlayerHUDView[] playersStatsPanels)
+        public FightController(FightSceneFactory fightSceneFactory, FightSceneStorage fightSceneStorage,
+            FightScopesFactory fightScopesFactory, FightSceneModel fightSceneModel,
+            PlayerHUDView[] playerHUDs, FightScopesStorage fightScopesStorage)
         {
-            _factory = factory;
-            _storage = storage;
-            _lifetimeScopeFactory = lifetimeScopeFactory;
+            _fightSceneFactory = fightSceneFactory;
+            _fightSceneStorage = fightSceneStorage;
+            _fightScopesFactory = fightScopesFactory;
             _fightSceneModel = fightSceneModel;
-            _playersStatsPanels = playersStatsPanels;
+            _playerHUDs = playerHUDs;
+            _fightScopesStorage = fightScopesStorage;
         }
 
         void IStartable.Start()
         {
             _fightSceneModel.OnRoundEnded += RestartFight;
 
-            _factory.CreateFightLocation();
-            _factory.CreatePlayers();
+            _fightSceneFactory.CreateFightLocation();
+            _fightSceneFactory.CreatePlayers();
 
             InitializeOpponentsForPlayers();
 
-            CreatePlayerLifetimeScopes();
+            CreateFightScopes();
         }
 
         private void RestartFight()
         {
-            foreach (var playerLifetimeScope in _fightSceneModel.PlayerLifetimeScopes)
-            {
-                playerLifetimeScope.Dispose();
-            }
+            DisposeFightScopes();
 
-            _fightSceneModel.CameraControllerScope.Dispose();
+            _fightSceneStorage.PlayerContainers.Clear();
+            _fightSceneStorage.AttackModelsByView.Clear();
 
-            _fightSceneModel.PlayerLifetimeScopes.Clear();
-            _storage.PlayerContainers.Clear();
-            _storage.AttackModelsByView.Clear();
-
-            _factory.CreatePlayers();
+            _fightSceneFactory.CreatePlayers();
 
             InitializeOpponentsForPlayers();
 
-            CreatePlayerLifetimeScopes();
+            CreateFightScopes();
         }
 
         private void InitializeOpponentsForPlayers()
         {
-            foreach (var playerContainer in _storage.PlayerContainers)
+            foreach (var playerContainer in _fightSceneStorage.PlayerContainers)
             {
-                var opponentContainer = _storage.PlayerContainers.First(c => c != playerContainer);
+                var opponentContainer = _fightSceneStorage.PlayerContainers.First(c => c != playerContainer);
 
                 playerContainer.SetOpponent(opponentContainer);
             }
         }
 
-        private void CreatePlayerLifetimeScopes()
+        private void CreateFightScopes()
         {
-            _fightSceneModel.CameraControllerScope = _lifetimeScopeFactory.CreateCameraControllerScope();
+            _fightScopesFactory.CreateCameraScope();
 
-            foreach (var playerContainer in _storage.PlayerContainers)
+            foreach (var playerContainer in _fightSceneStorage.PlayerContainers)
             {
-                var playerIndex = _storage.PlayerContainers.IndexOf(playerContainer);
-                var playersStatsPanel = _playersStatsPanels[playerIndex];
+                var playerIndex = _fightSceneStorage.PlayerContainers.IndexOf(playerContainer);
+                var playersStatsPanel = _playerHUDs[playerIndex];
 
-                var playerLifetimeScope =
-                    _lifetimeScopeFactory.CreatePlayerLifetimeScope(playerContainer, playersStatsPanel);
-
-                _fightSceneModel.PlayerLifetimeScopes.Add(playerLifetimeScope);
+                _fightScopesFactory.CreatePlayerScope(playerContainer, playersStatsPanel);
             }
+        }
+
+        private void DisposeFightScopes()
+        {
+            _fightScopesStorage.CameraControllerScope.Dispose();
+
+            foreach (var playerLifetimeScope in _fightScopesStorage.PlayerLifetimeScopes)
+            {
+                playerLifetimeScope.Dispose();
+            }
+
+            _fightScopesStorage.PlayerLifetimeScopes.Clear();
         }
     }
 }
