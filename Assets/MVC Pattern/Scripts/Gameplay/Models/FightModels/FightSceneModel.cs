@@ -11,6 +11,8 @@ namespace MVC.Gameplay.Models
         public event Action OnFightEnded;
         public List<LifetimeScope> PlayerLifetimeScopes { get; } = new List<LifetimeScope>(2);
 
+        public LifetimeScope CameraControllerScope { get; set; }
+
         public void InvokeRoundEnd()
         {
             OnRoundEnded?.Invoke();

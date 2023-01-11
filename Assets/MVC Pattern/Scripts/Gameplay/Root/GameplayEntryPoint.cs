@@ -2,6 +2,7 @@
 using MVC.Gameplay.Controllers;
 using MVC.Gameplay.Models;
 using MVC.Gameplay.Services;
+using MVC.Gameplay.Views;
 using MVC.Gameplay.Views.UI;
 using MVC_Pattern.Scripts.Services.SceneLoader.Config;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace MVC.Root
         [SerializeField] private PlayerInputConfig[] _playerInputConfigs;
         [SerializeField] private PlayerHUDView[] _statsPanelViews;
         [SerializeField] private EndGamePanelView _endGamePanelView;
-        [SerializeField] private Camera _camera;
+        [SerializeField] private CameraView _camera;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -30,7 +31,7 @@ namespace MVC.Root
             builder.RegisterInstance(_endGamePanelView);
             builder.RegisterInstance(_camera);
 
-            builder.Register<PlayerLifetimeScopeFactory>(Lifetime.Singleton);
+            builder.Register<LifetimeScopeFactory>(Lifetime.Singleton);
 
             builder.Register<FightSceneFactory>(Lifetime.Singleton);
             builder.Register<FightSceneStorage>(Lifetime.Singleton);

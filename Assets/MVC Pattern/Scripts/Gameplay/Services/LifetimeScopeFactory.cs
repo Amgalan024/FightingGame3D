@@ -10,13 +10,23 @@ using VContainer.Unity;
 
 namespace MVC.Gameplay.Services
 {
-    public class PlayerLifetimeScopeFactory
+    public class LifetimeScopeFactory
     {
         private readonly LifetimeScope _gameplayLifeTimeScope;
 
-        public PlayerLifetimeScopeFactory(LifetimeScope gameplayLifeTimeScope)
+        public LifetimeScopeFactory(LifetimeScope gameplayLifeTimeScope)
         {
             _gameplayLifeTimeScope = gameplayLifeTimeScope;
+        }
+
+        public LifetimeScope CreateCameraControllerScope()
+        {
+            var scope = _gameplayLifeTimeScope.CreateChild(builder =>
+            {
+                builder.RegisterEntryPoint<CameraController>();
+            });
+
+            return scope;
         }
 
         public LifetimeScope CreatePlayerLifetimeScope(PlayerContainer playerContainer,

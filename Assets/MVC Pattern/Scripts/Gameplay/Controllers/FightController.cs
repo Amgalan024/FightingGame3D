@@ -10,18 +10,18 @@ namespace MVC.Gameplay.Controllers
     {
         private readonly FightSceneFactory _factory;
         private readonly FightSceneStorage _storage;
-        private readonly PlayerLifetimeScopeFactory _playerLifetimeScopeFactory;
+        private readonly LifetimeScopeFactory _lifetimeScopeFactory;
 
         private readonly FightSceneModel _fightSceneModel;
         private readonly PlayerHUDView[] _playersStatsPanels;
 
         public FightController(FightSceneFactory factory, FightSceneStorage storage,
-            PlayerLifetimeScopeFactory playerLifetimeScopeFactory, FightSceneModel fightSceneModel,
+            LifetimeScopeFactory lifetimeScopeFactory, FightSceneModel fightSceneModel,
             PlayerHUDView[] playersStatsPanels)
         {
             _factory = factory;
             _storage = storage;
-            _playerLifetimeScopeFactory = playerLifetimeScopeFactory;
+            _lifetimeScopeFactory = lifetimeScopeFactory;
             _fightSceneModel = fightSceneModel;
             _playersStatsPanels = playersStatsPanels;
         }
@@ -44,6 +44,8 @@ namespace MVC.Gameplay.Controllers
             {
                 playerLifetimeScope.Dispose();
             }
+
+            _fightSceneModel.CameraControllerScope.Dispose();
 
             _fightSceneModel.PlayerLifetimeScopes.Clear();
             _storage.PlayerContainers.Clear();
@@ -68,13 +70,15 @@ namespace MVC.Gameplay.Controllers
 
         private void CreatePlayerLifetimeScopes()
         {
+            _fightSceneModel.CameraControllerScope = _lifetimeScopeFactory.CreateCameraControllerScope();
+
             foreach (var playerContainer in _storage.PlayerContainers)
             {
                 var playerIndex = _storage.PlayerContainers.IndexOf(playerContainer);
                 var playersStatsPanel = _playersStatsPanels[playerIndex];
 
                 var playerLifetimeScope =
-                    _playerLifetimeScopeFactory.CreatePlayerLifetimeScope(playerContainer, playersStatsPanel);
+                    _lifetimeScopeFactory.CreatePlayerLifetimeScope(playerContainer, playersStatsPanel);
 
                 _fightSceneModel.PlayerLifetimeScopes.Add(playerLifetimeScope);
             }
