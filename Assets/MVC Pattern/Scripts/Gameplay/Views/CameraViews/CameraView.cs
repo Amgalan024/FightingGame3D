@@ -11,7 +11,7 @@ namespace MVC.Gameplay.Views
         [SerializeField] private CinemachineVirtualCamera _camera;
         [SerializeField] private TriggerDetectorView[] _increaseSizeBorders;
         [SerializeField] private TriggerDetectorView[] _decreaseSizeBorders;
-        
+
         [SerializeField] private float _cameraMoveSpeed;
         [SerializeField] private float _increasedSize;
         [SerializeField] private float _decreasedSize;
@@ -38,9 +38,9 @@ namespace MVC.Gameplay.Views
             await ChangeSizeAsync(_decreasedSize);
         }
 
-        public async UniTask MoveToPositionXAsync(float posX)
+        public async UniTask MoveToPositionAsync(Vector3 moveTo)
         {
-            await transform.DOMoveX(posX, _cameraMoveSpeed);
+            await transform.DOMove(moveTo, _cameraMoveSpeed);
         }
 
         private async UniTask ChangeSizeAsync(float size)
