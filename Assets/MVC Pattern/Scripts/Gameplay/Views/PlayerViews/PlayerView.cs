@@ -11,7 +11,8 @@ namespace MVC.Views
     public class PlayerView : MonoBehaviour
     {
         public event Action OnAttackAnimationEnded = delegate { };
-
+        public event Action OnStunAnimationEnded = delegate { };
+        
         [SerializeField] private TriggerDetectorView _mainTriggerDetector;
         [SerializeField] private TriggerDetectorView _attackHitBoxView;
         [SerializeField] private TriggerDetectorView _sideDetectorView;
@@ -44,6 +45,11 @@ namespace MVC.Views
         public void InvokeAttackAnimationEnd()
         {
             OnAttackAnimationEnded.Invoke();
+        }
+
+        public void InvokeStunAnimationEnd()
+        {
+            OnStunAnimationEnded?.Invoke();
         }
 
         public void SetParent(Transform parent)

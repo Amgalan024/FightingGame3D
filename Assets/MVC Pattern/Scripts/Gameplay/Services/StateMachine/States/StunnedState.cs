@@ -21,22 +21,28 @@ namespace MVC.StateMachine.States
         public void Enter()
         {
             PlayerContainer.InputFilterModelsContainer.SetAllInputActionModelFilters(false);
-            PlayStunAnimationAsync(Cts.Token).Forget();
+            PlayerContainer.View.Animator.SetTrigger(PlayerAnimatorData.StunnedTrigger);
+            PlayerContainer.View.OnStunAnimationEnded += GoToIdleState;
+            PlayerContainer.Model.OnLose += OnLose;
         }
 
         public void Exit()
         {
         }
 
-        private async UniTask PlayStunAnimationAsync(CancellationToken token)
+        private void OnLose()
         {
-            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsStunned, true);
+            PlayerContainer.View.OnStunAnimationEnded -= GoToIdleState;
+            PlayerContainer.Model.OnLose -= OnLose;
+        }
 
-            await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: token);
-
+        private void GoToIdleState()
+        {
             PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.IsStunned, false);
 
             StateMachine.ChangeState<IdleState>();
+            
+            PlayerContainer.View.OnStunAnimationEnded -= GoToIdleState;
         }
     }
 }
