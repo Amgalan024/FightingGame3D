@@ -10,7 +10,7 @@ using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class CameraController : DisposableWithCts, IInitializable, IFixedTickable
+    public class CameraController : DisposableWithCts, IInitializable, IStartable, IFixedTickable
     {
         private readonly CameraView _cameraView;
 
@@ -33,6 +33,13 @@ namespace MVC.Gameplay.Controllers
             {
                 cameraBorderView.OnTriggerEntered += DecreaseCameraSize;
             }
+        }
+
+        void IStartable.Start()
+        {
+            var cameraZPosition = _playerTransforms[0].position.z + _cameraView.ZOffset;
+
+            _cameraView.SetZPosition(cameraZPosition);
         }
 
         void IFixedTickable.FixedTick()

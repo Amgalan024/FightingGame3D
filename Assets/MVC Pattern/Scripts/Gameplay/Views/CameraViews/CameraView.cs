@@ -12,7 +12,7 @@ namespace MVC.Gameplay.Views
         [SerializeField] private CinemachineVirtualCamera _camera;
         [SerializeField] private TriggerDetectorView[] _increaseSizeBorders;
         [SerializeField] private TriggerDetectorView[] _decreaseSizeBorders;
-
+        [SerializeField] private float _zOffset;
         [SerializeField] private float _decreasedYOffset;
         [SerializeField] private float _increasedYOffset;
         [SerializeField] private float _moveSpeed;
@@ -20,16 +20,27 @@ namespace MVC.Gameplay.Views
         [SerializeField] private float _decreasedSize;
         [SerializeField] private float _sizeChangeDuration;
 
+        public float ZOffset => _zOffset;
         public float YOffset => _yOffset;
-
         public TriggerDetectorView[] IncreaseSizeBorders => _increaseSizeBorders;
         public TriggerDetectorView[] DecreaseSizeBorders => _decreaseSizeBorders;
 
         private float _yOffset;
 
+        private Tween _movePositionTween;
+
         private void Awake()
         {
             _yOffset = _decreasedYOffset;
+        }
+
+        public void SetZPosition(float zPosition)
+        {
+            var position = transform.position;
+
+            position.z = zPosition;
+
+            transform.position = position;
         }
 
         public void SetBordersActive(bool isActive, params TriggerDetectorView[] cameraBorderViews)
@@ -52,7 +63,14 @@ namespace MVC.Gameplay.Views
 
         public async UniTask MoveToPositionAsync(Vector3 moveTo)
         {
-            await transform.DOMove(moveTo, _moveSpeed);
+            if (_movePositionTween.IsActive())
+            {
+                _movePositionTween.Kill();
+            }
+
+            _movePositionTween = transform.DOMove(moveTo, _moveSpeed);
+
+            await _movePositionTween;
         }
 
         private async UniTask ChangeSizeAsync(float cameraSize, float yOffset)
