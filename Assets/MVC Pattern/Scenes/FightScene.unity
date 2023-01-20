@@ -2931,7 +2931,9 @@ MonoBehaviour:
   _decreaseSizeBorders:
   - {fileID: 1609833710}
   - {fileID: 856973481}
-  _cameraMoveSpeed: 0.1
+  _decreasedYOffset: 4.15
+  _increasedYOffset: 4.55
+  _moveSpeed: 0.1
   _increasedSize: 3
   _decreasedSize: 2.5
   _sizeChangeDuration: 0.5

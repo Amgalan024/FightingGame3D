@@ -16,8 +16,6 @@ namespace MVC.Gameplay.Controllers
 
         private readonly List<Transform> _playerTransforms;
 
-        private float _initialYPosition;
-
         public CameraController(CameraView cameraView, FightSceneStorage storage)
         {
             _cameraView = cameraView;
@@ -26,8 +24,6 @@ namespace MVC.Gameplay.Controllers
 
         void IInitializable.Initialize()
         {
-            _initialYPosition = _cameraView.transform.position.y;
-
             foreach (var cameraBorderView in _cameraView.IncreaseSizeBorders)
             {
                 cameraBorderView.OnTriggerEntered += IncreaseCameraSize;
@@ -83,7 +79,7 @@ namespace MVC.Gameplay.Controllers
 
             var positionYDifference = Mathf.Abs(_playerTransforms[0].position.y - _playerTransforms[1].position.y);
 
-            cameraPosition.y = _initialYPosition + positionYDifference / 2;
+            cameraPosition.y = _cameraView.YOffset + positionYDifference / 2;
 
             cameraPosition.z = _cameraView.transform.position.z;
 
