@@ -1,4 +1,5 @@
-﻿using MVC.Configs;
+﻿using System.Linq;
+using MVC.Configs;
 using MVC.Gameplay.Models.Player;
 using MVC.Menu.Models;
 using MVC.Models;
@@ -30,7 +31,9 @@ namespace MVC.Gameplay.Services
 
         public void CreateFightLocation()
         {
-            var fightLocation = Object.Instantiate(_visualConfig.FightLocationView, _parent);
+            var random = Random.Range(0, _visualConfig.FightLocationViews.Length);
+
+            var fightLocation = Object.Instantiate(_visualConfig.FightLocationViews[random], _parent);
 
             _storage.FightLocationView = fightLocation;
         }

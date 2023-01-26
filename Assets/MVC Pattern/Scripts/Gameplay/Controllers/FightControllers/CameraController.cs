@@ -10,13 +10,11 @@ using VContainer.Unity;
 
 namespace MVC.Gameplay.Controllers
 {
-    public class CameraController : DisposableWithCts, IInitializable, IFixedTickable
+    public class CameraController : DisposableWithCts, IInitializable, IStartable, IFixedTickable
     {
         private readonly CameraView _cameraView;
 
         private readonly List<Transform> _playerTransforms;
-
-        private float _initialYPosition;
 
         public CameraController(CameraView cameraView, FightSceneStorage storage)
         {
@@ -26,8 +24,6 @@ namespace MVC.Gameplay.Controllers
 
         void IInitializable.Initialize()
         {
-            _initialYPosition = _cameraView.transform.position.y;
-
             foreach (var cameraBorderView in _cameraView.IncreaseSizeBorders)
             {
                 cameraBorderView.OnTriggerEntered += IncreaseCameraSize;
@@ -37,6 +33,13 @@ namespace MVC.Gameplay.Controllers
             {
                 cameraBorderView.OnTriggerEntered += DecreaseCameraSize;
             }
+        }
+
+        void IStartable.Start()
+        {
+            var cameraZPosition = _playerTransforms[0].position.z + _cameraView.ZOffset;
+
+            _cameraView.SetZPosition(cameraZPosition);
         }
 
         void IFixedTickable.FixedTick()
@@ -83,7 +86,7 @@ namespace MVC.Gameplay.Controllers
 
             var positionYDifference = Mathf.Abs(_playerTransforms[0].position.y - _playerTransforms[1].position.y);
 
-            cameraPosition.y = _initialYPosition + positionYDifference / 2;
+            cameraPosition.y = _cameraView.YOffset + positionYDifference / 2;
 
             cameraPosition.z = _cameraView.transform.position.z;
 
