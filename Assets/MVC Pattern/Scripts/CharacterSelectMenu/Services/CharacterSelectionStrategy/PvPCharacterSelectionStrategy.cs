@@ -37,8 +37,8 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
                 _menuStorage.MenuView.GridLayoutGroup.constraintCount - 1
             };
 
-            _menuStorage.CharacterButtonViews[_playerButtonIndexes[PlayerIndex1]].SelectButton(PlayerIndex1);
-            _menuStorage.CharacterButtonViews[_playerButtonIndexes[PlayerIndex2]].SelectButton(PlayerIndex2);
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[PlayerIndex1]].PlaySelectedByPlayerAnimation(PlayerIndex1);
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[PlayerIndex2]].PlaySelectedByPlayerAnimation(PlayerIndex2);
         }
 
         void ICharacterSelectionStrategy.HandlePlayerSelection()
@@ -88,11 +88,11 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
 
         private void AddPlayerButtonIndex(int index, int value)
         {
-            _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].UnselectButton(index);
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].PlayUnselectedByPlayerAnimation(index);
 
             _playerButtonIndexes[index] += value;
 
-            _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].SelectButton(index);
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].PlaySelectedByPlayerAnimation(index);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MVC.Menu.Configs;
 using MVC_Pattern.Scripts.MainMenu.Controllers;
+using MVC_Pattern.Scripts.MainMenu.Network;
 using MVC_Pattern.Scripts.MainMenu.Views;
 using UnityEngine;
 using VContainer;

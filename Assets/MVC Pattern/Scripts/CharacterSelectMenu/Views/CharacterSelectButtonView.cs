@@ -6,12 +6,12 @@ namespace MVC.Menu.Views
     {
         [SerializeField] private Animator _animator;
 
-        public void SelectButton(int playerNumber)
+        public void PlaySelectedByPlayerAnimation(int playerNumber)
         {
             _animator.SetBool("IsSelectedByPlayer" + playerNumber, true);
         }
 
-        public void UnselectButton(int playerNumber)
+        public void PlayUnselectedByPlayerAnimation(int playerNumber)
         {
             _animator.SetBool("IsSelectedByPlayer" + playerNumber, false);
         }

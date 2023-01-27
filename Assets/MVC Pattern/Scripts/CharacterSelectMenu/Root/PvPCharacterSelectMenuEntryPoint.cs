@@ -28,7 +28,7 @@ namespace MVC.Root
             builder.Register<CharacterSelectMenuFactory>(Lifetime.Singleton).AsSelf();
             builder.Register<CharacterSelectMenuStorage>(Lifetime.Singleton).AsSelf();
 
-            builder.Register<PvPCharacterSelectionStrategy>(Lifetime.Singleton).AsImplementedInterfaces();
+            //builder.Register<PvPCharacterSelectionStrategy>(Lifetime.Singleton).AsImplementedInterfaces();
 
             builder.RegisterEntryPoint<CharacterSelectController>();
         }
