@@ -37,8 +37,10 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
                 _menuStorage.MenuView.GridLayoutGroup.constraintCount - 1
             };
 
-            _menuStorage.CharacterButtonViews[_playerButtonIndexes[PlayerIndex1]].PlaySelectedByPlayerAnimation(PlayerIndex1);
-            _menuStorage.CharacterButtonViews[_playerButtonIndexes[PlayerIndex2]].PlaySelectedByPlayerAnimation(PlayerIndex2);
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[PlayerIndex1]]
+                .PlaySelectedByPlayerAnimation(PlayerIndex1);
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[PlayerIndex2]]
+                .PlaySelectedByPlayerAnimation(PlayerIndex2);
         }
 
         void ICharacterSelectionStrategy.HandlePlayerSelection()
@@ -49,34 +51,34 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
             }
         }
 
-        private void HandlePlayerSelecting(int index, CharacterSelectMenuInputConfig inputConfig)
+        private void HandlePlayerSelecting(int playerIndex, CharacterSelectMenuInputConfig inputConfig)
         {
-            if (Input.GetKeyDown(inputConfig.Down) && _playerButtonIndexes[index] <
+            if (Input.GetKeyDown(inputConfig.Down) && _playerButtonIndexes[playerIndex] <
                 _menuStorage.CharacterButtonViews.Count - _menuStorage.MenuView.GridLayoutGroup.constraintCount)
             {
-                AddPlayerButtonIndex(index, _menuStorage.MenuView.GridLayoutGroup.constraintCount);
+                AddPlayerButtonIndex(playerIndex, _menuStorage.MenuView.GridLayoutGroup.constraintCount);
             }
 
-            if (Input.GetKeyDown(inputConfig.Up) && _playerButtonIndexes[index] >
+            if (Input.GetKeyDown(inputConfig.Up) && _playerButtonIndexes[playerIndex] >
                 _menuStorage.MenuView.GridLayoutGroup.constraintCount - 1)
             {
-                AddPlayerButtonIndex(index, -_menuStorage.MenuView.GridLayoutGroup.constraintCount);
+                AddPlayerButtonIndex(playerIndex, -_menuStorage.MenuView.GridLayoutGroup.constraintCount);
             }
 
             if (Input.GetKeyDown(inputConfig.Right) &&
-                _playerButtonIndexes[index] < _menuStorage.CharacterButtonViews.Count - 1)
+                _playerButtonIndexes[playerIndex] < _menuStorage.CharacterButtonViews.Count - 1)
             {
-                AddPlayerButtonIndex(index, 1);
+                AddPlayerButtonIndex(playerIndex, 1);
             }
 
-            if (Input.GetKeyDown(inputConfig.Left) && _playerButtonIndexes[index] > 0)
+            if (Input.GetKeyDown(inputConfig.Left) && _playerButtonIndexes[playerIndex] > 0)
             {
-                AddPlayerButtonIndex(index, -1);
+                AddPlayerButtonIndex(playerIndex, -1);
             }
 
             if (Input.GetKeyDown(inputConfig.Choose))
             {
-                var selectedButton = _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]];
+                var selectedButton = _menuStorage.CharacterButtonViews[_playerButtonIndexes[playerIndex]];
                 _selectedCharactersContainer.PlayerConfigs.Add(_menuStorage.CharacterConfigsByButtons[selectedButton]);
 
                 if (_selectedCharactersContainer.PlayerConfigs.Count >= PlayersCount)
@@ -86,13 +88,15 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
             }
         }
 
-        private void AddPlayerButtonIndex(int index, int value)
+        private void AddPlayerButtonIndex(int playerIndex, int value)
         {
-            _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].PlayUnselectedByPlayerAnimation(index);
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[playerIndex]]
+                .PlayUnselectedByPlayerAnimation(playerIndex);
 
-            _playerButtonIndexes[index] += value;
+            _playerButtonIndexes[playerIndex] += value;
 
-            _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].PlaySelectedByPlayerAnimation(index);
+            _menuStorage.CharacterButtonViews[_playerButtonIndexes[playerIndex]]
+                .PlaySelectedByPlayerAnimation(playerIndex);
         }
     }
 }

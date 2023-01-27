@@ -77,34 +77,34 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
             }
         }
 
-        private void HandlePlayerSelecting(int index, CharacterSelectMenuInputConfig inputConfig)
+        private void HandlePlayerSelecting(int playerIndex, CharacterSelectMenuInputConfig inputConfig)
         {
-            if (Input.GetKeyDown(inputConfig.Down) && _playerButtonIndexes[index] <
+            if (Input.GetKeyDown(inputConfig.Down) && _playerButtonIndexes[playerIndex] <
                 _menuStorage.CharacterButtonViews.Count - _menuStorage.MenuView.GridLayoutGroup.constraintCount)
             {
-                RaiseAddPlayerButtonIndexEvent(index, _menuStorage.MenuView.GridLayoutGroup.constraintCount);
+                RaiseAddPlayerButtonIndexEvent(playerIndex, _menuStorage.MenuView.GridLayoutGroup.constraintCount);
             }
 
-            if (Input.GetKeyDown(inputConfig.Up) && _playerButtonIndexes[index] >
+            if (Input.GetKeyDown(inputConfig.Up) && _playerButtonIndexes[playerIndex] >
                 _menuStorage.MenuView.GridLayoutGroup.constraintCount - 1)
             {
-                RaiseAddPlayerButtonIndexEvent(index, -_menuStorage.MenuView.GridLayoutGroup.constraintCount);
+                RaiseAddPlayerButtonIndexEvent(playerIndex, -_menuStorage.MenuView.GridLayoutGroup.constraintCount);
             }
 
             if (Input.GetKeyDown(inputConfig.Right) &&
-                _playerButtonIndexes[index] < _menuStorage.CharacterButtonViews.Count - 1)
+                _playerButtonIndexes[playerIndex] < _menuStorage.CharacterButtonViews.Count - 1)
             {
-                RaiseAddPlayerButtonIndexEvent(index, 1);
+                RaiseAddPlayerButtonIndexEvent(playerIndex, 1);
             }
 
-            if (Input.GetKeyDown(inputConfig.Left) && _playerButtonIndexes[index] > 0)
+            if (Input.GetKeyDown(inputConfig.Left) && _playerButtonIndexes[playerIndex] > 0)
             {
-                RaiseAddPlayerButtonIndexEvent(index, -1);
+                RaiseAddPlayerButtonIndexEvent(playerIndex, -1);
             }
 
             if (Input.GetKeyDown(inputConfig.Choose))
             {
-                var selectedButton = _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]];
+                var selectedButton = _menuStorage.CharacterButtonViews[_playerButtonIndexes[playerIndex]];
                 _selectedCharactersContainer.PlayerConfigs.Add(_menuStorage.CharacterConfigsByButtons[selectedButton]);
 
                 if (_selectedCharactersContainer.PlayerConfigs.Count >= PlayersCount)
@@ -114,11 +114,11 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
             }
         }
 
-        private void RaiseAddPlayerButtonIndexEvent(int index, int value)
+        private void RaiseAddPlayerButtonIndexEvent(int playerIndex, int value)
         {
             var paramsArray = new int[]
             {
-                index,
+                playerIndex,
                 value
             };
 
@@ -136,14 +136,14 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
             {
                 var data = (int[]) eventData.CustomData;
 
-                var index = data[0];
+                var playerIndex = data[0];
                 var value = data[1];
 
-                _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].PlayUnselectedByPlayerAnimation(index);
+                _menuStorage.CharacterButtonViews[_playerButtonIndexes[playerIndex]].PlayUnselectedByPlayerAnimation(playerIndex);
 
-                _playerButtonIndexes[index] += value;
+                _playerButtonIndexes[playerIndex] += value;
 
-                _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]].PlaySelectedByPlayerAnimation(index);
+                _menuStorage.CharacterButtonViews[_playerButtonIndexes[playerIndex]].PlaySelectedByPlayerAnimation(playerIndex);
             }
         }
     }
