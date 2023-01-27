@@ -6,7 +6,7 @@ namespace MVC.Configs
     [CreateAssetMenu(fileName = nameof(GameplayVisualConfig), menuName = "Configs/Gameplay/" + nameof(GameplayVisualConfig))]
     public class GameplayVisualConfig : ScriptableObject
     {
-        [SerializeField] private FightLocationView _fightLocationView;
-        public FightLocationView FightLocationView => _fightLocationView;
+        [SerializeField] private FightLocationView[] _fightLocationViews;
+        public FightLocationView[] FightLocationViews => _fightLocationViews;
     }
 }
