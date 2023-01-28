@@ -2,15 +2,16 @@
 using MVC.Configs.Enums;
 using MVC.Gameplay.Constants;
 using MVC.Gameplay.Models.Player;
+using MVC.Menu.Views.Network;
 using MVC.Models;
 using MVC.StateMachine.States;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using VContainer.Unity;
 
-namespace MVC.Controllers
+namespace MVC_Pattern.Scripts.Gameplay.Controllers.PlayerControllers.Network
 {
-    public class PlayerInputController : IInitializable, ITickable, IDisposable
+    public class NetworkPlayerInputController : IInitializable, ITickable, IDisposable
     {
         private readonly IStateMachine _stateMachine;
         private readonly RunStateModel _runStateModel;
@@ -18,7 +19,8 @@ namespace MVC.Controllers
         private readonly PlayerModel _playerModel;
         private readonly InputFilterModelsContainer _inputFilterModelsContainer;
 
-        public PlayerInputController(PlayerContainer playerContainer, IStateMachine stateMachine,
+
+        public NetworkPlayerInputController(PlayerContainer playerContainer, IStateMachine stateMachine,
             RunStateModel runStateModel)
         {
             _stateMachine = stateMachine;
@@ -29,8 +31,6 @@ namespace MVC.Controllers
 
         void IInitializable.Initialize()
         {
-            _playerModel.OnTurned += _inputFilterModelsContainer.SwitchMovementControllers;
-
             HandleAttackInput();
             HandleJumpInput();
             HandleMovementInput();
@@ -49,27 +49,26 @@ namespace MVC.Controllers
 
         void IDisposable.Dispose()
         {
-            _playerModel.OnTurned -= _inputFilterModelsContainer.SwitchMovementControllers;
         }
 
         private void HandleAttackInput()
         {
-            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.Punch].OnInputDown +=
+            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.Punch].OnNetworkInputDown +=
                 _stateMachine.ChangeState<PunchState>;
 
-            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.Kick].OnInputDown +=
+            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.Kick].OnNetworkInputDown +=
                 _stateMachine.ChangeState<KickState>;
         }
 
         private void HandleJumpInput()
         {
-            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.Jump].OnInputDown +=
+            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.Jump].OnNetworkInputDown +=
                 _stateMachine.ChangeState<JumpState>;
         }
 
         private void HandleMovementInput()
         {
-            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.MoveForward].OnInputDown += () =>
+            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.MoveForward].OnNetworkInputDown += () =>
             {
                 _runStateModel.SetData(_inputFilterModelsContainer.InputFilterModelsByType[ControlType.MoveForward],
                     MovementType.Forward, PlayerAnimatorData.Forward);
@@ -77,7 +76,7 @@ namespace MVC.Controllers
                 _stateMachine.ChangeState<RunState>();
             };
 
-            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.MoveBackward].OnInputDown += () =>
+            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.MoveBackward].OnNetworkInputDown += () =>
             {
                 _runStateModel.SetData(
                     _inputFilterModelsContainer.InputFilterModelsByType[ControlType.MoveBackward],
@@ -86,7 +85,7 @@ namespace MVC.Controllers
                 _stateMachine.ChangeState<RunState>();
             };
 
-            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.Crouch].OnInputDown += () =>
+            _inputFilterModelsContainer.InputFilterModelsByType[ControlType.Crouch].OnNetworkInputDown += () =>
             {
                 _stateMachine.ChangeState<CrouchState>();
             };

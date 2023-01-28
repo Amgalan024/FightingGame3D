@@ -42,7 +42,7 @@ namespace MVC.StateMachine.States
 
         private void HandleCrouchInput()
         {
-            if (!Input.GetKey(PlayerContainer.InputFilterModelsContainer.InputFilterModelsByType[ControlType.Crouch].Key))
+            if (!PlayerContainer.InputFilterModelsContainer.InputFilterModelsByType[ControlType.Crouch].IsKeyPressed)
             {
                 StateMachine.ChangeState<IdleState>();
             }

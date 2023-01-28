@@ -3,6 +3,8 @@
     public enum NetworkEventCodes : byte
     {
         AddPlayerButtonIndexEventCode = 1,
-        SelectCharacterEventCode = 2
+        SelectCharacterEventCode = 2,
+        InputKeyDownEvent = 3,
+        InputKeyUpEvent = 4
     }
 }

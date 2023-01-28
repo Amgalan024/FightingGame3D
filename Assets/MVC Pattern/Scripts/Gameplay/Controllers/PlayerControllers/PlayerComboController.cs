@@ -27,48 +27,48 @@ namespace MVC.Controllers
 
         void IFixedTickable.FixedTick()
         {
-            CountComboTimer();
-
-            if (!_playerContainer.Model.IsDoingCombo)
-            {
-                foreach (var comboModel in _playerContainer.ComboModelsContainer.ComboModels)
-                {
-                    HandleComboInput(comboModel);
-                }
-            }
+            // CountComboTimer();
+            //
+            // if (!_playerContainer.Model.IsDoingCombo)
+            // {
+            //     foreach (var comboModel in _playerContainer.ComboModelsContainer.ComboModels)
+            //     {
+            //         HandleComboInput(comboModel);
+            //     }
+            // }
         }
 
         private void HandleComboInput(ComboModel comboModel)
         {
-            if (comboModel.InputModels[comboModel.ComboCount].GetInputDown())
-            {
-                if (comboModel.ComboCount == 0)
-                {
-                    _comboTimer = 2f;
-                }
-
-                if (_comboTimer > 0)
-                {
-                    comboModel.ComboCount++;
-                }
-                else
-                {
-                    ResetComboCounts();
-                }
-            }
-            else if (Input.anyKeyDown)
-            {
-                comboModel.ComboCount = 0;
-            }
-
-            if (comboModel.ComboCount == comboModel.InputModels.Length)
-            {
-                ResetComboCounts();
-
-                _comboStateModel.SetData(comboModel.Name, comboModel.Damage);
-
-                _stateMachine.ChangeState<ComboState>();
-            }
+            // if (comboModel.InputModels[comboModel.ComboCount].GetInputDown())
+            // {
+            //     if (comboModel.ComboCount == 0)
+            //     {
+            //         _comboTimer = 2f;
+            //     }
+            //
+            //     if (_comboTimer > 0)
+            //     {
+            //         comboModel.ComboCount++;
+            //     }
+            //     else
+            //     {
+            //         ResetComboCounts();
+            //     }
+            // }
+            // else if (Input.anyKeyDown)
+            // {
+            //     comboModel.ComboCount = 0;
+            // }
+            //
+            // if (comboModel.ComboCount == comboModel.InputModels.Length)
+            // {
+            //     ResetComboCounts();
+            //
+            //     _comboStateModel.SetData(comboModel.Name, comboModel.Damage);
+            //
+            //     _stateMachine.ChangeState<ComboState>();
+            // }
         }
 
         private void CountComboTimer()

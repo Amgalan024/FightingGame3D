@@ -1,14 +1,23 @@
-﻿using MVC.Configs.Enums;
+﻿using System;
+using MVC.Configs.Enums;
 using UnityEngine;
 
 namespace MVC.Models
 {
     public class InputFilterModel
     {
+        public event Action OnInputDown;
+        public event Action OnInputUp;
+
+        public event Action OnNetworkInputDown;
+        public event Action OnNetworkInputUp;
+
         public ControlType ControlType { get; }
         public KeyCode Key { get; set; }
 
         public bool Filter { get; set; }
+        public bool IsKeyPressed { get; private set; }
+        public bool IsKeyPressedWithFilter => IsKeyPressed && Filter;
 
         public InputFilterModel(ControlType controlType, KeyCode key)
         {
@@ -16,19 +25,34 @@ namespace MVC.Models
             Key = key;
         }
 
-        public bool GetInputDown()
+        public void HandleInputDown()
         {
-            return Filter && Input.GetKeyDown(Key);
+            if (Filter && Input.GetKeyDown(Key))
+            {
+                OnInputDown?.Invoke();
+                IsKeyPressed = true;
+            }
         }
 
-        public bool GetInputUp()
+        public void HandleInputUp()
         {
-            return Filter && Input.GetKeyUp(Key);
+            if (Input.GetKeyUp(Key))
+            {
+                OnInputUp?.Invoke();
+                IsKeyPressed = false;
+            }
         }
 
-        public bool GetInput()
+        public void InvokeNetworkInputDown()
         {
-            return Filter && Input.GetKey(Key);
+            OnNetworkInputDown?.Invoke();
+            IsKeyPressed = true;
+        }
+
+        public void InvokeNetworkInputUp()
+        {
+            OnNetworkInputUp?.Invoke();
+            IsKeyPressed = false;
         }
     }
 }

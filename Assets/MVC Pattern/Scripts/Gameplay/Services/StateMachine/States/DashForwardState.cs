@@ -48,7 +48,7 @@ namespace MVC.StateMachine.States
 
         private void HandleDashKeyInput()
         {
-            if (!Input.GetKey(_runStateModel.InputKey))
+            if (!_runStateModel.InputFilterModel.IsKeyPressed)
             {
                 PlayerContainer.View.Rigidbody.velocity = Vector3.zero;
 

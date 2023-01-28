@@ -4,8 +4,11 @@ using MVC.Gameplay.Models;
 using MVC.Gameplay.Models.Player;
 using MVC.Models;
 using MVC.StateMachine.States;
+using MVC_Pattern.Scripts.Gameplay.Controllers.PlayerControllers;
+using MVC_Pattern.Scripts.Gameplay.Controllers.PlayerControllers.Network;
 using MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels;
 using MVC_Pattern.Scripts.Gameplay.Services;
+using Photon.Pun;
 using VContainer;
 using VContainer.Unity;
 
@@ -49,12 +52,21 @@ namespace MVC.Gameplay.Services
                 builder.Register<StateMachine.StateMachine>(Lifetime.Scoped).AsImplementedInterfaces();
 
                 builder.RegisterEntryPoint<PlayerStateMachineController>(Lifetime.Scoped);
-                builder.RegisterEntryPoint<PlayerInputController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerComboController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerAnimatorController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerInteractionsController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerMainController>(Lifetime.Scoped);
                 builder.RegisterEntryPoint<PlayerHUDController>(Lifetime.Scoped);
+
+                if (PhotonNetwork.IsConnected)
+                {
+                    builder.RegisterEntryPoint<NetworkInputSynchronizer>(Lifetime.Scoped);
+                    builder.RegisterEntryPoint<NetworkPlayerInputController>(Lifetime.Scoped);
+                }
+                else
+                {
+                    builder.RegisterEntryPoint<PlayerInputController>(Lifetime.Scoped);
+                }
 
                 BuildStates(builder);
 

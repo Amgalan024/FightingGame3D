@@ -1,5 +1,4 @@
-﻿using System;
-using Photon.Pun;
+﻿using Photon.Pun;
 using UnityEngine;
 
 namespace MVC.Menu.Views.Network
@@ -9,13 +8,5 @@ namespace MVC.Menu.Views.Network
         [SerializeField] private PhotonView _photonView;
 
         public PhotonView PhotonView => _photonView;
-
-        [PunRPC]
-        public void InvokeActionRPC(object action)
-        {
-            var act = action as Action;
-
-            act?.Invoke();
-        }
     }
 }

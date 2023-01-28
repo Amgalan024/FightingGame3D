@@ -21,7 +21,7 @@ public class PlayerModel
     public AsyncReactiveProperty<bool> IsDoingCombo { get; } = new AsyncReactiveProperty<bool>(false);
     public AsyncReactiveProperty<bool> IsBlocking { get; } = new AsyncReactiveProperty<bool>(false);
     public AsyncReactiveProperty<bool> IsCrouching { get; } = new AsyncReactiveProperty<bool>(false);
-    public int Number { get; }
+    public int Index { get; }
     public Sprite Icon { get; }
     public int MaxHealthPoints { get; }
     public int MaxEnergyPoints { get; }
@@ -41,10 +41,10 @@ public class PlayerModel
 
     public int Turn { get; set; }
 
-    public PlayerModel(int playerNumber, Sprite icon, int maxHealthPoints, int maxEnergyPoints, int healthPoints,
+    public PlayerModel(int playerIndex, Sprite icon, int maxHealthPoints, int maxEnergyPoints, int healthPoints,
         int energyPoints, float movementSpeed, float jumpForce, int punchDamage, int kickDamage)
     {
-        Number = playerNumber;
+        Index = playerIndex;
         Icon = icon;
         MaxHealthPoints = maxHealthPoints;
         MaxEnergyPoints = maxEnergyPoints;
@@ -56,9 +56,9 @@ public class PlayerModel
         KickDamage = kickDamage;
     }
 
-    public PlayerModel(int playerNumber, CharacterConfig characterConfig)
+    public PlayerModel(int playerIndex, CharacterConfig characterConfig)
     {
-        Number = playerNumber;
+        Index = playerIndex;
         Icon = characterConfig.Icon;
         MaxHealthPoints = characterConfig.MaxHealthPoints;
         MaxEnergyPoints = characterConfig.MaxEnergyPoints;

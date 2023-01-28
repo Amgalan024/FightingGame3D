@@ -1,17 +1,18 @@
 ﻿using MVC.Configs.Enums;
+using MVC.Models;
 using UnityEngine;
 
 namespace MVC_Pattern.Scripts.Gameplay.Models.StateMachineModels.StateModels
 {
     public class RunStateModel
     {
-        public KeyCode InputKey { get; private set; }
+        public InputFilterModel InputFilterModel { get; private set; }
         public MovementType MovementType { get; private set; }
         public int AnimationHash { get; private set; }
 
-        public void SetData(KeyCode inputKey, MovementType movementType, int animationHash)
+        public void SetData(InputFilterModel inputFilterModel, MovementType movementType, int animationHash)
         {
-            InputKey = inputKey;
+            InputFilterModel = inputFilterModel;
             MovementType = movementType;
             AnimationHash = animationHash;
         }

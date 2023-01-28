@@ -77,23 +77,25 @@ namespace MVC.StateMachine.States
             _dashCts?.Dispose();
             _dashCts = new CancellationTokenSource();
 
-            UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: _dashCts.Token).ContinueWith(_dashCts.Cancel)
-                .Forget();
+            _runStateModel.InputFilterModel.OnInputDown += Dash;
 
-            UniTask.WaitUntil(() => Input.GetKeyDown(_runStateModel.InputKey), cancellationToken: _dashCts.Token)
-                .ContinueWith(() =>
-                    {
-                        switch (_runStateModel.MovementType)
-                        {
-                            case MovementType.Forward:
-                                StateMachine.ChangeState<DashForwardState>();
-                                break;
-                            case MovementType.Backward:
-                                StateMachine.ChangeState<DashBackwardState>();
-                                break;
-                        }
-                    }
-                )
+            void Dash()
+            {
+                switch (_runStateModel.MovementType)
+                {
+                    case MovementType.Forward:
+                        StateMachine.ChangeState<DashForwardState>();
+                        break;
+                    case MovementType.Backward:
+                        StateMachine.ChangeState<DashBackwardState>();
+                        break;
+                }
+            }
+
+            _dashCts.Token.Register(() => _runStateModel.InputFilterModel.OnInputDown -= Dash);
+
+            UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: _dashCts.Token)
+                .ContinueWith(() => _runStateModel.InputFilterModel.OnInputDown -= Dash)
                 .Forget();
         }
 
@@ -101,7 +103,7 @@ namespace MVC.StateMachine.States
         {
             var playerView = PlayerContainer.View;
 
-            if (!Input.GetKey(_runStateModel.InputKey))
+            if (!_runStateModel.InputFilterModel.IsKeyPressed)
             {
                 playerView.Rigidbody.velocity = Vector3.zero;
 
