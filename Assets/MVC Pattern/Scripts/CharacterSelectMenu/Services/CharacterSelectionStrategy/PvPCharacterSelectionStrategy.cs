@@ -53,6 +53,11 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
 
         private void HandlePlayerSelecting(int playerIndex, CharacterSelectMenuInputConfig inputConfig)
         {
+            if (_selectedCharactersContainer.CharacterConfigsByPlayer.ContainsKey(playerIndex))
+            {
+                return;
+            }
+
             if (Input.GetKeyDown(inputConfig.Down) && _playerButtonIndexes[playerIndex] <
                 _menuStorage.CharacterButtonViews.Count - _menuStorage.MenuView.GridLayoutGroup.constraintCount)
             {
@@ -79,9 +84,12 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
             if (Input.GetKeyDown(inputConfig.Choose))
             {
                 var selectedButton = _menuStorage.CharacterButtonViews[_playerButtonIndexes[playerIndex]];
-                _selectedCharactersContainer.PlayerConfigs.Add(_menuStorage.CharacterConfigsByButtons[selectedButton]);
 
-                if (_selectedCharactersContainer.PlayerConfigs.Count >= PlayersCount)
+                var characterConfig = _menuStorage.CharacterConfigsByButtons[selectedButton];
+
+                _selectedCharactersContainer.CharacterConfigsByPlayer.Add(playerIndex, characterConfig);
+
+                if (_selectedCharactersContainer.CharacterConfigsByPlayer.Count >= PlayersCount)
                 {
                     OnCharactersSelected?.Invoke(_selectedCharactersContainer);
                 }

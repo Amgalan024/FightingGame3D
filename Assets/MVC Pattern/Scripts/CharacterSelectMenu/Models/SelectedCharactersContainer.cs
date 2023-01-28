@@ -5,6 +5,7 @@ namespace MVC.Menu.Models
 {
     public class SelectedCharactersContainer
     {
-        public List<CharacterConfig> PlayerConfigs { get; } = new List<CharacterConfig>(2);
+        public Dictionary<int, CharacterConfig> CharacterConfigsByPlayer { get; } =
+            new Dictionary<int, CharacterConfig>();
     }
 }

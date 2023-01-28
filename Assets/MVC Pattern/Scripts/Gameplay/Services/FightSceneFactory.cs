@@ -40,21 +40,24 @@ namespace MVC.Gameplay.Services
 
         public void CreatePlayers()
         {
-            for (int i = 0; i < _selectedCharactersContainer.PlayerConfigs.Count; i++)
+            foreach (var characterConfigByPlayer in _selectedCharactersContainer.CharacterConfigsByPlayer)
             {
-                var playerModel = new PlayerModel(i, _selectedCharactersContainer.PlayerConfigs[i]);
+                var playerIndex = characterConfigByPlayer.Key;
+                var characterConfig = characterConfigByPlayer.Value;
 
-                var playerView = CreatePlayerView(_selectedCharactersContainer.PlayerConfigs[i],
-                    _storage.FightLocationView.PlayerSpawnPoints[i]);
+                var playerModel = new PlayerModel(playerIndex, characterConfig);
 
-                var inputModelsContainer = new InputFilterModelsContainer(_inputConfigs[i].InputModels);
+                var playerView = CreatePlayerView(characterConfig,
+                    _storage.FightLocationView.PlayerSpawnPoints[playerIndex]);
 
-                var comboList = _selectedCharactersContainer.PlayerConfigs[i].ComboConfig.ComboList;
+                var inputModelsContainer = new InputFilterModelsContainer(_inputConfigs[playerIndex].InputModels);
+
+                var comboList = characterConfig.ComboConfig.ComboList;
                 var comboModelsContainer = new ComboModelsContainer(comboList, inputModelsContainer);
 
                 var playerAttackModel = new PlayerAttackModel();
 
-                var animationData = _selectedCharactersContainer.PlayerConfigs[i].PlayerAnimationData;
+                var animationData = characterConfig.PlayerAnimationData;
 
                 var playerContainer = new PlayerContainer(playerModel, playerView, playerAttackModel,
                     playerView.AttackHitBoxView, animationData, inputModelsContainer, comboModelsContainer);
