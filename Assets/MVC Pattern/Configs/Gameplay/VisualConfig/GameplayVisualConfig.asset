@@ -1,18 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d095ed428b2409e80c984dbab59dfb6, type: 3}
-  m_Name: GameplayVisualConfig
-  m_EditorClassIdentifier: 
-  _fightLocationViews:
-  - {fileID: 8229148091232101866, guid: 73defc46a31a4c941aefb8649d369ee9, type: 3}
-  - {fileID: 6064145517166092405, guid: 4c086645ac03f8141986e9abe42ff296, type: 3}
-  - {fileID: 4341802068927144087, guid: 41140d1093b398c47a60e3dffaf60c93, type: 3}
+version https://git-lfs.github.com/spec/v1
+oid sha256:2cc0dcdda66276f25a9255811decd1a8f442decc684e394982c1a7a2564daf32
+size 598
