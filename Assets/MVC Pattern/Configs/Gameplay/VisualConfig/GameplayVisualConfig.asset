@@ -15,4 +15,4 @@ MonoBehaviour:
   _fightLocationViews:
   - {fileID: 8229148091232101866, guid: 73defc46a31a4c941aefb8649d369ee9, type: 3}
   - {fileID: 6064145517166092405, guid: 4c086645ac03f8141986e9abe42ff296, type: 3}
-  - {fileID: 4341802068927144087, guid: 41140d1093b398c47a60e3dffaf60c93, type: 3}
+  - {fileID: 6064145517166092405, guid: 4c086645ac03f8141986e9abe42ff296, type: 3}
