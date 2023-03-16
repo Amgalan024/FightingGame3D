@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8a88729f194f0a728127ecaaa0df71b909dbd157ce2c7fb83db76640871a8fac
-size 473
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b286f9ac387496fb968785043512706, type: 3}
+  m_Name: Player2InputConfig
+  m_EditorClassIdentifier: 
+  _up: 273
+  _down: 274
+  _right: 275
+  _left: 276
+  _choose: 262
