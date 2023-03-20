@@ -4,6 +4,8 @@ namespace MVC.Gameplay.Constants
 {
     public class PlayerAnimatorData
     {
+        public static readonly int Win = Animator.StringToHash("Win");
+        public static readonly int Lose = Animator.StringToHash("Lose");
         public static readonly int IsAttacking = Animator.StringToHash("IsAttacking");
         public static readonly int IsBlocking = Animator.StringToHash("IsBlocking");
         public static readonly int IsCrouching = Animator.StringToHash("IsCrouching");

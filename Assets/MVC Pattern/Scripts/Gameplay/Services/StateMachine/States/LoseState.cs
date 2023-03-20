@@ -1,4 +1,5 @@
-﻿using MVC.Gameplay.Models.Player;
+﻿using MVC.Gameplay.Constants;
+using MVC.Gameplay.Models.Player;
 using MVC_Pattern.Scripts.Gameplay.Services.StateMachine;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ namespace MVC.StateMachine.States
         public void Enter()
         {
             PlayerContainer.InputFilterModelsContainer.SetAllInputActionModelFilters(false);
+            PlayerContainer.View.Animator.SetBool(PlayerAnimatorData.Lose, true);
             Debug.Log("Lost", PlayerContainer.View);
         }
 

@@ -34,6 +34,8 @@ namespace MVC.Menu.Services
                 var characterButton =
                     Object.Instantiate(_menuVisualConfig.ButtonView, _storage.MenuView.ButtonsContainer);
 
+                characterButton.SetIcon(characterConfig.Icon);
+
                 _storage.CharacterButtonViews.Add(characterButton);
 
                 _storage.CharacterConfigsByButtons.Add(characterButton, characterConfig);

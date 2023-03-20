@@ -27,12 +27,12 @@ namespace MVC.StateMachine
         private void ChangeState(IState newState)
         {
             _stateMachineModel.PreviousState = _stateMachineModel.CurrentState;
-            //Debug.Log($" Exited {_stateMachineModel.CurrentState?.GetType()}");
+            Debug.Log($" Exited {_stateMachineModel.CurrentState?.GetType()}");
             _stateMachineModel.CurrentState?.Exit();
             _stateMachineModel.SetCurrentState(newState);
 
             newState.Enter();
-            //Debug.Log($" Entered {_stateMachineModel.CurrentState.GetType()}");
+            Debug.Log($" Entered {_stateMachineModel.CurrentState.GetType()}");
         }
     }
 }

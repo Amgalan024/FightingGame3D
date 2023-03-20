@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2a40d6598ef47f9b4d52b41f5283f41, type: 3}
-  m_Name: CharacterConfig 1
+  m_Name: CharacterConfig 2
   m_EditorClassIdentifier: 
-  _icon: {fileID: 21300000, guid: 71463377b80acd34aa0349e16962debd, type: 3}
+  _icon: {fileID: 21300000, guid: 5e7a3021f55c2764c977db7473a5e665, type: 3}
   _maxHealthPoints: 100
   _maxEnergyPoints: 100
   _movementSpeed: 3
   _jumpForce: 10
   _punchDamage: 34
   _kickDamage: 34
-  _prefab: {fileID: 465514404453568435, guid: e0782d1de0235e34e9f9ea99e2a44a24, type: 3}
+  _prefab: {fileID: 465514404453568435, guid: b5062ce49fd3ad342a24066a02ab5376, type: 3}
   _playerAnimationData:
     _jumpTweenData:
     - _movementType: -1

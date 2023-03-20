@@ -77,6 +77,9 @@ namespace MVC.Menu.Services.CharacterSelectionStrategy
             if (Input.GetKeyDown(inputConfig.Choose))
             {
                 var selectedButton = _menuStorage.CharacterButtonViews[_playerButtonIndexes[index]];
+
+                selectedButton.CommitSelect(index);
+
                 _selectedCharactersContainer.PlayerConfigs.Add(_menuStorage.CharacterConfigsByButtons[selectedButton]);
 
                 if (_selectedCharactersContainer.PlayerConfigs.Count >= PlayersCount)

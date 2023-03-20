@@ -25,7 +25,6 @@ namespace MVC.StateMachine.States
         {
             ConfigureInputActionsFilters();
 
-            PlayerContainer.View.PlayIdleToMoveAnimationAsync(PlayerAnimatorData.Forward, Token).Forget();
         }
 
         public void Exit()

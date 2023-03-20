@@ -12,7 +12,7 @@ namespace MVC.Views
     {
         public event Action OnAttackAnimationEnded = delegate { };
         public event Action OnStunAnimationEnded = delegate { };
-        
+
         [SerializeField] private TriggerDetectorView _mainTriggerDetector;
         [SerializeField] private TriggerDetectorView _attackHitBoxView;
         [SerializeField] private TriggerDetectorView _sideDetectorView;

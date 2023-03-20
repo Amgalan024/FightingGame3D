@@ -84,7 +84,14 @@ namespace MVC.Controllers
                 {
                     _playerModel.TakeDamage(_fightSceneStorage.AttackModelsByView[attackView].Damage);
 
-                    _stateMachine.ChangeState<StunnedState>();
+                    if (_playerModel.HealthPoints > 0)
+                    {
+                        _stateMachine.ChangeState<StunnedState>();
+                    }
+                    else
+                    {
+                        _stateMachine.ChangeState<LoseState>();
+                    }
                 }
             }
         }
